@@ -12,7 +12,7 @@ public protocol Explorer {
 }
 
 final class IPAExplorer: Explorer {
-    func scan(at path: String) -> Tree {
+    func scan(at _: String) -> Tree {
         return Tree(items: [])
     }
 }

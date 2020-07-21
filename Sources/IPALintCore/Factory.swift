@@ -8,9 +8,7 @@
 import Foundation
 
 public final class Factory {
-
     func makeExplorar() -> Explorer {
-
         return IPAExplorer()
     }
 }

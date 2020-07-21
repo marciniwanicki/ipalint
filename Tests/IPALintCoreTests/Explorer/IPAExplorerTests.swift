@@ -1,5 +1,3 @@
 import XCTest
 
-final class IPAExporerTests: XCTestCase {
-    
-}
+final class IPAExporerTests: XCTestCase {}

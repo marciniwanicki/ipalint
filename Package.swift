@@ -12,21 +12,23 @@ let package = Package(
     targets: [
         .target(
             name: "ipalint",
-            dependencies: ["IPALintKit"]),
+            dependencies: ["IPALintKit"]
+        ),
         .target(
             name: "IPALintKit",
-            dependencies: ["IPALintCore"]),
+            dependencies: ["IPALintCore"]
+        ),
         .target(
             name: "IPALintCore",
-            dependencies: []),
+            dependencies: []
+        ),
         .testTarget(
             name: "IPALintFixtures",
-            dependencies: []),
+            dependencies: []
+        ),
         .testTarget(
             name: "IPALintCoreTests",
-            dependencies: ["IPALintCore", "IPALintFixtures"]),
-        .testTarget(
-            name: "ipalintTests",
-            dependencies: ["ipalint"]),
+            dependencies: ["IPALintCore", "IPALintFixtures"]
+        ),
     ]
 )
