@@ -15,10 +15,10 @@ function main {
     set -e
 
     # 0.35.0
-    SWIFTLINT_FORMULA="https://raw.githubusercontent.com/Homebrew/homebrew-core/a150ab2162228b957db1871947315f2278b21252/Formula/swiftlint.rb"
+    SWIFTLINT_FORMULA="Scripts/Formulas/swiftlint.rb"
 
     # 0.40.13
-    SWIFTFORMAT_FORMULA="https://raw.githubusercontent.com/Homebrew/homebrew-core/cd3ba980c503d06fdc8daf796e2ddb795685b555/Formula/swiftformat.rb"
+    SWIFTFORMAT_FORMULA="Scripts/Formulas/swiftformat.rb"
 
     # disable homebrew auto update
     export HOMEBREW_NO_AUTO_UPDATE=1
