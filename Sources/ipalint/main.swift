@@ -1,1 +1,4 @@
-print("Hello, world!")
+import Foundation
+import IPALintCommand
+
+CommandRunner.run()
