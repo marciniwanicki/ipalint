@@ -1,10 +1,11 @@
-import Foundation
 import ArgumentParser
+import Foundation
 
 struct VersionCommand: ParsableCommand {
     static let configuration: CommandConfiguration = .init(
         commandName: "version",
-        abstract: "Show version.")
+        abstract: "Show version."
+    )
 
     func run() {
         printer.text(Constants.version.description)

@@ -14,9 +14,11 @@ final class Constants {
     private static let gitHash = "#GIT_SHORT_HASH#"
 
     // MARK: - Init
+
     private init() {}
 
     // MARK: - Private
+
     private static func debugVersionIdentifier() -> String? {
         return debug ? "debug" : nil
     }
