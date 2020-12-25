@@ -7,6 +7,7 @@ public final class CommandRunner {
             commandName: "ipalint",
             subcommands: [
                 VersionCommand.self,
+                TestMeCommand.self
             ]
         )
 

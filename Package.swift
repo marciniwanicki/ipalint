@@ -20,7 +20,7 @@ let package = Package(
         ),
         .target(
             name: "IPALintCore",
-            dependencies: []
+            dependencies: ["SwiftToolsSupport-auto"]
         ),
         .testTarget(
             name: "IPALintFixtures",

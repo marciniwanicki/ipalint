@@ -1,0 +1,32 @@
+//
+//  Archiver.swift
+//  IPALintCore
+//
+//  Created by Marcin Iwanicki on 23/12/2020.
+//
+
+import Foundation
+import TSCBasic
+
+protocol Archiver {
+    func extract(source sourcePath: AbsolutePath,
+                 destination destinationPath: AbsolutePath) throws
+}
+
+final class TarArchiver: Archiver {
+    private let system: System
+
+    init(system: System) {
+        self.system = system
+    }
+
+    func extract(source sourcePath: AbsolutePath,
+                 destination destinationPath: AbsolutePath) throws {
+        try system.execute(["tar",
+                            "xvzf",
+                            sourcePath.pathString,
+                            "-C",
+                            destinationPath.pathString],
+                           output: .muted)
+    }
+}
