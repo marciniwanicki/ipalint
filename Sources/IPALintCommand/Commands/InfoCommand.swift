@@ -18,12 +18,20 @@ struct InfoCommand: ParsableCommand {
 
     @Option(
         name: .shortAndLong,
-        help: "The path to .ipa file.",
+        help: "Path to .ipa file.",
         completion: .directory
     )
     var path: String?
 
     @Option(
+        name: .shortAndLong,
+        help: "Path to temp directory.",
+        completion: .directory
+    )
+    var temp: String?
+
+    @Option(
+        name: .shortAndLong,
         help: "Format of the output.",
         completion: .list(["text"])
     )
@@ -43,7 +51,8 @@ struct InfoCommand: ParsableCommand {
         }
 
         func execute(command: InfoCommand) throws {
-            let context = InfoContext(path: command.path)
+            let context = InfoContext(path: command.path,
+                                      tempPath: command.temp)
             let result = try infoInteractor.info(with: context)
             renderer().render(result: result, to: output)
         }

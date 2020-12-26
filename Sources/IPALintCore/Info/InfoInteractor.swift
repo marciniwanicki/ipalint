@@ -10,9 +10,11 @@ import TSCBasic
 
 public struct InfoContext {
     public let path: String?
+    public let tempPath: String?
 
-    public init(path: String?) {
+    public init(path: String?, tempPath: String?) {
         self.path = path
+        self.tempPath = tempPath
     }
 }
 
@@ -41,7 +43,8 @@ final class DefaultInfoInteractor: InfoInteractor {
 
     func info(with context: InfoContext) throws -> InfoResult {
         let ipaPath = try findIPAFilePath(with: context)
-        let ipaFile = try ipaFileInspector.inspect(at: ipaPath)
+        let tempPath = try tempDirectoryPath(from: context.tempPath)
+        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, tempPath: tempPath)
         let ipaSize = try fileSystem.fileSize(at: ipaPath)
         return InfoResult(properties: [
             .ipaPath(ipaPath),
@@ -72,5 +75,12 @@ final class DefaultInfoInteractor: InfoInteractor {
             throw CoreError.generic("Found more than one (\(items.count)) in the current directory.")
         }
         return items[0]
+    }
+
+    private func tempDirectoryPath(from path: String?) throws -> AbsolutePath? {
+        if let path = path {
+            return try fileSystem.absolutePath(from: path)
+        }
+        return nil
     }
 }
