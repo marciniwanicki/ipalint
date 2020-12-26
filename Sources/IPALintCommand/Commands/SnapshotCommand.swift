@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import IPALintCore
 
 struct SnapshotCommand: ParsableCommand {
     static let configuration: CommandConfiguration = .init(
@@ -15,13 +16,16 @@ struct SnapshotCommand: ParsableCommand {
     )
 
     func run() throws {
-        try Executor(printer: r.printer).execute(command: self)
+        try r.resolveSnapshotExecutor().execute(command: self)
     }
 
     final class Executor {
+        private let interactor: SnapshotInteractor
         private let printer: Printer
 
-        init(printer: Printer) {
+        init(interactor: SnapshotInteractor,
+             printer: Printer) {
+            self.interactor = interactor
             self.printer = printer
         }
 

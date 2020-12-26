@@ -41,19 +41,22 @@ struct InfoCommand: ParsableCommand {
         try r.resolveInfoExecutor().execute(command: self)
     }
 
+    private func context() -> InfoContext {
+        .init(ipaPath: path,
+              tempPath: temp)
+    }
+
     final class Executor {
-        private let infoInteractor: InfoInteractor
+        private let interactor: InfoInteractor
         private let output: Output
 
-        init(infoInteractor: InfoInteractor, output: Output) {
-            self.infoInteractor = infoInteractor
+        init(interactor: InfoInteractor, output: Output) {
+            self.interactor = interactor
             self.output = output
         }
 
         func execute(command: InfoCommand) throws {
-            let context = InfoContext(path: command.path,
-                                      tempPath: command.temp)
-            let result = try infoInteractor.info(with: context)
+            let result = try interactor.info(with: command.context())
             renderer().render(result: result, to: output)
         }
 
@@ -62,11 +65,5 @@ struct InfoCommand: ParsableCommand {
         private func renderer() -> InfoResultRenderer {
             return TextInfoResultRenderer()
         }
-    }
-}
-
-final class StandardOutputResultRenderer<Renderer, Result> {
-    func render(_ result: Result) throws  {
-
     }
 }

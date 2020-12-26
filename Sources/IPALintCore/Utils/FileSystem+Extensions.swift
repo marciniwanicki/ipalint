@@ -11,8 +11,8 @@ import TSCBasic
 extension FileSystem {
 
     func ipaFilePath(from context: InfoContext) throws -> AbsolutePath {
-        if let path = context.path {
-            return try absolutePath(from: path)
+        if let ipaPath = context.ipaPath {
+            return try absolutePath(from: ipaPath)
         }
 
         let items: [AbsolutePath] = try list(at: currentWorkingDirectory)

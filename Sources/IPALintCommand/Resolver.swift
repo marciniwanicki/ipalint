@@ -7,6 +7,7 @@ final class Resolver {
 
     private var infoInteractor: InfoInteractor { factory.makeInfoInteractor() }
     private var lintInteractor: LintInteractor { factory.makeLintInteractor() }
+    private var snapshotInteractor: SnapshotInteractor { factory.makeSnapshotInteractor() }
 
     private let factory: Factory
 
@@ -21,7 +22,12 @@ final class Resolver {
     }
 
     func resolveInfoExecutor() -> InfoCommand.Executor {
-        .init(infoInteractor: infoInteractor,
+        .init(interactor: infoInteractor,
               output: output)
+    }
+
+    func resolveSnapshotExecutor() -> SnapshotCommand.Executor {
+        .init(interactor: snapshotInteractor,
+              printer: printer)
     }
 }

@@ -38,4 +38,9 @@ public final class Factory {
     public func makeDiffInteractor() -> DiffInteractor {
         DefaultDiffInteractor()
     }
+
+    public func makeSnapshotInteractor() -> SnapshotInteractor {
+        DefaultSnapshotInteractor(fileSystem: fileSystem,
+                                  ipaFileInspector: ipaFileInspector)
+    }
 }
