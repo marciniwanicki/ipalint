@@ -7,11 +7,20 @@ struct VersionCommand: ParsableCommand {
         abstract: "Show version."
     )
 
-    func run() {
-        printer.text(Constants.version.description)
+    func run() throws {
+        try Executor(printer: r.printer).execute(command: self)
     }
 
-    // MARK: - Private
+    final class Executor {
+        private let printer: Printer
 
-    private var printer: Printer { Resolver.shared.printer }
+        init(printer: Printer) {
+            self.printer = printer
+        }
+
+        func execute(command: VersionCommand) throws {
+            printer.text(Constants.version.description)
+        }
+    }
 }
+
