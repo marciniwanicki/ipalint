@@ -1,4 +1,5 @@
 import Foundation
+import IPALintCore
 
 protocol Printer {
     func text(_ message: String)
@@ -6,11 +7,17 @@ protocol Printer {
 }
 
 final class DefaultPrinter: Printer {
+    private let output: Output
+
+    init(output: Output) {
+        self.output = output
+    }
+
     func text(_ message: String) {
-        print(message)
+        output.write(.stdout, "\(message)\n")
     }
 
     func error(_ message: String) {
-        print("ERROR: \(message)")
+        output.write(.stdout, "ERROR: \(message)\n")
     }
 }

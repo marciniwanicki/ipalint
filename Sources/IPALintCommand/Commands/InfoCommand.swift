@@ -23,31 +23,41 @@ struct InfoCommand: ParsableCommand {
     )
     var path: String?
 
+    @Option(
+        help: "Format of the output.",
+        completion: .list(["text"])
+    )
+    var format: String?
+
     func run() throws {
         try r.resolveInfoExecutor().execute(command: self)
     }
 
     final class Executor {
         private let infoInteractor: InfoInteractor
-        private let printer: Printer
+        private let output: Output
 
-        init(infoInteractor: InfoInteractor, printer: Printer) {
+        init(infoInteractor: InfoInteractor, output: Output) {
             self.infoInteractor = infoInteractor
-            self.printer = printer
+            self.output = output
         }
 
         func execute(command: InfoCommand) throws {
             let context = InfoContext(path: command.path)
             let result = try infoInteractor.info(with: context)
-            printer.result(result)
+            renderer().render(result: result, to: output)
+        }
+
+        // MARK: - Private
+
+        private func renderer() -> InfoResultRenderer {
+            return TextInfoResultRenderer()
         }
     }
 }
 
-private extension Printer {
-    func result(_ result: InfoResult) {
-        result.properties.forEach {
-            text($0.description)
-        }
+final class StandardOutputResultRenderer<Renderer, Result> {
+    func render(_ result: Result) throws  {
+
     }
 }

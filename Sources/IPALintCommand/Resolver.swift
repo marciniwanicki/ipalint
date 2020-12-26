@@ -2,6 +2,7 @@ import Foundation
 import IPALintCore
 
 final class Resolver {
+    var output: Output
     var printer: Printer
 
     private var infoInteractor: InfoInteractor { factory.makeInfoInteractor() }
@@ -10,12 +11,13 @@ final class Resolver {
     private let factory: Factory
 
     init() {
-        printer = DefaultPrinter()
+        output = StandardOutput.shared
+        printer = DefaultPrinter(output: output)
         factory = Factory()
     }
 
     func resolveInfoExecutor() -> InfoCommand.Executor {
         .init(infoInteractor: infoInteractor,
-              printer: printer)
+              output: output)
     }
 }

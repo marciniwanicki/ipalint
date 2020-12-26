@@ -7,6 +7,10 @@
 
 import Foundation
 
+public enum RendererType {
+    case text
+}
+
 public final class Factory {
     var system: System
     var fileSystem: FileSystem

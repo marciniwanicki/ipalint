@@ -17,31 +17,9 @@ public struct InfoContext {
 }
 
 public struct InfoResult: Equatable {
-    public enum Property: Equatable, CustomStringConvertible {
+    public enum Property: Equatable {
         case ipaPath(AbsolutePath)
         case ipaSize(FileSize)
-
-        public var description: String {
-            switch self {
-            case let .ipaPath(path):
-                return keyValue(path.pathString)
-            case let .ipaSize(size):
-                return keyValue(size.metabytesString)
-            }
-        }
-
-        public var key: String {
-            switch self {
-            case .ipaPath:
-                return "ipa_path"
-            case .ipaSize:
-                return "ipa_size"
-            }
-        }
-
-        private func keyValue(_ value: String) -> String {
-            "\(key): \(value)"
-        }
     }
 
     public let properties: [Property]

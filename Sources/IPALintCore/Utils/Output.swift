@@ -6,18 +6,15 @@
 //
 
 import Foundation
+import Darwin
 
-enum OutputStream {
+public enum OutputStream {
     case stdout
     case stderr
 }
 
-protocol Output: AnyObject {
+public protocol Output: AnyObject {
     func write(_ stream: OutputStream, _ string: String)
-
-    func write(_ stream: OutputStream, _ data: Data)
-
-    func write(_ stream: OutputStream, _ bytes: [UInt8])
 }
 
 extension Output {
@@ -33,13 +30,23 @@ extension Output {
     }
 }
 
-final class StandardOutput: Output {
+public final class StandardOutput: Output {
     private init() {}
 
-    static let shared = StandardOutput()
+    public static let shared = StandardOutput()
 
-    func write(_ stream: OutputStream, _ string: String) {
-        // Should never be called
+    private let lock = NSLock()
+
+    public func write(_ stream: OutputStream, _ string: String) {
+        lock.lock(); defer { lock.unlock() }
+        switch stream {
+        case .stdout:
+            fputs(string, stdout)
+            fflush(stdout)
+        case .stderr:
+            fputs(string, stderr)
+            fflush(stderr)
+        }
     }
 }
 
