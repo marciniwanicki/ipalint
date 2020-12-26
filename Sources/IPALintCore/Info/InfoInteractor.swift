@@ -22,6 +22,7 @@ public struct InfoResult: Equatable {
     public enum Property: Equatable {
         case ipaPath(AbsolutePath)
         case ipaSize(FileSize)
+        case numberOfFiles(UInt)
     }
 
     public let properties: [Property]
@@ -44,11 +45,20 @@ final class DefaultInfoInteractor: InfoInteractor {
     func info(with context: InfoContext) throws -> InfoResult {
         let ipaPath = try findIPAFilePath(with: context)
         let tempPath = try tempDirectoryPath(from: context.tempPath)
-        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, tempPath: tempPath)
         let ipaSize = try fileSystem.fileSize(at: ipaPath)
+        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, tempPath: tempPath)
+        let fileSystemTree = try ipaFile.fileSystemTree()
+        let allFilesIterator = AllFilesIterator(fileSystemTree: fileSystemTree)
+
+        var count: UInt = 0
+        allFilesIterator.forEach { _ in
+            count += 1
+        }
+
         return InfoResult(properties: [
             .ipaPath(ipaPath),
-            .ipaSize(ipaSize)
+            .ipaSize(ipaSize),
+            .numberOfFiles(count)
         ])
     }
 

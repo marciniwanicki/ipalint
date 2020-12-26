@@ -28,6 +28,8 @@ private extension InfoResult.Property {
             return keyValue(path.pathString)
         case let .ipaSize(size):
             return keyValue(size.metabytesString)
+        case let .numberOfFiles(number):
+            return keyValue("\(number)")
         }
     }
 
@@ -37,6 +39,8 @@ private extension InfoResult.Property {
             return "ipa_path"
         case .ipaSize:
             return "ipa_size"
+        case .numberOfFiles:
+            return "number_of_files"
         }
     }
 
