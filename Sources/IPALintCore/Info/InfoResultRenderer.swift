@@ -24,23 +24,27 @@ public final class TextInfoResultRenderer: InfoResultRenderer {
 private extension InfoResult.Property {
     var description: String {
         switch self {
-        case let .ipaPath(path):
-            return keyValue(path.pathString)
         case let .ipaSize(size):
             return keyValue(size.metabytesString)
-        case let .numberOfFiles(number):
-            return keyValue("\(number)")
+        case let .string(_, value):
+            return keyValue(value)
+        case let .int(_, value):
+            return keyValue("\(value)")
+        case let .uint(_, value):
+            return keyValue("\(value)")
         }
     }
 
     var key: String {
         switch self {
-        case .ipaPath:
-            return "ipa_path"
         case .ipaSize:
             return "ipa_size"
-        case .numberOfFiles:
-            return "number_of_files"
+        case let .string(key, _):
+            return key
+        case let .int(key, _):
+            return key
+        case let .uint(key, _):
+            return key
         }
     }
 

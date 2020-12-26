@@ -21,6 +21,16 @@ final class AllFilesIterator {
         }
     }
 
+    func all() -> [AbsolutePath] {
+        var paths = [AbsolutePath]()
+        fileSystemTree.items.forEach { item in
+            visit(item, parent: fileSystemTree.path) {
+                paths.append($0)
+            }
+        }
+        return paths
+    }
+
     // MARK: - Private
 
     private func visit(_ item: FileSystemTree.Item,

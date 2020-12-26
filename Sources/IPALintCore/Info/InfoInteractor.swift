@@ -20,9 +20,10 @@ public struct InfoContext {
 
 public struct InfoResult: Equatable {
     public enum Property: Equatable {
-        case ipaPath(AbsolutePath)
         case ipaSize(FileSize)
-        case numberOfFiles(UInt)
+        case string(String, String)
+        case uint(String, UInt)
+        case int(String, Int)
     }
 
     public let properties: [Property]
@@ -43,54 +44,17 @@ final class DefaultInfoInteractor: InfoInteractor {
     }
 
     func info(with context: InfoContext) throws -> InfoResult {
-        let ipaPath = try findIPAFilePath(with: context)
-        let tempPath = try tempDirectoryPath(from: context.tempPath)
+        let ipaPath = try fileSystem.ipaFilePath(from: context)
+        let tempPath = try fileSystem.tempDirectoryPath(from: context)
         let ipaSize = try fileSystem.fileSize(at: ipaPath)
         let ipaFile = try ipaFileInspector.inspect(at: ipaPath, tempPath: tempPath)
         let fileSystemTree = try ipaFile.fileSystemTree()
         let allFilesIterator = AllFilesIterator(fileSystemTree: fileSystemTree)
-
-        var count: UInt = 0
-        allFilesIterator.forEach { _ in
-            count += 1
-        }
-
+        let numberOfFiles = allFilesIterator.all().count
         return InfoResult(properties: [
-            .ipaPath(ipaPath),
+            .string("ipa_path", ipaPath.pathString),
             .ipaSize(ipaSize),
-            .numberOfFiles(count)
+            .int("number_of_files", numberOfFiles)
         ])
-    }
-
-    // MARK: - Private
-
-    // TODO: Move it to a better place
-    private func findIPAFilePath(with context: InfoContext) throws -> AbsolutePath {
-        if let path = context.path {
-            return try fileSystem.absolutePath(from: path)
-        }
-
-        let items: [AbsolutePath] = try fileSystem.list(at: fileSystem.currentWorkingDirectory)
-            .compactMap {
-                if case let .file(file) = $0, file.path.extension == "ipa" {
-                    return fileSystem.currentWorkingDirectory.appending(file.path)
-                }
-                return nil
-            }
-
-        guard !items.isEmpty else {
-            throw CoreError.generic("Did find any .ipa files in the current directory.")
-        }
-        guard items.count == 1 else {
-            throw CoreError.generic("Found more than one (\(items.count)) in the current directory.")
-        }
-        return items[0]
-    }
-
-    private func tempDirectoryPath(from path: String?) throws -> AbsolutePath? {
-        if let path = path {
-            return try fileSystem.absolutePath(from: path)
-        }
-        return nil
     }
 }

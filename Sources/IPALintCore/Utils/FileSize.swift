@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FileSize: Equatable {
+public struct FileSize: Equatable, Codable {
     public let bytes: UInt64
 
     public var kilobytes: Float {

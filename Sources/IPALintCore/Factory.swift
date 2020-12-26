@@ -38,12 +38,4 @@ public final class Factory {
     public func makeDiffInteractor() -> DiffInteractor {
         DefaultDiffInteractor()
     }
-
-    // MARK: - Internal
-
-    func makeIPAFileReader() -> IPAFileReader {
-        DefaultIPAFileReader(system: system,
-                             fileSystem: fileSystem,
-                             archiver: archiver)
-    }
 }

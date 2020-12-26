@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum CoreError: Error {
+public enum CoreError: Error {
     case generic(String)
 }

@@ -16,6 +16,10 @@ final class Resolver {
         factory = Factory()
     }
 
+    func resolveMainExecutor() -> MainCommand.Executor {
+        .init(printer: printer)
+    }
+
     func resolveInfoExecutor() -> InfoCommand.Executor {
         .init(infoInteractor: infoInteractor,
               output: output)
