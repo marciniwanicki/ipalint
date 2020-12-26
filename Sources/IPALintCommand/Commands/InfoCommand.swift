@@ -16,22 +16,38 @@ struct InfoCommand: ParsableCommand {
         abstract: "Shows info about the ipa package."
     )
 
+    @Option(
+        name: .shortAndLong,
+        help: "The path to .ipa file.",
+        completion: .directory
+    )
+    var path: String?
+
     func run() throws {
-        try Executor(printer: r.printer).execute(command: self)
+        try r.resolveInfoExecutor().execute(command: self)
     }
 
     final class Executor {
+        private let infoInteractor: InfoInteractor
         private let printer: Printer
 
-        init(printer: Printer) {
+        init(infoInteractor: InfoInteractor, printer: Printer) {
+            self.infoInteractor = infoInteractor
             self.printer = printer
         }
 
         func execute(command: InfoCommand) throws {
-            let path = AbsolutePath("/Users/marcin/Desktop/BBA-2.2020b1.ipa")
-            let factory = Factory()
-            let ipaFileReader = factory.makeIPAFileReader()
-            try ipaFileReader.read(at: path)
+            let context = InfoContext(path: command.path)
+            let result = try infoInteractor.info(with: context)
+            printer.result(result)
+        }
+    }
+}
+
+private extension Printer {
+    func result(_ result: InfoResult) {
+        result.properties.forEach {
+            text($0.description)
         }
     }
 }

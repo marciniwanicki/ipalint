@@ -60,6 +60,10 @@ protocol FileSystem {
     func executable(at path: AbsolutePath) -> Bool
 
     func makeTemporaryDirectory() throws -> TemporaryDirectory
+
+    func absolutePath(from string: String) throws -> AbsolutePath
+
+    func fileSize(at path: AbsolutePath) throws -> FileSize
 }
 
 final class DefaultFileSystem: FileSystem {
@@ -110,6 +114,18 @@ final class DefaultFileSystem: FileSystem {
 
     func makeTemporaryDirectory() throws -> TemporaryDirectory {
         return try TemporaryDirectory()
+    }
+
+    func absolutePath(from string: String) throws -> AbsolutePath {
+        string.hasPrefix("/") ? AbsolutePath(string) : currentWorkingDirectory.appending(RelativePath(string))
+    }
+
+    func fileSize(at path: AbsolutePath) throws -> FileSize {
+        let attributes = try fileManager.attributesOfItem(atPath: path.pathString)
+        guard let size = attributes[FileAttributeKey.size] as? UInt64 else {
+            throw CoreError.generic("Cannot calculate size of the file at path=\(path.pathString)")
+        }
+        return .init(bytes: size)
     }
 
     // MARK: - Private

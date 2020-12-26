@@ -27,9 +27,9 @@ private struct MainCommand: ParsableCommand {
         do {
             var command = try parseAsRoot(arguments)
             try command.run()
-            return 0
+            exit()
         } catch {
-            return 1
+            exit(withError: error)
         }
     }
 }

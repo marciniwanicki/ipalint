@@ -12,18 +12,6 @@ public protocol IPAFileReader {
     func read(at path: AbsolutePath) throws
 }
 
-public final class Factory {
-    public init() {}
-
-    public func makeIPAFileReader() -> IPAFileReader {
-        let system = DefaultSystem()
-        let fileSystem = DefaultFileSystem()
-        let archiver = TarArchiver(system: system)
-        return DefaultIPAFileReader(system: system,
-                                    fileSystem: fileSystem,
-                                    archiver: archiver)
-    }
-}
 
 final class DefaultIPAFileReader: IPAFileReader {
     private let system: System
