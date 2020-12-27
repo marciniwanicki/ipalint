@@ -28,13 +28,13 @@ public struct InfoResult: Equatable {
         public var description: String {
             switch self {
             case let .fileSize(value):
-                return value.metabytesString
+                return value.description
             case let .int(value):
-                return "\(value)"
+                return value.description
             case let .string(value):
                 return value
             case let .uint(value):
-                return "\(value)"
+                return value.description
             }
         }
     }
