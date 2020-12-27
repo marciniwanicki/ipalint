@@ -15,22 +15,24 @@ public final class Factory {
     var system: System
     var fileSystem: FileSystem
     var archiver: Archiver
-    var ipaFileInspector: IPAFileInspector
+    var contentExtractor: ContentExtractor
     var crypto: Crypto
 
     public init() {
         system = DefaultSystem()
         fileSystem = DefaultFileSystem()
         archiver = TarArchiver(system: system)
-        ipaFileInspector = DefaultIPAFileInspector(system: system,
-                                                   fileSystem: fileSystem,
-                                                   archiver: archiver)
+        contentExtractor = DefaultContentExtractor(
+            system: system,
+            fileSystem: fileSystem,
+            archiver: archiver
+        )
         crypto = DefaultCrypto()
     }
 
     public func makeInfoInteractor() -> InfoInteractor {
         DefaultInfoInteractor(fileSystem: fileSystem,
-                              ipaFileInspector: ipaFileInspector)
+                              contentExtractor: contentExtractor)
     }
 
     public func makeLintInteractor() -> LintInteractor {
@@ -43,7 +45,7 @@ public final class Factory {
 
     public func makeSnapshotInteractor() -> SnapshotInteractor {
         DefaultSnapshotInteractor(fileSystem: fileSystem,
-                                  ipaFileInspector: ipaFileInspector,
+                                  contentExtractor: contentExtractor,
                                   crypto: crypto)
     }
 }

@@ -48,3 +48,9 @@ final class AllFilesIterator {
         }
     }
 }
+
+extension FileSystemTree {
+    func allFilesIterator() -> AllFilesIterator {
+        AllFilesIterator(fileSystemTree: self)
+    }
+}

@@ -48,25 +48,21 @@ public protocol InfoInteractor {
 
 final class DefaultInfoInteractor: InfoInteractor {
     private let fileSystem: FileSystem
-    private let ipaFileInspector: IPAFileInspector
+    private let contentExtractor: ContentExtractor
 
     init(fileSystem: FileSystem,
-         ipaFileInspector: IPAFileInspector) {
+         contentExtractor: ContentExtractor) {
         self.fileSystem = fileSystem
-        self.ipaFileInspector = ipaFileInspector
+        self.contentExtractor = contentExtractor
     }
 
     func info(with context: InfoContext) throws -> InfoResult {
-        let ipaPath = try fileSystem.ipaFilePath(from: context)
-        let tempDirOptionalPath = try context.tempPath.map { try fileSystem.absolutePath(from: $0) }
-        let temporaryDirectory = try fileSystem.temporaryDirectory(at: tempDirOptionalPath)
-        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, temporaryDirectory: temporaryDirectory)
-        let fileSystemTree = try ipaFile.fileSystemTree()
-        let allFilesIterator = AllFilesIterator(fileSystemTree: fileSystemTree)
-        let ipaSize = try fileSystem.fileSize(at: ipaPath)
+        let content = try contentExtractor.content(from: context)
+        let allFilesIterator = try fileSystem.tree(at: content.temporaryDirectory.path).allFilesIterator()
+        let ipaSize = try fileSystem.fileSize(at: content.ipaPath)
         let numberOfFiles = allFilesIterator.all().count
         return InfoResult(properties: [
-            "ipa_path": .string(ipaPath.pathString),
+            "ipa_path": .string(content.ipaPath.pathString),
             "ipa_size": .fileSize(ipaSize),
             "number_of_files": .int(numberOfFiles)
         ])

@@ -49,35 +49,31 @@ public protocol SnapshotInteractor {
 
 final class DefaultSnapshotInteractor: SnapshotInteractor {
     private let fileSystem: FileSystem
-    private let ipaFileInspector: IPAFileInspector
+    private let contentExtractor: ContentExtractor
     private let crypto: Crypto
 
     init(fileSystem: FileSystem,
-         ipaFileInspector: IPAFileInspector,
+         contentExtractor: ContentExtractor,
          crypto: Crypto) {
         self.fileSystem = fileSystem
-        self.ipaFileInspector = ipaFileInspector
+        self.contentExtractor = contentExtractor
         self.crypto = crypto
     }
 
     func snapshot(with context: SnapshotContext) throws -> SnapshotResult {
-        let ipaPath = try fileSystem.ipaFilePath(from: context)
-        let tempDirOptionalPath = try context.tempPath.map { try fileSystem.absolutePath(from: $0) }
-        let temporaryDirectory = try fileSystem.temporaryDirectory(at: tempDirOptionalPath)
-        let outputPath = try fileSystem.absolutePath(from: context.outputPath ?? "\(ipaPath.basenameWithoutExt).json")
-        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, temporaryDirectory: temporaryDirectory)
-        let fileSystemTree = try ipaFile.fileSystemTree()
-        let allFilesIterator = AllFilesIterator(fileSystemTree: fileSystemTree)
-        let files = try allFilesIterator.all().reduce(into: [Snapshot.File]()) { acc, path in
-            let relativePath = path.relative(to: temporaryDirectory.path)
+        let content = try contentExtractor.content(from: context)
+        let fileSystemTree = try fileSystem.tree(at: content.temporaryDirectory.path)
+        let outputPath = try fileSystem.absolutePath(from: context.outputPath ?? "\(content.ipaPath.basenameWithoutExt).json")
+        let files = try fileSystemTree.allFilesIterator().all().reduce(into: [Snapshot.File]()) { acc, path in
+            let relativePath = path.relative(to: content.temporaryDirectory.path)
             let sha256 = try crypto.sha256String(at: path)
             let fileSize = try fileSystem.fileSize(at: path)
             acc.append(.init(path: relativePath,
                              sha256: sha256,
                              size: fileSize))
         }
-        let ipaSha256 = try crypto.sha256String(at: ipaPath)
-        let descriptor = Snapshot.Descriptor(filename: ipaPath.basename,
+        let ipaSha256 = try crypto.sha256String(at: content.ipaPath)
+        let descriptor = Snapshot.Descriptor(filename: content.ipaPath.basename,
                                              createdAt: Date() /* FIXME */,
                                              sha256: ipaSha256)
         let snapshot = Snapshot(descriptor: descriptor, files: files)
