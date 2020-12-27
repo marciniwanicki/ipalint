@@ -8,9 +8,20 @@
 import Foundation
 import TSCBasic
 
+protocol HasIPAPath {
+    var ipaPath: String? { get }
+}
+
+protocol HasTempPath {
+    var tempPath: String? { get }
+}
+
+extension InfoContext: HasIPAPath, HasTempPath {}
+extension SnapshotContext: HasIPAPath, HasTempPath {}
+
 extension FileSystem {
 
-    func ipaFilePath(from context: InfoContext) throws -> AbsolutePath {
+    func ipaFilePath(from context: HasIPAPath) throws -> AbsolutePath {
         if let ipaPath = context.ipaPath {
             return try absolutePath(from: ipaPath)
         }
@@ -32,7 +43,7 @@ extension FileSystem {
         return items[0]
     }
 
-    func tempDirectoryPath(from context: InfoContext) throws -> AbsolutePath? {
+    func tempDirectoryPath(from context: HasTempPath) throws -> AbsolutePath? {
         if let path = context.tempPath {
             return try absolutePath(from: path)
         }

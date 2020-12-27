@@ -19,14 +19,27 @@ public struct InfoContext {
 }
 
 public struct InfoResult: Equatable {
-    public enum Property: Equatable {
-        case ipaSize(FileSize)
-        case string(String, String)
-        case uint(String, UInt)
-        case int(String, Int)
+    public enum Value: Equatable, CustomStringConvertible {
+        case fileSize(FileSize)
+        case string(String)
+        case uint(UInt)
+        case int(Int)
+
+        public var description: String {
+            switch self {
+            case let .fileSize(value):
+                return value.metabytesString
+            case let .int(value):
+                return "\(value)"
+            case let .string(value):
+                return value
+            case let .uint(value):
+                return "\(value)"
+            }
+        }
     }
 
-    public let properties: [Property]
+    public let properties: [String: Value]
 }
 
 public protocol InfoInteractor {
@@ -52,9 +65,9 @@ final class DefaultInfoInteractor: InfoInteractor {
         let allFilesIterator = AllFilesIterator(fileSystemTree: fileSystemTree)
         let numberOfFiles = allFilesIterator.all().count
         return InfoResult(properties: [
-            .string("ipa_path", ipaPath.pathString),
-            .ipaSize(ipaSize),
-            .int("number_of_files", numberOfFiles)
+            "ipa_path": .string(ipaPath.pathString),
+            "ipa_size": .fileSize(ipaSize),
+            "number_of_files": .int(numberOfFiles)
         ])
     }
 }

@@ -15,40 +15,9 @@ public final class TextInfoResultRenderer: InfoResultRenderer {
     public init() {}
 
     public func render(result: InfoResult, to output: Output) {
-        result.properties.forEach { property in
-            output.write(.stdout, "\(property.description)\n")
+        result.properties.keys.sorted().forEach { key in
+            let value = result.properties[key]?.description ?? "<nil>"
+            output.write(.stdout, "\(key): \(value)\n")
         }
-    }
-}
-
-private extension InfoResult.Property {
-    var description: String {
-        switch self {
-        case let .ipaSize(size):
-            return keyValue(size.metabytesString)
-        case let .string(_, value):
-            return keyValue(value)
-        case let .int(_, value):
-            return keyValue("\(value)")
-        case let .uint(_, value):
-            return keyValue("\(value)")
-        }
-    }
-
-    var key: String {
-        switch self {
-        case .ipaSize:
-            return "ipa_size"
-        case let .string(key, _):
-            return key
-        case let .int(key, _):
-            return key
-        case let .uint(key, _):
-            return key
-        }
-    }
-
-    private func keyValue(_ value: String) -> String {
-        "\(key): \(value)"
     }
 }

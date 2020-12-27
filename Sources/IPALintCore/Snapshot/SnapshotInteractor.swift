@@ -8,12 +8,14 @@
 import Foundation
 
 public struct SnapshotContext {
-    public let path: String?
+    public let ipaPath: String?
     public let tempPath: String?
+    public let outputPath: String?
 
-    public init(path: String?, tempPath: String?) {
-        self.path = path
+    public init(ipaPath: String?, tempPath: String?, outputPath: String?) {
+        self.ipaPath = ipaPath
         self.tempPath = tempPath
+        self.outputPath = outputPath
     }
 }
 
@@ -36,6 +38,8 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
     }
 
     func snapshot(with context: SnapshotContext) throws -> SnapshotResult {
+        let ipaPath = try fileSystem.ipaFilePath(from: context)
+        let tempPath = try fileSystem.tempDirectoryPath(from: context)
 
         return .init()
     }
