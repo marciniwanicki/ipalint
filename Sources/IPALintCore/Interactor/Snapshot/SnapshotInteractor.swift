@@ -63,7 +63,7 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
     func snapshot(with context: SnapshotContext) throws -> SnapshotResult {
         let content = try contentExtractor.content(from: context)
         let fileSystemTree = try fileSystem.tree(at: content.temporaryDirectory.path)
-        let outputPath = try fileSystem.absolutePath(from: context.outputPath ?? "\(content.ipaPath.basenameWithoutExt).json")
+        let outputPath = try fileSystem.absolutePath(from: context.outputPath ?? "\(content.ipaPath.basenameWithoutExt)-snapshot.json")
         let files = try fileSystemTree.allFilesIterator().all().reduce(into: [Snapshot.File]()) { acc, path in
             let relativePath = path.relative(to: content.temporaryDirectory.path)
             let sha256 = try crypto.sha256String(at: path)
