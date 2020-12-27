@@ -9,7 +9,7 @@ import Foundation
 import TSCBasic
 
 protocol IPAFileInspector {
-    func inspect(at path: AbsolutePath, tempPath: AbsolutePath?) throws -> IPAFile
+    func inspect(at path: AbsolutePath, temporaryDirectory: Directory) throws -> IPAFile
 }
 
 protocol IPAFile {
@@ -27,30 +27,12 @@ final class DefaultIPAFileInspector: IPAFileInspector {
         self.archiver = archiver
     }
 
-    func inspect(at path: AbsolutePath, tempPath: AbsolutePath?) throws -> IPAFile {
-        // make temporary directory
-        let tempDirectory = try directory(tempPath: tempPath)
-
+    func inspect(at path: AbsolutePath, temporaryDirectory: Directory) throws -> IPAFile {
         // extract ipa file
-        try archiver.extract(source: path, destination: tempDirectory.path)
+        try archiver.extract(source: path, destination: temporaryDirectory.path)
 
         // prepare ipa file handler
-        return DefaultIPAFile(fileSystem: fileSystem,
-                              directory: tempDirectory)
-    }
-
-    // MARK: - Private
-
-    private func directory(tempPath: AbsolutePath?) throws -> Directory {
-        if let tempPath = tempPath {
-            let items = try fileSystem.list(at: tempPath)
-            guard items.isEmpty else {
-                throw CoreError.generic("Temporary directory is not empty (path=\(tempPath.pathString))")
-            }
-            return PredefinedDirectory(path: tempPath)
-        } else {
-            return try fileSystem.makeTemporaryDirectory()
-        }
+        return DefaultIPAFile(fileSystem: fileSystem, directory: temporaryDirectory)
     }
 }
 

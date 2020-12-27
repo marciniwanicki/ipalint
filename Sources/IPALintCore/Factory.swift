@@ -16,6 +16,7 @@ public final class Factory {
     var fileSystem: FileSystem
     var archiver: Archiver
     var ipaFileInspector: IPAFileInspector
+    var crypto: Crypto
 
     public init() {
         system = DefaultSystem()
@@ -24,6 +25,7 @@ public final class Factory {
         ipaFileInspector = DefaultIPAFileInspector(system: system,
                                                    fileSystem: fileSystem,
                                                    archiver: archiver)
+        crypto = DefaultCrypto()
     }
 
     public func makeInfoInteractor() -> InfoInteractor {
@@ -41,6 +43,7 @@ public final class Factory {
 
     public func makeSnapshotInteractor() -> SnapshotInteractor {
         DefaultSnapshotInteractor(fileSystem: fileSystem,
-                                  ipaFileInspector: ipaFileInspector)
+                                  ipaFileInspector: ipaFileInspector,
+                                  crypto: crypto)
     }
 }

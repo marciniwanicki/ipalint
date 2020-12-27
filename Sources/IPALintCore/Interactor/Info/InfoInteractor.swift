@@ -58,11 +58,12 @@ final class DefaultInfoInteractor: InfoInteractor {
 
     func info(with context: InfoContext) throws -> InfoResult {
         let ipaPath = try fileSystem.ipaFilePath(from: context)
-        let tempPath = try fileSystem.tempDirectoryPath(from: context)
-        let ipaSize = try fileSystem.fileSize(at: ipaPath)
-        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, tempPath: tempPath)
+        let tempDirOptionalPath = try context.tempPath.map { try fileSystem.absolutePath(from: $0) }
+        let temporaryDirectory = try fileSystem.temporaryDirectory(at: tempDirOptionalPath)
+        let ipaFile = try ipaFileInspector.inspect(at: ipaPath, temporaryDirectory: temporaryDirectory)
         let fileSystemTree = try ipaFile.fileSystemTree()
         let allFilesIterator = AllFilesIterator(fileSystemTree: fileSystemTree)
+        let ipaSize = try fileSystem.fileSize(at: ipaPath)
         let numberOfFiles = allFilesIterator.all().count
         return InfoResult(properties: [
             "ipa_path": .string(ipaPath.pathString),

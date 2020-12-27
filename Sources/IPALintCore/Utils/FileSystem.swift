@@ -64,6 +64,10 @@ protocol FileSystem {
     func absolutePath(from string: String) throws -> AbsolutePath
 
     func fileSize(at path: AbsolutePath) throws -> FileSize
+
+    func temporaryDirectory(at existingPath: AbsolutePath?) throws -> Directory
+
+    func write(data: Data, to path: AbsolutePath) throws
 }
 
 final class DefaultFileSystem: FileSystem {
@@ -126,6 +130,22 @@ final class DefaultFileSystem: FileSystem {
             throw CoreError.generic("Cannot calculate size of the file at path=\(path.pathString)")
         }
         return .init(bytes: size)
+    }
+
+    func temporaryDirectory(at existingPath: AbsolutePath?) throws -> Directory {
+        if let existingPath = existingPath {
+            let items = try list(at: existingPath)
+            guard items.isEmpty else {
+                throw CoreError.generic("Temporary directory is not empty (path=\(existingPath.pathString))")
+            }
+            return PredefinedDirectory(path: existingPath)
+        } else {
+            return try makeTemporaryDirectory()
+        }
+    }
+
+    func write(data: Data, to path: AbsolutePath) throws {
+        try data.write(to: path.asURL)
     }
 
     // MARK: - Private
