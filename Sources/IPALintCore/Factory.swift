@@ -18,6 +18,7 @@ public final class Factory {
     var contentExtractor: ContentExtractor
     var crypto: Crypto
     var snapshotGenerator: SnapshotGenerator
+    var snapshotParser: SnapshotParser
 
     public init() {
         system = DefaultSystem()
@@ -30,6 +31,7 @@ public final class Factory {
         )
         crypto = DefaultCrypto()
         snapshotGenerator = DefaultSnapshotGenerator(fileSystem: fileSystem, crypto: crypto)
+        snapshotParser = DefaultSnapshotParser(fileSystem: fileSystem)
     }
 
     public func makeInfoInteractor() -> InfoInteractor {
@@ -48,6 +50,7 @@ public final class Factory {
     public func makeSnapshotInteractor() -> SnapshotInteractor {
         DefaultSnapshotInteractor(fileSystem: fileSystem,
                                   contentExtractor: contentExtractor,
-                                  snapshotGenerator: snapshotGenerator)
+                                  snapshotGenerator: snapshotGenerator,
+                                  snapshotParser: snapshotParser)
     }
 }

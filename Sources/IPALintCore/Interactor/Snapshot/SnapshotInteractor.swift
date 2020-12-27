@@ -33,25 +33,24 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
     private let fileSystem: FileSystem
     private let contentExtractor: ContentExtractor
     private let snapshotGenerator: SnapshotGenerator
+    private let snapshotParser: SnapshotParser
 
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
-         snapshotGenerator: SnapshotGenerator) {
+         snapshotGenerator: SnapshotGenerator,
+         snapshotParser: SnapshotParser) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.snapshotGenerator = snapshotGenerator
+        self.snapshotParser = snapshotParser
     }
 
     func snapshot(with context: SnapshotContext) throws -> SnapshotResult {
         let content = try contentExtractor.content(from: context)
         let snapshot = try snapshotGenerator.snapshot(of: content)
         let outputPath = try fileSystem.absolutePath(from: context.outputPath ?? "\(content.ipaPath.basenameWithoutExt)-snapshot.json")
-        let codableSnapshot = snapshot.codable()
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let jsonData = try encoder.encode(codableSnapshot)
 
-        try fileSystem.write(data: jsonData, to: outputPath)
+        try snapshotParser.write(snapshot: snapshot, to: outputPath)
 
         return .init()
     }
