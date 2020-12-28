@@ -1,10 +1,3 @@
-//
-//  DiffCommand.swift
-//  IPALintCommand
-//
-//  Created by Marcin Iwanicki on 26/12/2020.
-//
-
 import ArgumentParser
 import Foundation
 import IPALintCore

@@ -1,10 +1,3 @@
-//
-//  CoreAssembly.swift
-//  IPALintCommand
-//
-//  Created by Marcin Iwanicki on 28/12/2020.
-//
-
 import Foundation
 
 public final class CoreAssembly: Assembly {
