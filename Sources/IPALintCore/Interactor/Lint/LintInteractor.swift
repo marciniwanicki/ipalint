@@ -50,7 +50,7 @@ final class DefaultLintInteractor: LintInteractor {
         let content = try contentExtractor.content(from: context)
 
         let rulesMap = rules.reduce(into: [LintRuleIdentifier: LintRuleType]()) { acc, rule in
-            acc[rule.identifier] = rule
+            acc[rule.descriptor.identifier] = rule
         }
 
         try configuration.all.rules.keys
@@ -63,12 +63,16 @@ final class DefaultLintInteractor: LintInteractor {
                 }
                 let configuration = configuration.all.rules[ruleIdentifier.rawValue]!
                 switch ruleType {
-                case var .file(rule):
-                    try rule.configuration.apply(configuration: configuration)
+                case let .file(rule):
+                    if var configurableRule = rule as? LintRuleConfigurationModifier {
+                        try configurableRule.apply(configuration: configuration)
+                    }
                     let result = try rule.lint(with: content.ipaPath)
                     print(result)
-                case var .content(rule):
-                    try rule.configuration.apply(configuration: configuration)
+                case let .content(rule):
+                    if var configurableRule = rule as? LintRuleConfigurationModifier {
+                        try configurableRule.apply(configuration: configuration)
+                    }
                     let result = try rule.lint(with: content)
                     print(result)
                 }

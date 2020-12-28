@@ -40,13 +40,27 @@ struct LintRuleDescriptor: Equatable {
     let description: String
 }
 
-protocol LintRuleConfiguration {
+protocol LintRuleConfigurationModifier {
     mutating func apply(configuration: Any) throws
+}
+
+protocol LintRuleConfiguration: LintRuleConfigurationModifier {
 }
 
 protocol LintRule {
     var descriptor: LintRuleDescriptor { get }
-    var configuration: LintRuleConfiguration { get set }
+}
+
+protocol ConfigurableLintRule: LintRuleConfigurationModifier {
+    associatedtype C: LintRuleConfiguration
+
+    var configuration: C { get set }
+}
+
+extension LintRule where Self: ConfigurableLintRule {
+    mutating func apply(configuration: Any) throws {
+        try self.configuration.apply(configuration: configuration)
+    }
 }
 
 protocol FileLintRule: LintRule {
@@ -61,12 +75,12 @@ enum LintRuleType {
     case file(FileLintRule)
     case content(ContentLintRule)
 
-    var identifier: LintRuleIdentifier {
+    var descriptor: LintRuleDescriptor {
         switch self {
         case let .file(rule):
-            return rule.descriptor.identifier
+            return rule.descriptor
         case let .content(rule):
-            return rule.descriptor.identifier
+            return rule.descriptor
         }
     }
 }
