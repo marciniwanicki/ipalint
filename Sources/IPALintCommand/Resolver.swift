@@ -36,4 +36,9 @@ final class Resolver {
         .init(interactor: snapshotInteractor,
               printer: printer)
     }
+
+    func resolveLintExecutor() -> LintCommand.Executor {
+        .init(interactor: lintInteractor,
+              printer: printer)
+    }
 }

@@ -18,6 +18,7 @@ protocol HasTempPath {
 
 extension InfoContext: HasIPAPath, HasTempPath {}
 extension SnapshotContext: HasIPAPath, HasTempPath {}
+extension LintContext: HasIPAPath, HasTempPath {}
 
 extension FileSystem {
 

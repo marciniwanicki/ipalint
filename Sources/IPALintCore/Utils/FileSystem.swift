@@ -68,6 +68,8 @@ protocol FileSystem {
     func temporaryDirectory(at existingPath: AbsolutePath?) throws -> Directory
 
     func write(data: Data, to path: AbsolutePath) throws
+
+    func read(from path: AbsolutePath) throws -> Data
 }
 
 final class DefaultFileSystem: FileSystem {
@@ -146,6 +148,10 @@ final class DefaultFileSystem: FileSystem {
 
     func write(data: Data, to path: AbsolutePath) throws {
         try data.write(to: path.asURL)
+    }
+
+    func read(from path: AbsolutePath) throws -> Data {
+        return try Data(contentsOf: path.asURL)
     }
 
     // MARK: - Private

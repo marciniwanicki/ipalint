@@ -19,6 +19,7 @@ public final class Factory {
     var crypto: Crypto
     var snapshotGenerator: SnapshotGenerator
     var snapshotParser: SnapshotParser
+    var configurationLoader: ConfigurationLoader
 
     public init() {
         system = DefaultSystem()
@@ -32,15 +33,12 @@ public final class Factory {
         crypto = DefaultCrypto()
         snapshotGenerator = DefaultSnapshotGenerator(fileSystem: fileSystem, crypto: crypto)
         snapshotParser = DefaultSnapshotParser(fileSystem: fileSystem)
+        configurationLoader = YamlConfigurationLoader(fileSystem: fileSystem)
     }
 
     public func makeInfoInteractor() -> InfoInteractor {
         DefaultInfoInteractor(fileSystem: fileSystem,
                               contentExtractor: contentExtractor)
-    }
-
-    public func makeLintInteractor() -> LintInteractor {
-        DefaultLintInteractor()
     }
 
     public func makeDiffInteractor() -> DiffInteractor {
@@ -55,5 +53,18 @@ public final class Factory {
                                   contentExtractor: contentExtractor,
                                   snapshotGenerator: snapshotGenerator,
                                   snapshotParser: snapshotParser)
+    }
+
+    public func makeLintInteractor() -> LintInteractor {
+        DefaultLintInteractor(fileSystem: fileSystem,
+                              contentExtractor: contentExtractor,
+                              configurationLoader: configurationLoader,
+                              rules: rules)
+    }
+
+    var rules: [LintRuleType] {
+        [
+            .file(IPAFileSizeLintRule(fileSystem: fileSystem))
+        ]
     }
 }

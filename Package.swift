@@ -8,6 +8,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMajor(from: "0.1.10")),
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMajor(from: "0.3.1")),
+        .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.3"),
     ],
     targets: [
         .target(
@@ -20,7 +21,7 @@ let package = Package(
         ),
         .target(
             name: "IPALintCore",
-            dependencies: ["SwiftToolsSupport-auto"]
+            dependencies: ["SwiftToolsSupport-auto", "Yams"]
         ),
         .testTarget(
             name: "IPALintFixtures",
