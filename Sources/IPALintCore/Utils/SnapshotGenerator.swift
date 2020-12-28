@@ -8,7 +8,7 @@
 import Foundation
 
 protocol SnapshotGenerator {
-    func snapshot(of content: IPAContent) throws -> Snapshot
+    func snapshot(of content: Content) throws -> Snapshot
 }
 
 final class DefaultSnapshotGenerator: SnapshotGenerator {
@@ -21,7 +21,7 @@ final class DefaultSnapshotGenerator: SnapshotGenerator {
         self.crypto = crypto
     }
 
-    func snapshot(of content: IPAContent) throws -> Snapshot {
+    func snapshot(of content: Content) throws -> Snapshot {
         let fileSystemTree = try fileSystem.tree(at: content.temporaryDirectory.path)
         let files = try fileSystemTree.allFilesIterator().all().reduce(into: [Snapshot.File]()) { acc, path in
             let relativePath = path.relative(to: content.temporaryDirectory.path)

@@ -54,7 +54,7 @@ protocol FileLintRule: LintRule {
 }
 
 protocol ContentLintRule: LintRule {
-    func lint(with content: IPAContent) throws -> LintRuleResult
+    func lint(with content: Content) throws -> LintRuleResult
 }
 
 enum LintRuleType {
