@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 import IPALintCore
+import TSCUtility
 
 struct VersionCommand: Command {
     static let configuration = CommandConfiguration(
@@ -8,8 +9,8 @@ struct VersionCommand: Command {
         abstract: "Show version."
     )
 
-    func context() -> NoContext {
-        .noContext
+    func context() -> VersionContext {
+        .init(version: Constants.version)
     }
 
     final class Executor: CommandExecutor {
@@ -19,8 +20,8 @@ struct VersionCommand: Command {
             self.printer = printer
         }
 
-        func execute(with _: NoContext) throws {
-            printer.text(Constants.version.description)
+        func execute(with context: VersionContext) throws {
+            printer.text(context.version.description)
         }
     }
 
@@ -31,4 +32,8 @@ struct VersionCommand: Command {
             }
         }
     }
+}
+
+struct VersionContext {
+    let version: Version
 }
