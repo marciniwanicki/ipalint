@@ -57,19 +57,22 @@ final class DefaultDiffInteractor: DiffInteractor {
             .onlyInFirst(filesMap1[path]!)
         }
         let onlyInSecondFiles: [SnapshotDiff.FileDiff] = pathsOnlyInSecond.map { path in
-            .onlyInFirst(filesMap2[path]!)
+            .onlyInSecond(filesMap2[path]!)
         }
-        let differentFiles: [SnapshotDiff.FileDiff] = commonPaths.map { path in
+        let differentFiles: [SnapshotDiff.FileDiff] = commonPaths.compactMap { path in
             let firstFile = filesMap1[path]!
             let secondFile = filesMap2[path]!
+            guard firstFile.sha256 != secondFile.sha256 else {
+                return nil
+            }
 
-            return .different(.init(path: path,
-                                    firstSha256: firstFile.sha256,
-                                    firstSize: firstFile.size,
-                                    secondSha256: secondFile.sha256,
-                                    secondSize: secondFile.size,
-                                    diffSize: .init(bytes: 1),
-                                    sizeReduced: false))
+            return .difference(.init(path: path,
+                                     firstSha256: firstFile.sha256,
+                                     firstSize: firstFile.size,
+                                     secondSha256: secondFile.sha256,
+                                     secondSize: secondFile.size,
+                                     diffSize: .init(bytes: 1),
+                                     sizeReduced: false))
         }
 
         return DiffResult(diff: .init(differences: onlyInFirstFiles + onlyInSecondFiles + differentFiles))

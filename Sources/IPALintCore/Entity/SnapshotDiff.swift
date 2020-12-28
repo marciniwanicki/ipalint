@@ -12,7 +12,7 @@ public struct SnapshotDiff {
     enum FileDiff {
         case onlyInFirst(Snapshot.File)
         case onlyInSecond(Snapshot.File)
-        case different(FileDiffDescriptor)
+        case difference(FileDiffDescriptor)
     }
 
     struct FileDiffDescriptor {
