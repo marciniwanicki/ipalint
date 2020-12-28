@@ -10,7 +10,7 @@ import Foundation
 import IPALintCore
 import TSCBasic
 
-struct InfoCommand: ParsableCommand {
+struct InfoCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "info",
         abstract: "Shows info about the ipa package."
@@ -37,33 +37,38 @@ struct InfoCommand: ParsableCommand {
     )
     var format: String?
 
-    func run() throws {
-//        try r.resolveInfoExecutor().execute(command: self)
-    }
-
-    private func context() -> InfoContext {
+    func context() -> InfoContext {
         .init(ipaPath: path,
               tempPath: temp)
     }
 
-    final class Executor {
+    final class Executor: CommandExecutor {
         private let interactor: InfoInteractor
-        private let output: Output
+        private let printer: Printer
 
-        init(interactor: InfoInteractor, output: Output) {
+        init(interactor: InfoInteractor, printer: Printer) {
             self.interactor = interactor
-            self.output = output
+            self.printer = printer
         }
 
-        func execute(command: InfoCommand) throws {
-            let result = try interactor.info(with: command.context())
-            renderer().render(result: result, to: output)
+        func execute(with context: InfoContext) throws {
+            let result = try interactor.info(with: context)
+            renderer().render(result: result, to: printer.output)
         }
 
         // MARK: - Private
 
         private func renderer() -> InfoResultRenderer {
             return TextInfoResultRenderer()
+        }
+    }
+
+    final class Assembly: CommandAssembly {
+        func assemble(_ registry: Registry) {
+            registry.register(Executor.self) { r in
+                Executor(interactor: r.resolve(InfoInteractor.self),
+                         printer: r.resolve(Printer.self))
+            }
         }
     }
 }
