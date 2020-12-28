@@ -70,9 +70,7 @@ final class DefaultDiffInteractor: DiffInteractor {
                                      firstSha256: firstFile.sha256,
                                      firstSize: firstFile.size,
                                      secondSha256: secondFile.sha256,
-                                     secondSize: secondFile.size,
-                                     diffSize: .init(bytes: 1),
-                                     sizeReduced: false))
+                                     secondSize: secondFile.size))
         }
 
         return DiffResult(diff: .init(differences: onlyInFirstFiles + onlyInSecondFiles + differentFiles))

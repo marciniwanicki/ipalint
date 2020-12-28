@@ -21,8 +21,10 @@ public struct SnapshotDiff {
         let firstSize: FileSize
         let secondSha256: String
         let secondSize: FileSize
-        let diffSize: FileSize
-        let sizeReduced: Bool
+
+        var deltaFileSize: DeltaFileSize {
+            firstSize.delta(secondSize)
+        }
     }
 
     let differences: [FileDiff]

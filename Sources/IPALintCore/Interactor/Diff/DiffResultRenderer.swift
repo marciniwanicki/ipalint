@@ -22,7 +22,7 @@ public final class TextDiffResultRenderer: DiffResultRenderer {
             case let .onlyInSecond(file):
                 output.write(.stdout, "✗ \(file.path) (only in second)\n")
             case let .difference(difference):
-                output.write(.stdout, "✗ \(difference.path) (different content Δ \(difference.diffSize))\n")
+                output.write(.stdout, "✗ \(difference.path) (different content Δ \(difference.deltaFileSize))\n")
                 output.write(.stdout, "   1) \(difference.firstSize) (\(difference.firstSha256))\n")
                 output.write(.stdout, "   2) \(difference.secondSize) (\(difference.secondSha256))\n")
             }

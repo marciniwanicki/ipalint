@@ -54,4 +54,31 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible {
         }
         return gigabytesString
     }
+
+    public func delta(_ rhs: FileSize) -> DeltaFileSize {
+        if rhs.bytes > bytes {
+            return .greater(.init(bytes: rhs.bytes - bytes))
+        }
+        if rhs.bytes < bytes {
+            return .lower(.init(bytes: bytes - rhs.bytes))
+        }
+        return .equal
+    }
+}
+
+public enum DeltaFileSize: Equatable, CustomStringConvertible {
+    case lower(FileSize)
+    case greater(FileSize)
+    case equal
+
+    public var description: String {
+        switch self {
+        case let .lower(fileSize):
+            return "-\(fileSize.description)"
+        case let .greater(fileSize):
+            return "+\(fileSize.description)"
+        case .equal:
+            return "0"
+        }
+    }
 }
