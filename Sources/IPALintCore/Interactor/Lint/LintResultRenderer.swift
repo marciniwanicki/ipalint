@@ -17,12 +17,12 @@ public final class TextLintResultRenderer: LintResultRenderer {
     public func render(result: LintResult, to output: Output) {
         result.ruleResults.forEach { result in
             if result.violations.isEmpty {
-                output.write(.stdout, "[\(result.rule.name)] Passed.\n")
+                output.write(.stdout, "✔ Passed '\(result.rule.identifier.rawValue)' rule\n")
             } else {
                 result.violations.forEach { violation in
                     switch violation {
                     case let .generic(violation):
-                        output.write(.stdout, "\(violation.severity): \(violation.message) (\(result.rule.identifier.rawValue))\n")
+                        output.write(.stdout, "\(violation.severity.rawValue): \(violation.message) (\(result.rule.identifier.rawValue))\n")
                     }
                 }
             }

@@ -16,13 +16,21 @@ struct LintRuleResult {
         let message: String
     }
 
-    enum ViolationSeverity {
+    enum ViolationSeverity: String {
         case warning
         case error
     }
 
     enum Violation {
         case generic(GenericViolation)
+
+        static func warning(message: String) -> Violation {
+            return .generic(.init(severity: .warning, message: message))
+        }
+
+        static func error(message: String) -> Violation {
+            return .generic(.init(severity: .error, message: message))
+        }
     }
 
     let violations: [Violation]

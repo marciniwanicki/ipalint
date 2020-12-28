@@ -27,20 +27,24 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         let fileSize = try fileSystem.fileSize(at: ipaPath)
         var violations: [LintRuleResult.Violation] = []
         if let minSize = configuration.warning.minSize, fileSize < minSize {
-            violations.append(.generic(.init(severity: .warning,
-                                             message: "Test message")))
+            violations.append(
+                .warning(message: "The .ipa package size is smaller than min_size -- min_size=\(minSize), ipa_size=\(fileSize)")
+            )
         }
         if let maxSize = configuration.warning.maxSize, fileSize > maxSize {
-            violations.append(.generic(.init(severity: .warning,
-                                             message: "Test message")))
+            violations.append(
+                .warning(message: "The .ipa package size is bigger than max_size -- max_size=\(maxSize), ipa_size=\(fileSize)")
+            )
         }
         if let minSize = configuration.error.minSize, fileSize < minSize {
-            violations.append(.generic(.init(severity: .error,
-                                             message: "Test message")))
+            violations.append(
+                .error(message: "The .ipa package size is smaller than min_size -- min_size=\(minSize), ipa_size=\(fileSize)")
+            )
         }
         if let maxSize = configuration.error.maxSize, fileSize > maxSize {
-            violations.append(.generic(.init(severity: .error,
-                                             message: "Test message")))
+            violations.append(
+                .error(message: "The .ipa package size is bigger than max_size -- max_size=\(maxSize), ipa_size=\(fileSize)")
+            )
         }
         return .init(rule: descriptor, violations: violations)
     }
