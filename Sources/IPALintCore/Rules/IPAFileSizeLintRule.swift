@@ -27,18 +27,22 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         let fileSize = try fileSystem.fileSize(at: ipaPath)
         var violations: [LintRuleResult.Violation] = []
         if let minSize = configuration.warning.minSize, fileSize < minSize {
-            violations.append(.generic(.init(rule: descriptor, severity: .warning)))
+            violations.append(.generic(.init(severity: .warning,
+                                             message: "Test message")))
         }
         if let maxSize = configuration.warning.maxSize, fileSize > maxSize {
-            violations.append(.generic(.init(rule: descriptor, severity: .warning)))
+            violations.append(.generic(.init(severity: .warning,
+                                             message: "Test message")))
         }
         if let minSize = configuration.error.minSize, fileSize < minSize {
-            violations.append(.generic(.init(rule: descriptor, severity: .error)))
+            violations.append(.generic(.init(severity: .error,
+                                             message: "Test message")))
         }
         if let maxSize = configuration.error.maxSize, fileSize > maxSize {
-            violations.append(.generic(.init(rule: descriptor, severity: .error)))
+            violations.append(.generic(.init(severity: .error,
+                                             message: "Test message")))
         }
-        return .init(violations: violations)
+        return .init(rule: descriptor, violations: violations)
     }
 
     struct Configuration: LintRuleConfiguration {

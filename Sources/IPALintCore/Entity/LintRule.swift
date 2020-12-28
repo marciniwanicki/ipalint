@@ -9,9 +9,11 @@ import Foundation
 import TSCBasic
 
 struct LintRuleResult {
+    let rule: LintRuleDescriptor
+
     struct GenericViolation {
-        let rule: LintRuleDescriptor
         let severity: ViolationSeverity
+        let message: String
     }
 
     enum ViolationSeverity {

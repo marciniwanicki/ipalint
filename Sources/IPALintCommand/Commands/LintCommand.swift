@@ -55,7 +55,13 @@ struct LintCommand: ParsableCommand {
 
         func execute(command: LintCommand) throws {
             let result = try interactor.lint(with: command.context())
-            print(result)
+            renderer().render(result: result, to: printer.output)
+        }
+
+        // MARK: - Private
+
+        private func renderer() -> LintResultRenderer {
+            TextLintResultRenderer()
         }
     }
 }

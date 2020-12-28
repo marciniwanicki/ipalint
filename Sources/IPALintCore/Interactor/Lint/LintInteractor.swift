@@ -20,7 +20,7 @@ public struct LintContext {
 }
 
 public struct LintResult {
-
+    let ruleResults: [LintRuleResult]
 }
 
 public protocol LintInteractor {
@@ -45,7 +45,7 @@ final class DefaultLintInteractor: LintInteractor {
 
     func lint(with context: LintContext) throws -> LintResult {
         // read configuration
-        let configurationPath = try context.configPath.map { try fileSystem.absolutePath(from: $0) } ?? fileSystem.currentWorkingDirectory.appending(component: ".applint.yml")
+        let configurationPath = try context.configPath.map { try fileSystem.absolutePath(from: $0) } ?? fileSystem.currentWorkingDirectory.appending(component: ".ipalint.yml")
         let configuration = try configurationLoader.load(from: configurationPath)
         let content = try contentExtractor.content(from: context)
 
@@ -53,13 +53,13 @@ final class DefaultLintInteractor: LintInteractor {
             acc[rule.descriptor.identifier] = rule
         }
 
-        try configuration.all.rules.keys
+        let results: [LintRuleResult] = try configuration.all.rules.keys
             .sorted()
             .map { LintRuleIdentifier(rawValue: $0) }
-            .forEach { ruleIdentifier in
+            .compactMap { ruleIdentifier in
                 guard let ruleType = rulesMap[ruleIdentifier] else {
                     print("UNKNOWN RULE")
-                    return
+                    return nil
                 }
                 let configuration = configuration.all.rules[ruleIdentifier.rawValue]!
                 switch ruleType {
@@ -67,23 +67,16 @@ final class DefaultLintInteractor: LintInteractor {
                     if var configurableRule = rule as? LintRuleConfigurationModifier {
                         try configurableRule.apply(configuration: configuration)
                     }
-                    let result = try rule.lint(with: content.ipaPath)
-                    print(result)
+                    return try rule.lint(with: content.ipaPath)
                 case let .content(rule):
                     if var configurableRule = rule as? LintRuleConfigurationModifier {
                         try configurableRule.apply(configuration: configuration)
                     }
-                    let result = try rule.lint(with: content)
-                    print(result)
+                    return try rule.lint(with: content)
                 }
-        }
+            }
 
-        // check if the file exists...
-
-
-        // unpack ipa
-
-        return LintResult()
+        return .init(ruleResults: results)
     }
 
     // MARK: - Private
