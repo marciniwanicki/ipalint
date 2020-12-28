@@ -21,7 +21,6 @@ extension SnapshotContext: HasIPAPath, HasTempPath {}
 extension LintContext: HasIPAPath, HasTempPath {}
 
 extension FileSystem {
-
     func ipaFilePath(from context: HasIPAPath) throws -> AbsolutePath {
         if let ipaPath = context.ipaPath {
             return try absolutePath(from: ipaPath)

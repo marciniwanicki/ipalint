@@ -5,8 +5,8 @@
 //  Created by Marcin Iwanicki on 26/12/2020.
 //
 
-import Foundation
 import ArgumentParser
+import Foundation
 import IPALintCore
 
 struct SnapshotCommand: Command {

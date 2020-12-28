@@ -29,14 +29,14 @@ final class TemporaryDirectory: Directory {
     init() throws {
         let path = try determineTempDirectory(nil).appending(RelativePath("ipalint.XXXXXX"))
 
-       // Convert path to a C style string terminating with null char to be an valid input
-       // to mkdtemp method. The XXXXXX in this string will be replaced by a random string
-       // which will be the actual path to the temporary directory.
-       var template = [UInt8](path.pathString.utf8).map { Int8($0) } + [Int8(0)]
+        // Convert path to a C style string terminating with null char to be an valid input
+        // to mkdtemp method. The XXXXXX in this string will be replaced by a random string
+        // which will be the actual path to the temporary directory.
+        var template = [UInt8](path.pathString.utf8).map { Int8($0) } + [Int8(0)]
 
-       if TSCLibc.mkdtemp(&template) == nil {
-           throw MakeDirectoryError.other(errno)
-       }
+        if TSCLibc.mkdtemp(&template) == nil {
+            throw MakeDirectoryError.other(errno)
+        }
 
         self.path = AbsolutePath(String(cString: template))
     }

@@ -33,7 +33,7 @@ final class DefaultSnapshotGenerator: SnapshotGenerator {
         }
         let ipaSha256 = try crypto.sha256String(at: content.ipaPath)
         let descriptor = Snapshot.Descriptor(filename: content.ipaPath.basename,
-                                             createdAt: Date() /* FIXME */,
+                                             createdAt: Date() /* FIXME: */,
                                              sha256: ipaSha256)
         return Snapshot(descriptor: descriptor, files: files)
     }

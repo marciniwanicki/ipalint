@@ -26,7 +26,6 @@ enum OutputType {
 }
 
 protocol System {
-
     func execute(_ arguments: [String]) throws
 
     func execute(_ arguments: [String], output: OutputType) throws
@@ -62,7 +61,7 @@ private extension OutputType {
             return .none
         default:
             return .stream { [output] bytes in output.write(.stdout, bytes) }
-                stderr: { [output] bytes in output.write(.stderr, bytes)
+            stderr: { [output] bytes in output.write(.stderr, bytes)
             }
         }
     }

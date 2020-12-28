@@ -5,9 +5,9 @@
 //  Created by Marcin Iwanicki on 27/12/2020.
 //
 
+import CommonCrypto
 import Foundation
 import TSCBasic
-import CommonCrypto
 
 protocol Crypto {
     func sha256(at path: AbsolutePath) throws -> Data
@@ -20,13 +20,13 @@ final class DefaultCrypto: Crypto {
     }
 
     func sha256String(at path: AbsolutePath) throws -> String {
-        try sha256(at: path).reduce(into: "") { acc, byte in acc.append(String(format:"%02x", byte)) }
+        try sha256(at: path).reduce(into: "") { acc, byte in acc.append(String(format: "%02x", byte)) }
     }
 }
 
 // https://inneka.com/programming/swift/sha256-in-swift/
 
-fileprivate final class SHA256Digest {
+private final class SHA256Digest {
     enum InputStreamError: Error {
         case createFailed(URL)
         case readFailed

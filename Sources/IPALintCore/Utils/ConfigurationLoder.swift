@@ -6,22 +6,22 @@
 //
 
 import Foundation
-import Yams
 import TSCBasic
+import Yams
 
 protocol ConfigurationLoader {
     func load(from path: AbsolutePath) throws -> Configuration
 }
 
 /*
-// .ipalint.yml
+ // .ipalint.yml
 
-com.bloomber.app.development:
+ com.bloomber.app.development:
   rules:
     - first_rule
       - blas: v32
 
-all:
+ all:
  rules:
    my_rules:
      - whatever we want
@@ -40,7 +40,6 @@ final class Configuration {
 
     let bundleSpecific: [String: BundleConfiguration]
     let all: BundleConfiguration
-
 
     init(bundleSpecific: [String: BundleConfiguration],
          all: BundleConfiguration) {

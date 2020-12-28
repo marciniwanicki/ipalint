@@ -1,7 +1,7 @@
 import ArgumentParser
-import TSCBasic
 import Foundation
 import IPALintCore
+import TSCBasic
 
 public final class CommandRunner {
     public init() {}

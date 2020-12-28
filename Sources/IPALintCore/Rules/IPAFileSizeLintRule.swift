@@ -15,7 +15,8 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         name: "Package size",
         description: """
         This is some description
-        """)
+        """
+    )
 
     private let fileSystem: FileSystem
 
@@ -54,6 +55,7 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
             var minSize: FileSize?
             var maxSize: FileSize?
         }
+
         struct Error {
             var minSize: FileSize?
             var maxSize: FileSize?

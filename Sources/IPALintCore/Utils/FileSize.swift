@@ -28,7 +28,7 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
     public init?(string: String) {
         let components = string.trimmingCharacters(in: .whitespacesAndNewlines)
             .split(separator: " ")
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines)}
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         guard components.count == 2 else {
             return nil
         }
@@ -50,11 +50,11 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
     }
 
     public var megabytes: Float {
-        return  Float(bytes) / Float(FileSize.MB)
+        return Float(bytes) / Float(FileSize.MB)
     }
 
     public var gigabytes: Float {
-        return  Float(bytes) / Float(FileSize.GB)
+        return Float(bytes) / Float(FileSize.GB)
     }
 
     public var bytesString: String {

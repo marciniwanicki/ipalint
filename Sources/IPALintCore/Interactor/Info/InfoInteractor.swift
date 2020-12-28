@@ -64,7 +64,7 @@ final class DefaultInfoInteractor: InfoInteractor {
         return InfoResult(properties: [
             "ipa_path": .string(content.ipaPath.pathString),
             "ipa_size": .fileSize(ipaSize),
-            "number_of_files": .int(numberOfFiles)
+            "number_of_files": .int(numberOfFiles),
         ])
     }
 }

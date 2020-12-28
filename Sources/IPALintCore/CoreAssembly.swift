@@ -8,7 +8,6 @@
 import Foundation
 
 public final class CoreAssembly: Assembly {
-
     // MARK: - Init
 
     public init() {}
@@ -26,7 +25,7 @@ public final class CoreAssembly: Assembly {
     private func assembleRules(_ registry: Registry) {
         registry.register([LintRuleType].self) { r in
             [
-                .file(IPAFileSizeLintRule(fileSystem: r.resolve(FileSystem.self)))
+                .file(IPAFileSizeLintRule(fileSystem: r.resolve(FileSystem.self))),
             ]
         }
     }

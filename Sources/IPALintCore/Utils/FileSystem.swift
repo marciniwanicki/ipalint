@@ -8,7 +8,6 @@
 import Foundation
 import TSCBasic
 
-
 enum FileSystemItem {
     struct File {
         let path: RelativePath
@@ -42,7 +41,6 @@ struct FileSystemTree {
 }
 
 protocol FileSystem {
-
     var currentWorkingDirectory: AbsolutePath { get }
 
     func exists(at path: AbsolutePath) -> Bool
@@ -103,7 +101,7 @@ final class DefaultFileSystem: FileSystem {
                 } else {
                     return .file(FileSystemItem.File(path: $0))
                 }
-        }
+            }
     }
 
     func tree(at path: AbsolutePath) throws -> FileSystemTree {

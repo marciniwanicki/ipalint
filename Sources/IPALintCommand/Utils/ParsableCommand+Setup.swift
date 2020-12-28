@@ -5,8 +5,8 @@
 //  Created by Marcin Iwanicki on 26/12/2020.
 //
 
-import Foundation
 import ArgumentParser
+import Foundation
 import IPALintCore
 
 extension ParsableCommand {
@@ -34,7 +34,7 @@ extension ParsableCommand {
 
     private var commonAssemblies: [Assembly] {
         [
-            CommonAssembly()
+            CommonAssembly(),
         ]
     }
 
@@ -50,7 +50,7 @@ extension ParsableCommand {
 
     private var coreAssemblies: [Assembly] {
         [
-            CoreAssembly()
+            CoreAssembly(),
         ]
     }
 }

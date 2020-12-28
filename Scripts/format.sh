@@ -8,7 +8,7 @@ function main {
 
     # swiftformat
     log_info "run swiftformat"
-    swiftformat . --lint
+    swiftformat .
 }
 
 main

@@ -19,7 +19,7 @@ struct VersionCommand: Command {
             self.printer = printer
         }
 
-        func execute(with context: NoContext) throws {
+        func execute(with _: NoContext) throws {
             printer.text(Constants.version.description)
         }
     }

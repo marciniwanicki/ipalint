@@ -33,4 +33,3 @@ final class DefaultContentExtractor: ContentExtractor {
         return Content(ipaPath: ipaPath, temporaryDirectory: temporaryDirectory)
     }
 }
-

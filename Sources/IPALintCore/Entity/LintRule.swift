@@ -54,8 +54,7 @@ protocol LintRuleConfigurationModifier {
     mutating func apply(configuration: Any) throws
 }
 
-protocol LintRuleConfiguration: LintRuleConfigurationModifier {
-}
+protocol LintRuleConfiguration: LintRuleConfigurationModifier {}
 
 protocol LintRule {
     var descriptor: LintRuleDescriptor { get }

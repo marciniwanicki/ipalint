@@ -5,8 +5,8 @@
 //  Created by Marcin Iwanicki on 25/12/2020.
 //
 
-import Foundation
 import Darwin
+import Foundation
 
 public enum OutputStream {
     case stdout
@@ -55,8 +55,8 @@ final class ForwardOutput: Output {
     private let forwardStderr: ((String) -> Void)?
 
     init(stdout: ((String) -> Void)?, stderr: ((String) -> Void)?) {
-        self.forwardStdout = stdout
-        self.forwardStderr = stderr
+        forwardStdout = stdout
+        forwardStderr = stderr
     }
 
     func write(_ stream: OutputStream, _ string: String) {
@@ -85,4 +85,3 @@ final class CaptureOutput: Output {
         }
     }
 }
-
