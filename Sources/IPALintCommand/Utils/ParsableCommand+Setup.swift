@@ -22,7 +22,8 @@ extension ParsableCommand {
 
     static var allSubcommands: [ParsableCommand.Type] {
         [
-            VersionCommand.self
+            VersionCommand.self,
+            SnapshotCommand.self
         ]
     }
 
@@ -36,7 +37,8 @@ extension ParsableCommand {
 
     private var commandAssemblies: [Assembly] {
         [
-            VersionCommand.Assembly()
+            VersionCommand.Assembly(),
+            SnapshotCommand.Assembly()
         ]
     }
 

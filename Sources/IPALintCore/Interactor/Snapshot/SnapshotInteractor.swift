@@ -22,7 +22,7 @@ public struct SnapshotContext {
 }
 
 public struct SnapshotResult {
-
+    public let snapshotPath: AbsolutePath
 }
 
 public protocol SnapshotInteractor {
@@ -52,7 +52,7 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
 
         try snapshotParser.write(snapshot: snapshot, to: outputPath)
 
-        return .init()
+        return .init(snapshotPath: outputPath)
     }
 }
 
