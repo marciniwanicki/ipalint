@@ -2,12 +2,14 @@ import Foundation
 import IPALintCore
 
 protocol Printer {
+    var output: Output { get }
+
     func text(_ message: String)
     func error(_ message: String)
 }
 
 final class DefaultPrinter: Printer {
-    private let output: Output
+    let output: Output
 
     init(output: Output) {
         self.output = output

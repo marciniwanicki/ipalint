@@ -21,7 +21,7 @@ struct InfoCommand: ParsableCommand {
         help: "Path to .ipa file.",
         completion: .directory
     )
-    var path: String?
+    var path: String
 
     @Option(
         name: .shortAndLong,

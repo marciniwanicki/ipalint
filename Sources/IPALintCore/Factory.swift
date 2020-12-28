@@ -44,7 +44,10 @@ public final class Factory {
     }
 
     public func makeDiffInteractor() -> DiffInteractor {
-        DefaultDiffInteractor()
+        DefaultDiffInteractor(fileSystem: fileSystem,
+                              contentExtractor: contentExtractor,
+                              snapshotGenerator: snapshotGenerator,
+                              snapshotParser: snapshotParser)
     }
 
     public func makeSnapshotInteractor() -> SnapshotInteractor {
