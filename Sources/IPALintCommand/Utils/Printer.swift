@@ -20,6 +20,6 @@ final class DefaultPrinter: Printer {
     }
 
     func error(_ message: String) {
-        output.write(.stdout, "ERROR: \(message)\n")
+        output.write(.stdout, "Error: \(message)\n")
     }
 }
