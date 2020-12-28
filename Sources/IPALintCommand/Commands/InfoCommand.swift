@@ -38,7 +38,7 @@ struct InfoCommand: ParsableCommand {
     var format: String?
 
     func run() throws {
-        try r.resolveInfoExecutor().execute(command: self)
+//        try r.resolveInfoExecutor().execute(command: self)
     }
 
     private func context() -> InfoContext {

@@ -11,22 +11,21 @@ public final class CommandRunner {
     }
 }
 
-struct MainCommand: ParsableCommand {
+private struct MainCommand: ParsableCommand {
     static let configuration: CommandConfiguration = .init(
         commandName: "ipalint",
-        subcommands: [
-            VersionCommand.self,
-            LintCommand.self,
-            InfoCommand.self,
-            DiffCommand.self,
-            SnapshotCommand.self
-        ]
+        subcommands: MainCommand.allSubcommands
     )
 
     func run() throws {}
 
     static func run(with arguments: [String]? = nil) -> Int32 {
-        return Resolver().resolveMainExecutor().execute(with: arguments ?? [])
+        Assembler(container: DefaultContainer())
+            .assemble([CommonAssembly()])
+            .assemble([Assembly()])
+            .container()
+            .resolve(Executor.self)
+            .execute(with: arguments ?? [])
     }
 
     final class Executor {
@@ -53,6 +52,14 @@ struct MainCommand: ParsableCommand {
             case let .generic(message):
                 printer.error(message)
                 return 1
+            }
+        }
+    }
+
+    final class Assembly: CommandAssembly {
+        func assemble(_ registry: Registry) {
+            registry.register(Executor.self) { r in
+                Executor(printer: r.resolve(Printer.self))
             }
         }
     }

@@ -37,7 +37,7 @@ struct SnapshotCommand: ParsableCommand {
     var output: String?
 
     func run() throws {
-        try r.resolveSnapshotExecutor().execute(command: self)
+//        try r.resolveSnapshotExecutor().execute(command: self)
     }
 
     private func context() -> SnapshotContext {

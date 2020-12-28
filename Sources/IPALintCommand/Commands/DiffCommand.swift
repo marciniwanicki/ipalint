@@ -38,7 +38,7 @@ struct DiffCommand: ParsableCommand {
 //    var temp: String?
 
     func run() throws {
-        try r.resolveDiffExecutor().execute(command: self)
+//        try r.resolveDiffExecutor().execute(command: self)
     }
 
     private func context() -> DiffContext {

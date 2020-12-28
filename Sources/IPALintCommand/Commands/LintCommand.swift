@@ -37,7 +37,7 @@ struct LintCommand: ParsableCommand {
     var config: String?
 
     func run() throws {
-        try r.resolveLintExecutor().execute(command: self)
+//        try r.resolveLintExecutor().execute(command: self)
     }
 
     private func context() -> LintContext {
