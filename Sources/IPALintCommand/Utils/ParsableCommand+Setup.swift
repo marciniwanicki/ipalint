@@ -26,6 +26,7 @@ extension ParsableCommand {
             SnapshotCommand.self,
             LintCommand.self,
             InfoCommand.self,
+            DiffCommand.self,
         ]
     }
 
@@ -43,6 +44,7 @@ extension ParsableCommand {
             SnapshotCommand.Assembly(),
             LintCommand.Assembly(),
             InfoCommand.Assembly(),
+            DiffCommand.Assembly(),
         ]
     }
 

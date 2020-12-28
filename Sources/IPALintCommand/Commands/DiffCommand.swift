@@ -9,7 +9,7 @@ import Foundation
 import ArgumentParser
 import IPALintCore
 
-struct DiffCommand: ParsableCommand {
+struct DiffCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "diff",
         abstract: "Diffs two ipa packages."
@@ -29,24 +29,12 @@ struct DiffCommand: ParsableCommand {
     )
     var path2: String
 
-    // TODO
-//    @Option(
-//        name: .shortAndLong,
-//        help: "Path to temp directory.",
-//        completion: .directory
-//    )
-//    var temp: String?
-
-    func run() throws {
-//        try r.resolveDiffExecutor().execute(command: self)
-    }
-
-    private func context() -> DiffContext {
+    func context() -> DiffContext {
         .init(path1: path1,
               path2: path2)
     }
 
-    final class Executor {
+    final class Executor: CommandExecutor {
         private let interactor: DiffInteractor
         private let printer: Printer
 
@@ -56,8 +44,8 @@ struct DiffCommand: ParsableCommand {
             self.printer = printer
         }
 
-        func execute(command: DiffCommand) throws {
-            let result = try interactor.diff(with: command.context())
+        func execute(with context: DiffContext) throws {
+            let result = try interactor.diff(with: context)
             renderer().render(result: result, to: printer.output)
         }
 
@@ -65,6 +53,15 @@ struct DiffCommand: ParsableCommand {
 
         private func renderer() -> DiffResultRenderer {
             TextDiffResultRenderer()
+        }
+    }
+
+    final class Assembly: CommandAssembly {
+        func assemble(_ registry: Registry) {
+            registry.register(Executor.self) { r in
+                Executor(interactor: r.resolve(DiffInteractor.self),
+                         printer: r.resolve(Printer.self))
+            }
         }
     }
 }
