@@ -9,7 +9,7 @@ import Foundation
 import ArgumentParser
 import IPALintCore
 
-struct LintCommand: ParsableCommand {
+struct LintCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "lint",
         abstract: "Lints given ipa package."
@@ -36,15 +36,13 @@ struct LintCommand: ParsableCommand {
     )
     var config: String?
 
-    func run() throws {
-//        try r.resolveLintExecutor().execute(command: self)
+    func context() -> LintContext {
+        .init(ipaPath: path,
+              tempPath: temp,
+              configPath: config)
     }
 
-    private func context() -> LintContext {
-        .init(ipaPath: path, tempPath: temp, configPath: config)
-    }
-
-    final class Executor {
+    final class Executor: CommandExecutor {
         private let interactor: LintInteractor
         private let printer: Printer
 
@@ -53,8 +51,8 @@ struct LintCommand: ParsableCommand {
             self.printer = printer
         }
 
-        func execute(command: LintCommand) throws {
-            let result = try interactor.lint(with: command.context())
+        func execute(with context: LintContext) throws {
+            let result = try interactor.lint(with: context)
             renderer().render(result: result, to: printer.output)
         }
 
@@ -62,6 +60,15 @@ struct LintCommand: ParsableCommand {
 
         private func renderer() -> LintResultRenderer {
             TextLintResultRenderer()
+        }
+    }
+
+    final class Assembly: CommandAssembly {
+        func assemble(_ registry: Registry) {
+            registry.register(Executor.self) { r in
+                Executor(interactor: r.resolve(LintInteractor.self),
+                         printer: r.resolve(Printer.self))
+            }
         }
     }
 }
