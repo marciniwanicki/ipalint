@@ -29,12 +29,6 @@ struct LintCommand: Command {
     )
     var config: String?
 
-    func context() -> LintContext {
-        .init(ipaPath: path,
-              tempPath: temp,
-              configPath: config)
-    }
-
     final class Executor: CommandExecutor {
         private let interactor: LintInteractor
         private let printer: Printer
@@ -44,7 +38,10 @@ struct LintCommand: Command {
             self.printer = printer
         }
 
-        func execute(with context: LintContext) throws {
+        func execute(with command: LintCommand) throws {
+            let context = LintContext(ipaPath: command.path,
+                                      tempPath: command.temp,
+                                      configPath: command.config)
             let result = try interactor.lint(with: context)
             renderer().render(result: result, to: printer.output)
         }

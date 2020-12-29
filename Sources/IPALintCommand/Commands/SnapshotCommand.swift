@@ -29,12 +29,6 @@ struct SnapshotCommand: Command {
     )
     var output: String?
 
-    func context() -> SnapshotContext {
-        .init(ipaPath: path,
-              tempPath: temp,
-              outputPath: output)
-    }
-
     final class Executor: CommandExecutor {
         private let interactor: SnapshotInteractor
         private let printer: Printer
@@ -45,7 +39,10 @@ struct SnapshotCommand: Command {
             self.printer = printer
         }
 
-        func execute(with context: SnapshotContext) throws {
+        func execute(with command: SnapshotCommand) throws {
+            let context = SnapshotContext(ipaPath: command.path,
+                                          tempPath: command.temp,
+                                          outputPath: command.output)
             let result = try interactor.snapshot(with: context)
             renderer().render(result: result, to: printer.output)
         }
