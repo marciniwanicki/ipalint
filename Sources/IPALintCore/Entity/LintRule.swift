@@ -54,9 +54,9 @@ protocol LintRule {
 }
 
 protocol ConfigurableLintRule: LintRuleConfigurationModifier {
-    associatedtype C: LintRuleConfiguration
+    associatedtype Configuration: LintRuleConfiguration
 
-    var configuration: C { get set }
+    var configuration: Configuration { get set }
 }
 
 extension LintRule where Self: ConfigurableLintRule {

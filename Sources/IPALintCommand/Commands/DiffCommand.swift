@@ -32,8 +32,7 @@ struct DiffCommand: Command {
         private let printer: Printer
 
         init(interactor: DiffInteractor,
-             printer: Printer)
-        {
+             printer: Printer) {
             self.interactor = interactor
             self.printer = printer
         }

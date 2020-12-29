@@ -9,8 +9,7 @@ final class DefaultSnapshotGenerator: SnapshotGenerator {
     private let crypto: Crypto
 
     init(fileSystem: FileSystem,
-         crypto: Crypto)
-    {
+         crypto: Crypto) {
         self.fileSystem = fileSystem
         self.crypto = crypto
     }

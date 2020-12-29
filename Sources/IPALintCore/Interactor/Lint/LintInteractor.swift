@@ -29,8 +29,7 @@ final class DefaultLintInteractor: LintInteractor {
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
          configurationLoader: ConfigurationLoader,
-         rules: [LintRuleType])
-    {
+         rules: [LintRuleType]) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.configurationLoader = configurationLoader

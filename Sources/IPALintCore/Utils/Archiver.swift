@@ -14,8 +14,7 @@ final class TarArchiver: Archiver {
     }
 
     func extract(source sourcePath: AbsolutePath,
-                 destination destinationPath: AbsolutePath) throws
-    {
+                 destination destinationPath: AbsolutePath) throws {
         try system.execute(["tar",
                             "xvzf",
                             sourcePath.pathString,

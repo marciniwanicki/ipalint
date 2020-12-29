@@ -31,8 +31,7 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
          snapshotGenerator: SnapshotGenerator,
-         snapshotParser: SnapshotParser)
-    {
+         snapshotParser: SnapshotParser) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.snapshotGenerator = snapshotGenerator

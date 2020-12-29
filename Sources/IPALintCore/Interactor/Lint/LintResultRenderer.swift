@@ -11,17 +11,20 @@ public final class TextLintResultRenderer: LintResultRenderer {
         result.ruleResults.forEach { result in
             if result.violations.isEmpty {
                 output.write(.stdout, "✔ Passed '\(result.rule.identifier.rawValue)' rule\n")
-            } else {
-                result.violations.forEach { violation in
-                    switch violation {
-                    case let .generic(violation):
-                        output.write(
-                            .stdout,
-                            "\(violation.severity.rawValue): \(violation.message) (\(result.rule.identifier.rawValue))\n"
-                        )
-                    }
-                }
+                return
             }
+            result.violations.forEach { violation in
+                output.write(violation: violation, ruleIdentifier: result.rule.identifier.rawValue)
+            }
+        }
+    }
+}
+
+private extension Output {
+    func write(violation: LintRuleResult.Violation, ruleIdentifier: String) {
+        switch violation {
+        case let .generic(violation):
+            write(.stdout, "\(violation.severity.rawValue): \(violation.message) (\(ruleIdentifier))\n")
         }
     }
 }

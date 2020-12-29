@@ -1,2 +1,4 @@
 --swiftversion 5
 --maxwidth 120
+--allman false
+--disable wrapMultilineStatementBraces

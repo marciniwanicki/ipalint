@@ -35,8 +35,7 @@ final class Configuration {
     let all: BundleConfiguration
 
     init(bundleSpecific: [String: BundleConfiguration],
-         all: BundleConfiguration)
-    {
+         all: BundleConfiguration) {
         self.bundleSpecific = bundleSpecific
         self.all = all
     }
