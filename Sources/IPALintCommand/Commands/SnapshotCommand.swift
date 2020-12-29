@@ -39,7 +39,7 @@ struct SnapshotCommand: Command {
             self.printer = printer
         }
 
-        func execute(with command: SnapshotCommand) throws {
+        func execute(command: SnapshotCommand) throws {
             let context = SnapshotContext(ipaPath: command.path,
                                           tempPath: command.temp,
                                           outputPath: command.output)

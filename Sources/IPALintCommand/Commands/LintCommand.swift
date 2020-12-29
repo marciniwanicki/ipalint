@@ -38,7 +38,7 @@ struct LintCommand: Command {
             self.printer = printer
         }
 
-        func execute(with command: LintCommand) throws {
+        func execute(command: LintCommand) throws {
             let context = LintContext(ipaPath: command.path,
                                       tempPath: command.temp,
                                       configPath: command.config)

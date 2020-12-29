@@ -32,7 +32,7 @@ struct DiffCommand: Command {
             self.printer = printer
         }
 
-        func execute(with command: DiffCommand) throws {
+        func execute(command: DiffCommand) throws {
             let context = DiffContext(path1: command.path1, path2: command.path2)
             let result = try interactor.diff(with: context)
             renderer().render(result: result, to: printer.output)

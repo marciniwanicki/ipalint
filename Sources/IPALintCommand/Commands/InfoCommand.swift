@@ -39,7 +39,7 @@ struct InfoCommand: Command {
             self.printer = printer
         }
 
-        func execute(with command: InfoCommand) throws {
+        func execute(command: InfoCommand) throws {
             let context = InfoContext(ipaPath: command.path, tempPath: command.temp)
             let result = try interactor.info(with: context)
             renderer().render(result: result, to: printer.output)
