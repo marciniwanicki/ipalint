@@ -57,21 +57,21 @@ public final class DefaultContainer: Container {
 }
 
 public final class Assembler {
-    private let _container: Container
+    private let container: Container
 
     public init(container: Container) {
-        _container = container
+        self.container = container
     }
 
     public func assemble(_ assemblies: [Assembly]) -> Assembler {
         assemblies.forEach {
-            $0.assemble(_container)
+            $0.assemble(container)
         }
         return self
     }
 
-    public func container() -> Container {
-        return _container
+    public func resolver() -> Resolver {
+        return container
     }
 }
 

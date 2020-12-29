@@ -14,6 +14,8 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
     private static let MB: UInt64 = 1024 * 1024
     private static let GB: UInt64 = 1024 * 1024 * 1024
 
+    // MARK: - Init
+
     public init(bytes: UInt64) {
         self.bytes = bytes
     }
@@ -38,32 +40,16 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
         }
     }
 
-    public var kilobytes: Float {
-        return Float(bytes) / Float(FileSize.KB)
-    }
+    // MARK: - Public
 
-    public var megabytes: Float {
-        return Float(bytes) / Float(FileSize.MB)
-    }
-
-    public var gigabytes: Float {
-        return Float(bytes) / Float(FileSize.GB)
-    }
-
-    public var bytesString: String {
-        return String(format: "%ld B", bytes)
-    }
-
-    public var kilobytesString: String {
-        return String(format: "%.2f KB", kilobytes)
-    }
-
-    public var metabytesString: String {
-        return String(format: "%.2f MB", megabytes)
-    }
-
-    public var gigabytesString: String {
-        return String(format: "%.2f GB", gigabytes)
+    public func delta(_ rhs: FileSize) -> DeltaFileSize {
+        if rhs.bytes > bytes {
+            return .greater(.init(bytes: rhs.bytes - bytes))
+        }
+        if rhs.bytes < bytes {
+            return .lower(.init(bytes: bytes - rhs.bytes))
+        }
+        return .equal
     }
 
     // MARK: - CustomStringConvertable
@@ -89,14 +75,32 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
 
     // MARK: - Private
 
-    public func delta(_ rhs: FileSize) -> DeltaFileSize {
-        if rhs.bytes > bytes {
-            return .greater(.init(bytes: rhs.bytes - bytes))
-        }
-        if rhs.bytes < bytes {
-            return .lower(.init(bytes: bytes - rhs.bytes))
-        }
-        return .equal
+    private var kilobytes: Float {
+        return Float(bytes) / Float(FileSize.KB)
+    }
+
+    private var megabytes: Float {
+        return Float(bytes) / Float(FileSize.MB)
+    }
+
+    private var gigabytes: Float {
+        return Float(bytes) / Float(FileSize.GB)
+    }
+
+    private var bytesString: String {
+        return String(format: "%ld B", bytes)
+    }
+
+    private var kilobytesString: String {
+        return String(format: "%.2f KB", kilobytes)
+    }
+
+    private var metabytesString: String {
+        return String(format: "%.2f MB", megabytes)
+    }
+
+    private var gigabytesString: String {
+        return String(format: "%.2f GB", gigabytes)
     }
 
     private static func unit(from string: String) -> UInt64? {

@@ -2,25 +2,13 @@ import ArgumentParser
 import Foundation
 import IPALintCore
 
-extension ParsableCommand {
+extension Command {
     var resolver: Resolver {
         Assembler(container: DefaultContainer())
             .assemble(commonAssemblies)
             .assemble(commandAssemblies)
             .assemble(coreAssemblies)
-            .container()
-    }
-
-    // MARK: - Subcommands
-
-    static var allSubcommands: [ParsableCommand.Type] {
-        [
-            VersionCommand.self,
-            SnapshotCommand.self,
-            LintCommand.self,
-            InfoCommand.self,
-            DiffCommand.self,
-        ]
+            .resolver()
     }
 
     // MARK: - Assemblies
@@ -44,6 +32,18 @@ extension ParsableCommand {
     private var coreAssemblies: [Assembly] {
         [
             CoreAssembly(),
+        ]
+    }
+}
+
+extension ParsableCommand {
+    static var allSubcommands: [ParsableCommand.Type] {
+        [
+            VersionCommand.self,
+            SnapshotCommand.self,
+            LintCommand.self,
+            InfoCommand.self,
+            DiffCommand.self,
         ]
     }
 }

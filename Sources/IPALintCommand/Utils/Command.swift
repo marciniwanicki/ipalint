@@ -3,20 +3,18 @@ import Foundation
 import IPALintCore
 
 protocol CommandExecutor {
-    associatedtype Context
+    associatedtype Command
 
-    func execute(with context: Context) throws
+    func execute(command: Command) throws
 }
 
 protocol Command: ParsableCommand {
-    associatedtype Executor: CommandExecutor
-
-    func context() -> Executor.Context
+    associatedtype Executor: CommandExecutor where Executor.Command == Self
 }
 
 extension Command {
     func run() throws {
-        try resolver.resolve(Executor.self).execute(with: context())
+        try resolver.resolve(Executor.self).execute(command: self)
     }
 }
 

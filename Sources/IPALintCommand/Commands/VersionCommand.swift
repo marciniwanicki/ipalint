@@ -9,10 +9,6 @@ struct VersionCommand: Command {
         abstract: "Show version."
     )
 
-    func context() -> VersionContext {
-        .init(version: Constants.version)
-    }
-
     final class Executor: CommandExecutor {
         private let printer: Printer
 
@@ -20,8 +16,8 @@ struct VersionCommand: Command {
             self.printer = printer
         }
 
-        func execute(with context: VersionContext) throws {
-            printer.text(context.version.description)
+        func execute(command _: VersionCommand) throws {
+            printer.text(Constants.version.description)
         }
     }
 

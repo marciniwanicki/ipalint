@@ -22,11 +22,6 @@ struct DiffCommand: Command {
     )
     var path2: String
 
-    func context() -> DiffContext {
-        .init(path1: path1,
-              path2: path2)
-    }
-
     final class Executor: CommandExecutor {
         private let interactor: DiffInteractor
         private let printer: Printer
@@ -37,7 +32,8 @@ struct DiffCommand: Command {
             self.printer = printer
         }
 
-        func execute(with context: DiffContext) throws {
+        func execute(command: DiffCommand) throws {
+            let context = DiffContext(path1: command.path1, path2: command.path2)
             let result = try interactor.diff(with: context)
             renderer().render(result: result, to: printer.output)
         }

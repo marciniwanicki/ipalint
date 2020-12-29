@@ -30,11 +30,6 @@ struct InfoCommand: Command {
     )
     var format: String?
 
-    func context() -> InfoContext {
-        .init(ipaPath: path,
-              tempPath: temp)
-    }
-
     final class Executor: CommandExecutor {
         private let interactor: InfoInteractor
         private let printer: Printer
@@ -44,7 +39,8 @@ struct InfoCommand: Command {
             self.printer = printer
         }
 
-        func execute(with context: InfoContext) throws {
+        func execute(command: InfoCommand) throws {
+            let context = InfoContext(ipaPath: command.path, tempPath: command.temp)
             let result = try interactor.info(with: context)
             renderer().render(result: result, to: printer.output)
         }
