@@ -1,4 +1,8 @@
 import Foundation
 import IPALintCommand
 
-CommandRunner.run()
+func main() -> Int32 {
+    CommandRunner().run(with: Array(ProcessInfo.processInfo.arguments.dropFirst()))
+}
+
+exit(main())

@@ -1,17 +1,39 @@
 import ArgumentParser
 import Foundation
+import IPALintCore
+import TSCUtility
 
-struct VersionCommand: ParsableCommand {
-    static let configuration: CommandConfiguration = .init(
+struct VersionCommand: Command {
+    static let configuration = CommandConfiguration(
         commandName: "version",
         abstract: "Show version."
     )
 
-    func run() {
-        printer.text(Constants.version.description)
+    func context() -> VersionContext {
+        .init(version: Constants.version)
     }
 
-    // MARK: - Private
+    final class Executor: CommandExecutor {
+        private let printer: Printer
 
-    private var printer: Printer { Resolver.shared.printer }
+        init(printer: Printer) {
+            self.printer = printer
+        }
+
+        func execute(with context: VersionContext) throws {
+            printer.text(context.version.description)
+        }
+    }
+
+    final class Assembly: CommandAssembly {
+        func assemble(_ registry: Registry) {
+            registry.register(Executor.self) { r in
+                Executor(printer: r.resolve(Printer.self))
+            }
+        }
+    }
+}
+
+struct VersionContext {
+    let version: Version
 }

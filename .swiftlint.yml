@@ -16,6 +16,11 @@ identifier_name:
     - h3
     - p1
     - p2
+    - r
+    - B
+    - KB
+    - MB
+    - GB
 
 type_name:
   excluded:
