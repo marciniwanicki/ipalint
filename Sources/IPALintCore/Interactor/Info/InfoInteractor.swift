@@ -44,7 +44,8 @@ final class DefaultInfoInteractor: InfoInteractor {
     private let contentExtractor: ContentExtractor
 
     init(fileSystem: FileSystem,
-         contentExtractor: ContentExtractor) {
+         contentExtractor: ContentExtractor)
+    {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
     }

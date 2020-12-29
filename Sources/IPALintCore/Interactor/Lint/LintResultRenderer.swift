@@ -15,7 +15,10 @@ public final class TextLintResultRenderer: LintResultRenderer {
                 result.violations.forEach { violation in
                     switch violation {
                     case let .generic(violation):
-                        output.write(.stdout, "\(violation.severity.rawValue): \(violation.message) (\(result.rule.identifier.rawValue))\n")
+                        output.write(
+                            .stdout,
+                            "\(violation.severity.rawValue): \(violation.message) (\(result.rule.identifier.rawValue))\n"
+                        )
                     }
                 }
             }

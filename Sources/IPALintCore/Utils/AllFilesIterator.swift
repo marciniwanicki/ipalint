@@ -28,7 +28,8 @@ final class AllFilesIterator {
 
     private func visit(_ item: FileSystemTree.Item,
                        parent: AbsolutePath,
-                       closure: (AbsolutePath) -> Void) {
+                       closure: (AbsolutePath) -> Void)
+    {
         switch item {
         case let .file(file):
             let absolutePath = parent.appending(file.path)

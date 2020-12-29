@@ -29,7 +29,8 @@ final class DefaultLintInteractor: LintInteractor {
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
          configurationLoader: ConfigurationLoader,
-         rules: [LintRuleType]) {
+         rules: [LintRuleType])
+    {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.configurationLoader = configurationLoader
@@ -38,7 +39,8 @@ final class DefaultLintInteractor: LintInteractor {
 
     func lint(with context: LintContext) throws -> LintResult {
         // read configuration
-        let configurationPath = try context.configPath.map { try fileSystem.absolutePath(from: $0) } ?? fileSystem.currentWorkingDirectory.appending(component: ".ipalint.yml")
+        let configurationPath = try context.configPath.map { try fileSystem.absolutePath(from: $0) } ?? fileSystem
+            .currentWorkingDirectory.appending(component: ".ipalint.yml")
         let configuration = try configurationLoader.load(from: configurationPath)
         let content = try contentExtractor.content(from: context)
 

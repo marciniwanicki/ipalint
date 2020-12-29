@@ -6,7 +6,8 @@ public struct DiffContext {
     let path2: String
 
     public init(path1: String,
-                path2: String) {
+                path2: String)
+    {
         self.path1 = path1
         self.path2 = path2
     }
@@ -29,7 +30,8 @@ final class DefaultDiffInteractor: DiffInteractor {
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
          snapshotGenerator: SnapshotGenerator,
-         snapshotParser: SnapshotParser) {
+         snapshotParser: SnapshotParser)
+    {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.snapshotGenerator = snapshotGenerator

@@ -17,11 +17,8 @@ function main {
     # 0.35.0
     SWIFTLINT_FORMULA="swiftlint.rb"
 
-    # 0.40.13
+    # 0.47.9
     SWIFTFORMAT_FORMULA="swiftformat.rb"
-
-    # tmp fix
-    brew unlink swiftlint
 
     # disable homebrew auto update
     export HOMEBREW_NO_AUTO_UPDATE=1

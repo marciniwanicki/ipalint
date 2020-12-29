@@ -40,7 +40,8 @@ struct SnapshotCommand: Command {
         private let printer: Printer
 
         init(interactor: SnapshotInteractor,
-             printer: Printer) {
+             printer: Printer)
+        {
             self.interactor = interactor
             self.printer = printer
         }

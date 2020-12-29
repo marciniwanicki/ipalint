@@ -31,7 +31,8 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
          snapshotGenerator: SnapshotGenerator,
-         snapshotParser: SnapshotParser) {
+         snapshotParser: SnapshotParser)
+    {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.snapshotGenerator = snapshotGenerator
@@ -41,7 +42,8 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
     func snapshot(with context: SnapshotContext) throws -> SnapshotResult {
         let content = try contentExtractor.content(from: context)
         let snapshot = try snapshotGenerator.snapshot(of: content)
-        let outputPath = try fileSystem.absolutePath(from: context.outputPath ?? "\(content.ipaPath.basenameWithoutExt)-snapshot.json")
+        let outputPath = try fileSystem
+            .absolutePath(from: context.outputPath ?? "\(content.ipaPath.basenameWithoutExt)-snapshot.json")
 
         try snapshotParser.write(snapshot: snapshot, to: outputPath)
 
