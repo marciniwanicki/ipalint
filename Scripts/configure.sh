@@ -20,6 +20,9 @@ function main {
     # 0.47.9
     SWIFTFORMAT_FORMULA="swiftformat.rb"
 
+    # FIXME
+    brew unlink swiftlint
+
     # disable homebrew auto update
     export HOMEBREW_NO_AUTO_UPDATE=1
 
