@@ -23,7 +23,7 @@ private struct MainCommand: ParsableCommand {
         Assembler(container: DefaultContainer())
             .assemble([CommonAssembly()])
             .assemble([Assembly()])
-            .container()
+            .resolver()
             .resolve(Executor.self)
             .execute(with: arguments ?? [])
     }
