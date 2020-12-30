@@ -16,7 +16,7 @@ struct VersionCommand: Command {
             self.printer = printer
         }
 
-        func execute(command _: VersionCommand) throws {
+        func execute(command: VersionCommand) throws {
             printer.text(Constants.version.description)
         }
     }
@@ -28,8 +28,4 @@ struct VersionCommand: Command {
             }
         }
     }
-}
-
-struct VersionContext {
-    let version: Version
 }
