@@ -10,7 +10,7 @@ public final class TextInfoResultRenderer: InfoResultRenderer {
     public func render(result: InfoResult, to output: Output) {
         result.properties.keys.sorted().forEach { key in
             let value = result.properties[key]?.description ?? "<nil>"
-            output.write(.stdout, "\(key): \(value)\n")
+            output.write("\(key): \(value)\n")
         }
     }
 }

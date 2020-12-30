@@ -16,10 +16,16 @@ final class DefaultPrinter: Printer {
     }
 
     func text(_ message: String) {
-        output.write(.stdout, "\(message)\n")
+        output.write("\(message)\n", to: .stdout)
     }
 
     func error(_ message: String) {
-        output.write(.stdout, "Error: \(message)\n")
+        output.write("Error: \(message)\n", to: .stderr)
+    }
+}
+
+extension Printer {
+    func richTextOutput(colorsEnabled _: Bool = true) -> RichTextOutput {
+        return TerminalRichTextOutput(output: output)
     }
 }

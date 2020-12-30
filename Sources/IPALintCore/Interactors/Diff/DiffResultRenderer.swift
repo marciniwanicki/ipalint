@@ -11,13 +11,13 @@ public final class TextDiffResultRenderer: DiffResultRenderer {
         result.diff.differences.forEach { diff in
             switch diff {
             case let .onlyInFirst(file):
-                output.write(.stdout, "- \(file.path) (only in first)\n")
+                output.write("- \(file.path) (only in first)\n")
             case let .onlyInSecond(file):
-                output.write(.stdout, "+ \(file.path) (only in second)\n")
+                output.write("+ \(file.path) (only in second)\n")
             case let .difference(difference):
-                output.write(.stdout, "* \(difference.path) (different content Δ \(difference.deltaFileSize))\n")
-                output.write(.stdout, "  1) \(difference.firstSize) (\(difference.firstSha256))\n")
-                output.write(.stdout, "  2) \(difference.secondSize) (\(difference.secondSha256))\n")
+                output.write("* \(difference.path) (different content Δ \(difference.deltaFileSize))\n")
+                output.write("  1) \(difference.firstSize) (\(difference.firstSha256))\n")
+                output.write("  2) \(difference.secondSize) (\(difference.secondSha256))\n")
             }
         }
     }
