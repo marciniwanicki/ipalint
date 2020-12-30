@@ -35,13 +35,13 @@ struct DiffCommand: Command {
         func execute(command: DiffCommand) throws {
             let context = DiffContext(path1: command.path1, path2: command.path2)
             let result = try interactor.diff(with: context)
-            renderer().render(result: result, to: printer.output)
+            renderer().render(result: result)
         }
 
         // MARK: - Private
 
         private func renderer() -> DiffResultRenderer {
-            TextDiffResultRenderer()
+            TextDiffResultRenderer(output: printer.richTextOutput())
         }
     }
 
