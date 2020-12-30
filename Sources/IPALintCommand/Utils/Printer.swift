@@ -25,7 +25,7 @@ final class DefaultPrinter: Printer {
 }
 
 extension Printer {
-    func richTextOutput(colorsEnabled _: Bool = true) -> RichTextOutput {
-        return TerminalRichTextOutput(output: output)
+    func richTextOutput(colorsEnabled: Bool = true) -> RichTextOutput {
+        TerminalRichTextOutput(output: output, colorsEnabled: colorsEnabled)
     }
 }

@@ -22,6 +22,9 @@ struct DiffCommand: Command {
     )
     var path2: String
 
+    @Flag
+    var noColors: Bool = false
+
     final class Executor: CommandExecutor {
         private let interactor: DiffInteractor
         private let printer: Printer
@@ -35,13 +38,13 @@ struct DiffCommand: Command {
         func execute(command: DiffCommand) throws {
             let context = DiffContext(path1: command.path1, path2: command.path2)
             let result = try interactor.diff(with: context)
-            renderer().render(result: result)
+            renderer(colorsEnabled: !command.noColors).render(result: result)
         }
 
         // MARK: - Private
 
-        private func renderer() -> DiffResultRenderer {
-            TextDiffResultRenderer(output: printer.richTextOutput())
+        private func renderer(colorsEnabled: Bool) -> DiffResultRenderer {
+            TextDiffResultRenderer(output: printer.richTextOutput(colorsEnabled: colorsEnabled))
         }
     }
 
