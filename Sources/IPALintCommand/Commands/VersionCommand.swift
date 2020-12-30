@@ -29,7 +29,3 @@ struct VersionCommand: Command {
         }
     }
 }
-
-struct VersionContext {
-    let version: Version
-}

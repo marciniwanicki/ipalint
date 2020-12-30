@@ -1,23 +1,33 @@
 import Foundation
 
 public protocol DiffResultRenderer {
-    func render(result: DiffResult, to output: Output)
+    func render(result: DiffResult)
 }
 
 public final class TextDiffResultRenderer: DiffResultRenderer {
-    public init() {}
+    private let output: RichTextOutput
 
-    public func render(result: DiffResult, to output: Output) {
+    public init(output: RichTextOutput) {
+        self.output = output
+    }
+
+    public func render(result: DiffResult) {
         result.diff.differences.forEach { diff in
             switch diff {
             case let .onlyInFirst(file):
-                output.write(.stdout, "- \(file.path) (only in first)\n")
+                output.write(
+                    .text("- \(file.path)", .color(.red)) + .text(" (only in first)\n", .color(.darkGray))
+                )
             case let .onlyInSecond(file):
-                output.write(.stdout, "+ \(file.path) (only in second)\n")
+                output.write(
+                    .text("+ \(file.path)", .color(.green)) + .text(" (only in second)\n", .color(.darkGray))
+                )
             case let .difference(difference):
-                output.write(.stdout, "* \(difference.path) (different content Δ \(difference.deltaFileSize))\n")
-                output.write(.stdout, "  1) \(difference.firstSize) (\(difference.firstSha256))\n")
-                output.write(.stdout, "  2) \(difference.secondSize) (\(difference.secondSha256))\n")
+                output.write(
+                    .text("* \(difference.path) (different content Δ \(difference.deltaFileSize))\n", .color(.yellow))
+                        + .text("  1) \(difference.firstSize) (\(difference.firstSha256))\n", .color(.yellow))
+                        + .text("  2) \(difference.secondSize) (\(difference.secondSha256))\n", .color(.yellow))
+                )
             }
         }
     }

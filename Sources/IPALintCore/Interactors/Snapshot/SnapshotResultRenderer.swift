@@ -8,6 +8,6 @@ public final class TextSnapshotResultRenderer: SnapshotResultRenderer {
     public init() {}
 
     public func render(result: SnapshotResult, to output: Output) {
-        output.write(.stdout, "Snapshot has been saved to '\(result.snapshotPath.pathString)'.\n")
+        output.write("Snapshot has been saved to '\(result.snapshotPath.pathString)'.\n")
     }
 }

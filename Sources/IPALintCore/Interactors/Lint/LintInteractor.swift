@@ -37,7 +37,6 @@ final class DefaultLintInteractor: LintInteractor {
     }
 
     func lint(with context: LintContext) throws -> LintResult {
-        // read configuration
         let configurationPath = try context.configPath.map { try fileSystem.absolutePath(from: $0) } ?? fileSystem
             .currentWorkingDirectory.appending(component: ".ipalint.yml")
         let configuration = try configurationLoader.load(from: configurationPath)

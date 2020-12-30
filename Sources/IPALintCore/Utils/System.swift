@@ -53,8 +53,8 @@ private extension OutputType {
         case .default:
             return .none
         default:
-            return .stream { [output] bytes in output.write(.stdout, bytes) }
-            stderr: { [output] bytes in output.write(.stderr, bytes)
+            return .stream { [output] bytes in output.write(bytes, to: .stdout) }
+            stderr: { [output] bytes in output.write(bytes, to: .stderr)
             }
         }
     }

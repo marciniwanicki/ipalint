@@ -7,19 +7,25 @@ public enum OutputStream {
 }
 
 public protocol Output: AnyObject {
-    func write(_ stream: OutputStream, _ string: String)
+    func write(_ string: String, to stream: OutputStream)
+
+    var redirected: Bool { get }
 }
 
 extension Output {
-    func write(_ stream: OutputStream, _ data: Data) {
+    func write(_ string: String) {
+        write(string, to: .stdout)
+    }
+
+    func write(_ data: Data, to stream: OutputStream) {
         guard let string = String(data: data, encoding: .utf8) else {
             return
         }
-        write(stream, string)
+        write(string, to: stream)
     }
 
-    func write(_ stream: OutputStream, _ bytes: [UInt8]) {
-        write(stream, Data(bytes))
+    func write(_ bytes: [UInt8], to stream: OutputStream) {
+        write(Data(bytes), to: stream)
     }
 }
 
@@ -30,7 +36,7 @@ public final class StandardOutput: Output {
 
     private let lock = NSLock()
 
-    public func write(_ stream: OutputStream, _ string: String) {
+    public func write(_ string: String, to stream: OutputStream) {
         lock.lock(); defer { lock.unlock() }
         switch stream {
         case .stdout:
@@ -41,9 +47,15 @@ public final class StandardOutput: Output {
             fflush(stderr)
         }
     }
+
+    public var redirected: Bool {
+        isatty(fileno(stdout)) != 1
+    }
 }
 
 final class ForwardOutput: Output {
+    let redirected = false
+
     private let forwardStdout: ((String) -> Void)?
     private let forwardStderr: ((String) -> Void)?
 
@@ -52,7 +64,7 @@ final class ForwardOutput: Output {
         forwardStderr = stderr
     }
 
-    func write(_ stream: OutputStream, _ string: String) {
+    public func write(_ string: String, to stream: OutputStream) {
         switch stream {
         case .stdout:
             forwardStdout?(string)
@@ -63,13 +75,15 @@ final class ForwardOutput: Output {
 }
 
 final class CaptureOutput: Output {
+    let redirected = false
+
     private(set) var captured: [(OutputStream, String)] = []
 
     var stdout: [String] { captured.filter { $0.0 == .stdout }.map { $0.1 } }
     var stderr: [String] { captured.filter { $0.0 == .stderr }.map { $0.1 } }
     var output: [String] { captured.map { $0.1 } }
 
-    func write(_ stream: OutputStream, _ string: String) {
+    public func write(_ string: String, to stream: OutputStream) {
         switch stream {
         case .stdout:
             captured.append((.stdout, string))

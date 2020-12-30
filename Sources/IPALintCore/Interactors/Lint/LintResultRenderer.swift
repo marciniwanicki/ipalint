@@ -1,30 +1,58 @@
 import Foundation
 
 public protocol LintResultRenderer {
-    func render(result: LintResult, to output: Output)
+    func render(result: LintResult)
 }
 
 public final class TextLintResultRenderer: LintResultRenderer {
-    public init() {}
+    private let output: RichTextOutput
 
-    public func render(result: LintResult, to output: Output) {
-        result.ruleResults.forEach { result in
-            if result.violations.isEmpty {
-                output.write(.stdout, "✔ Passed '\(result.rule.identifier.rawValue)' rule\n")
-                return
-            }
-            result.violations.forEach { violation in
-                output.write(violation: violation, ruleIdentifier: result.rule.identifier.rawValue)
-            }
+    public init(output: RichTextOutput) {
+        self.output = output
+    }
+
+    public func render(result: LintResult) {
+        result.ruleResults.forEach(renderLintRuleResult)
+    }
+
+    private func renderLintRuleResult(_ result: LintRuleResult) {
+        guard !result.violations.isEmpty else {
+            output.write(
+                .text("[", .color(.darkGray))
+                    + .text("OK", .color(.green))
+                    + .text("]", .color(.darkGray))
+                    + .text(" \(result.rule.identifier.rawValue)", .color(.lightGray))
+                    + .text(" rule", .color(.darkGray))
+                    + .newLine
+            )
+            return
+        }
+        result.violations.forEach { violation in
+            renderViolation(violation, ruleIdentifier: result.rule.identifier.rawValue)
         }
     }
-}
 
-private extension Output {
-    func write(violation: LintRuleResult.Violation, ruleIdentifier: String) {
+    private func renderViolation(_ violation: LintRuleResult.Violation, ruleIdentifier: String) {
         switch violation {
         case let .generic(violation):
-            write(.stdout, "\(violation.severity.rawValue): \(violation.message) (\(ruleIdentifier))\n")
+            output.write(
+                .text("[", .color(.darkGray))
+                    + .text(violation.severity.rawValue.uppercased(), .color(color(from: violation.severity)))
+                    + .text("]", .color(.darkGray))
+                    + .text(" \(ruleIdentifier)", .color(.lightGray))
+                    + .text(" rule:", .color(.darkGray))
+                    + .text(" \(violation.message)", .color(color(from: violation.severity)))
+                    + .newLine
+            )
+        }
+    }
+
+    private func color(from severity: LintRuleResult.ViolationSeverity) -> RichText.Color {
+        switch severity {
+        case .warning:
+            return .yellow
+        case .error:
+            return .red
         }
     }
 }

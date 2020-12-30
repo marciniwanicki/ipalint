@@ -43,13 +43,13 @@ struct LintCommand: Command {
                                       tempPath: command.temp,
                                       configPath: command.config)
             let result = try interactor.lint(with: context)
-            renderer().render(result: result, to: printer.output)
+            renderer().render(result: result)
         }
 
         // MARK: - Private
 
         private func renderer() -> LintResultRenderer {
-            TextLintResultRenderer()
+            TextLintResultRenderer(output: printer.richTextOutput())
         }
     }
 
