@@ -49,11 +49,26 @@ final class YamlConfigurationLoader: ConfigurationLoader {
     }
 
     func load(from path: AbsolutePath) throws -> Configuration {
-        let data = try fileSystem.read(from: path)
-        let string = String(data: data, encoding: .utf8)!
-        let rawConfiguration = try Yams.load(yaml: string)!
-        let bundleSpecific = self.bundleSpecific(from: rawConfiguration)
-        let all = self.all(from: rawConfiguration)
+        guard fileSystem.exists(at: path) else {
+            throw CoreError.generic("Config file at path '\(path.pathString)' does not exist")
+        }
+
+        let data = try CoreError.rethrow(try fileSystem.read(from: path),
+                                         "Failed to read config file at path '\(path.pathString)'")
+        guard let string = String(data: data, encoding: .utf8) else {
+            throw CoreError.generic("Config file at path '\(path.pathString)' does not use UTF-8 encoding")
+        }
+        let rawConfiguration = try CoreError.rethrow(try Yams.load(yaml: string)) { description in
+            .generic(
+                """
+                Config file at path '\(path.pathString)' cannot be parsed
+
+                - \(description)
+                """
+            )
+        }
+        let bundleSpecific = self.bundleSpecific(from: rawConfiguration as Any)
+        let all = self.all(from: rawConfiguration as Any)
         return .init(bundleSpecific: bundleSpecific, all: all)
     }
 

@@ -17,7 +17,9 @@ private struct MainCommand: ParsableCommand {
         subcommands: MainCommand.allSubcommands
     )
 
-    func run() throws {}
+    func run() throws {
+        _ = MainCommand.run(with: ["--help"])
+    }
 
     static func run(with arguments: [String]? = nil) -> Int32 {
         Assembler(container: DefaultContainer())
@@ -30,9 +32,15 @@ private struct MainCommand: ParsableCommand {
 
     final class Executor {
         private let printer: Printer
+        private let errorHandler: ErrorHandler
 
-        init(printer: Printer) {
+        init(printer: Printer, errorHandler: ErrorHandler) {
             self.printer = printer
+            self.errorHandler = errorHandler
+        }
+
+        func printHelp() {
+            printer.text(helpMessage())
         }
 
         func execute(with arguments: [String]) -> Int32 {
@@ -40,18 +48,8 @@ private struct MainCommand: ParsableCommand {
                 var command = try parseAsRoot(arguments)
                 try command.run()
                 return 0
-            } catch let error as CoreError {
-                return handleCoreError(error)
             } catch {
-                exit(withError: error)
-            }
-        }
-
-        private func handleCoreError(_ error: CoreError) -> Int32 {
-            switch error {
-            case let .generic(message):
-                printer.error(message)
-                return 1
+                return errorHandler.handle(error: error)
             }
         }
     }
@@ -59,8 +57,42 @@ private struct MainCommand: ParsableCommand {
     final class Assembly: CommandAssembly {
         func assemble(_ registry: Registry) {
             registry.register(Executor.self) { r in
-                Executor(printer: r.resolve(Printer.self))
+                Executor(printer: r.resolve(Printer.self),
+                         errorHandler: r.resolve(ErrorHandler.self))
+            }
+            registry.register(ErrorHandler.self) { r in
+                ErrorHandler(printer: r.resolve(Printer.self))
             }
         }
+    }
+}
+
+private final class ErrorHandler {
+    private let printer: Printer
+
+    init(printer: Printer) {
+        self.printer = printer
+    }
+
+    func handle(error: Error) -> Int32 {
+        if let error = error as? CoreError {
+            return handleCoreError(error)
+        }
+        return handleError(error)
+    }
+
+    // MARK: - Private
+
+    private func handleCoreError(_ error: CoreError) -> Int32 {
+        switch error {
+        case let .generic(message):
+            printer.error(message)
+            return 1
+        }
+    }
+
+    private func handleError(_ error: Error) -> Int32 {
+        printer.text(MainCommand.fullMessage(for: error))
+        return 1
     }
 }
