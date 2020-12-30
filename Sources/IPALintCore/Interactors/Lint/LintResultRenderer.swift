@@ -56,12 +56,3 @@ public final class TextLintResultRenderer: LintResultRenderer {
         }
     }
 }
-
-private extension Output {
-    func write(violation: LintRuleResult.Violation, ruleIdentifier: String) {
-        switch violation {
-        case let .generic(violation):
-            write("\(violation.severity.rawValue): \(violation.message) (\(ruleIdentifier))\n")
-        }
-    }
-}
