@@ -25,8 +25,8 @@ public final class TextDiffResultRenderer: DiffResultRenderer {
             case let .difference(difference):
                 output.write(
                     .text("* \(difference.path) (different content Δ \(difference.deltaFileSize))\n", .color(.yellow))
-                    + .text("  1) \(difference.firstSize) (\(difference.firstSha256))\n", .color(.yellow))
-                    + .text("  2) \(difference.secondSize) (\(difference.secondSha256))\n", .color(.yellow))
+                        + .text("  1) \(difference.firstSize) (\(difference.firstSha256))\n", .color(.yellow))
+                        + .text("  2) \(difference.secondSize) (\(difference.secondSha256))\n", .color(.yellow))
                 )
             }
         }
