@@ -15,10 +15,10 @@ public protocol Assembly {
 public protocol Container: Registry, Resolver {}
 
 public final class DefaultContainer: Container {
-    private let parent: Container?
+    private let parent: Resolver?
     private var factories: [ObjectIdentifier: ReferenceResolver] = [:]
 
-    public init(parent: Container? = nil) {
+    public init(parent: Resolver? = nil) {
         self.parent = parent
     }
 

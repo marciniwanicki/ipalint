@@ -30,11 +30,11 @@ extension Output {
 }
 
 public final class StandardOutput: Output {
-    private init() {}
-
     public static let shared = StandardOutput()
 
     private let lock = NSLock()
+
+    private init() {}
 
     public func write(_ string: String, to stream: OutputStream) {
         lock.lock(); defer { lock.unlock() }
@@ -74,21 +74,51 @@ final class ForwardOutput: Output {
     }
 }
 
-final class CaptureOutput: Output {
-    let redirected = false
+public final class DebugCaptureOutput: Output {
+    #if DEBUG
+        public static let tests = DebugCaptureOutput()
+    #endif
 
-    private(set) var captured: [(OutputStream, String)] = []
+    public let redirected = true
 
-    var stdout: [String] { captured.filter { $0.0 == .stdout }.map { $0.1 } }
-    var stderr: [String] { captured.filter { $0.0 == .stderr }.map { $0.1 } }
-    var output: [String] { captured.map { $0.1 } }
+    private let lock = NSLock()
+
+    private init() {}
+
+    public private(set) var captured: [(OutputStream, String)] = []
+
+    public var stdout: [String] { captured.filter { $0.0 == .stdout }.map { $0.1 } }
+    public var stderr: [String] { captured.filter { $0.0 == .stderr }.map { $0.1 } }
+    public var output: [String] { captured.map { $0.1 } }
 
     public func write(_ string: String, to stream: OutputStream) {
+        lock.lock(); defer { lock.unlock() }
         switch stream {
         case .stdout:
             captured.append((.stdout, string))
         case .stderr:
             captured.append((.stderr, string))
         }
+    }
+
+    public func clear() {
+        lock.lock(); defer { lock.unlock() }
+        captured = []
+    }
+}
+
+public final class CombinedOutput: Output {
+    private let outputs: [Output]
+
+    public init(outputs: [Output]) {
+        self.outputs = outputs
+    }
+
+    public func write(_ string: String, to stream: OutputStream) {
+        outputs.forEach { $0.write(string, to: stream) }
+    }
+
+    public var redirected: Bool {
+        outputs.contains { $0.redirected }
     }
 }

@@ -31,5 +31,9 @@ let package = Package(
             name: "IPALintCoreTests",
             dependencies: ["IPALintCore", "IPALintFixtures"]
         ),
+        .testTarget(
+            name: "IPALintIntegrationTests",
+            dependencies: ["IPALintCommand", "IPALintCore", "IPALintFixtures"]
+        ),
     ]
 )
