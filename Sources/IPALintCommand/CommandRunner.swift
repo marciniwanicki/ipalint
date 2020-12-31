@@ -93,6 +93,6 @@ private final class ErrorHandler {
 
     private func handleError(_ error: Error) -> Int32 {
         printer.text(MainCommand.fullMessage(for: error))
-        return 1
+        return MainCommand.exitCode(for: error).rawValue
     }
 }
