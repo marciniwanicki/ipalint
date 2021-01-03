@@ -57,41 +57,16 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
 }
 
 struct IPAFileSizeLintRuleConfiguration: LintRuleConfiguration {
-    struct Warning {
+    struct Warning: Codable {
         var minSize: FileSize?
         var maxSize: FileSize?
     }
 
-    struct Error {
+    struct Error: Codable {
         var minSize: FileSize?
         var maxSize: FileSize?
     }
 
     var warning = Warning()
     var error = Error()
-
-    mutating func apply(configuration: Any) throws {
-        guard let dictionary = configuration as? [String: Any] else {
-            return
-        }
-
-        if let warningDictionary = dictionary["warning"] as? [String: Any] {
-            warning.minSize = fileSize(from: warningDictionary["min_size"])
-            warning.maxSize = fileSize(from: warningDictionary["max_size"])
-        }
-        if let errorDictionary = dictionary["error"] as? [String: Any] {
-            error.minSize = fileSize(from: errorDictionary["min_size"])
-            error.maxSize = fileSize(from: errorDictionary["max_size"])
-        }
-    }
-
-    private func fileSize(from anyObject: Any?) -> FileSize? {
-        if let value = anyObject as? UInt64 {
-            return FileSize(bytes: value)
-        }
-        if let value = anyObject as? String {
-            return FileSize(string: value)
-        }
-        return nil
-    }
 }

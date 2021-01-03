@@ -47,7 +47,7 @@ protocol LintRuleConfigurationModifier {
     mutating func apply(configuration: Any) throws
 }
 
-protocol LintRuleConfiguration: LintRuleConfigurationModifier {}
+protocol LintRuleConfiguration: Codable {}
 
 protocol LintRule {
     var descriptor: LintRuleDescriptor { get }
@@ -61,7 +61,10 @@ protocol ConfigurableLintRule: LintRuleConfigurationModifier {
 
 extension LintRule where Self: ConfigurableLintRule {
     mutating func apply(configuration: Any) throws {
-        try self.configuration.apply(configuration: configuration)
+        let data = try JSONSerialization.data(withJSONObject: configuration, options: .fragmentsAllowed)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        self.configuration = try decoder.decode(Configuration.self, from: data)
     }
 }
 
