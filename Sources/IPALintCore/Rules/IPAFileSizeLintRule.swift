@@ -67,6 +67,7 @@ struct IPAFileSizeLintRuleConfiguration: LintRuleConfiguration {
         var maxSize: FileSize?
     }
 
+    var enabled: Bool?
     var warning = Warning()
     var error = Error()
 }

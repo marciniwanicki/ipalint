@@ -2,8 +2,6 @@ import Foundation
 import TSCBasic
 
 struct LintRuleResult {
-    let rule: LintRuleDescriptor
-
     struct GenericViolation {
         let severity: ViolationSeverity
         let message: String
@@ -26,6 +24,7 @@ struct LintRuleResult {
         }
     }
 
+    let rule: LintRuleDescriptor
     let violations: [Violation]
 }
 
@@ -44,10 +43,20 @@ struct LintRuleDescriptor: Equatable {
 }
 
 protocol LintRuleConfigurationModifier {
+    func isEnabled() -> Bool
+
     mutating func apply(configuration: Any) throws
 }
 
-protocol LintRuleConfiguration: Codable {}
+protocol LintRuleConfiguration: Codable {
+    var enabled: Bool? { get set }
+}
+
+extension LintRuleConfiguration {
+    func isEnabled() -> Bool {
+        enabled ?? true
+    }
+}
 
 protocol LintRule {
     var descriptor: LintRuleDescriptor { get }
@@ -57,6 +66,12 @@ protocol ConfigurableLintRule: LintRuleConfigurationModifier {
     associatedtype Configuration: LintRuleConfiguration
 
     var configuration: Configuration { get set }
+}
+
+extension ConfigurableLintRule {
+    func isEnabled() -> Bool {
+        configuration.isEnabled()
+    }
 }
 
 extension LintRule where Self: ConfigurableLintRule {

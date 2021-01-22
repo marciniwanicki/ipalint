@@ -59,11 +59,17 @@ final class DefaultLintInteractor: LintInteractor {
                 case let .file(rule):
                     if var configurableRule = rule as? LintRuleConfigurationModifier {
                         try configurableRule.apply(configuration: configuration)
+                        guard configurableRule.isEnabled() else {
+                            return nil
+                        }
                     }
                     return try rule.lint(with: content.ipaPath)
                 case let .content(rule):
                     if var configurableRule = rule as? LintRuleConfigurationModifier {
                         try configurableRule.apply(configuration: configuration)
+                        guard configurableRule.isEnabled() else {
+                            return nil
+                        }
                     }
                     return try rule.lint(with: content)
                 }

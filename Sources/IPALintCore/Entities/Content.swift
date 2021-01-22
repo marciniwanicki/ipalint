@@ -9,4 +9,8 @@ final class Content {
         self.ipaPath = ipaPath
         self.temporaryDirectory = temporaryDirectory
     }
+
+    var payloadPath: AbsolutePath {
+        temporaryDirectory.path.appending(component: "Payload")
+    }
 }
