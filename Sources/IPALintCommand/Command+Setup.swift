@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 import IPALintCore
 
-private struct Setup {
+private enum Setup {
     static let allSubcommands: [(ParsableCommand.Type, Assembly)] = [
         (VersionCommand.self, VersionCommand.Assembly()),
         (SnapshotCommand.self, SnapshotCommand.Assembly()),
