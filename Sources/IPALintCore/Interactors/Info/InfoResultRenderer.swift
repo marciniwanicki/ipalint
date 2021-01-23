@@ -1,16 +1,24 @@
 import Foundation
 
 public protocol InfoResultRenderer {
-    func render(result: InfoResult, to output: Output)
+    func render(result: InfoResult)
 }
 
 public final class TextInfoResultRenderer: InfoResultRenderer {
-    public init() {}
+    private let output: RichTextOutput
 
-    public func render(result: InfoResult, to output: Output) {
+    public init(output: RichTextOutput) {
+        self.output = output
+    }
+
+    public func render(result: InfoResult) {
         result.properties.keys.sorted().forEach { key in
             let value = result.properties[key]?.description ?? "<nil>"
-            output.write("\(key): \(value)\n")
+            output.write(
+                .text("· \(key) =", .color(.lightGray))
+                    + .text(" \(value)", .color(.white))
+                    + .newLine
+            )
         }
     }
 }
