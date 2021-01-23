@@ -14,6 +14,22 @@ public struct LintContext {
 
 public struct LintResult {
     let ruleResults: [LintRuleResult]
+
+    public var hasError: Bool {
+        ruleResults.contains { ruleResult in
+            ruleResult.violations.contains { violation in
+                violation.severity == .error
+            }
+        }
+    }
+
+    public var hasWarning: Bool {
+        ruleResults.contains { ruleResult in
+            ruleResult.violations.contains { violation in
+                violation.severity == .warning
+            }
+        }
+    }
 }
 
 public protocol LintInteractor {
@@ -24,12 +40,12 @@ final class DefaultLintInteractor: LintInteractor {
     private let fileSystem: FileSystem
     private let contentExtractor: ContentExtractor
     private let configurationLoader: ConfigurationLoader
-    private let rules: [LintRuleType]
+    private let rules: [TypedLintRule]
 
     init(fileSystem: FileSystem,
          contentExtractor: ContentExtractor,
          configurationLoader: ConfigurationLoader,
-         rules: [LintRuleType]) {
+         rules: [TypedLintRule]) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.configurationLoader = configurationLoader
@@ -40,43 +56,40 @@ final class DefaultLintInteractor: LintInteractor {
         let configurationPath = try context.configPath.map { try fileSystem.absolutePath(from: $0) } ?? fileSystem
             .currentWorkingDirectory.appending(component: ".ipalint.yml")
         let configuration = try configurationLoader.load(from: configurationPath)
-        let content = try contentExtractor.content(from: context)
-
-        let rulesMap = rules.reduce(into: [LintRuleIdentifier: LintRuleType]()) { acc, rule in
+        let rulesMap = rules.reduce(into: [LintRuleIdentifier: TypedLintRule]()) { acc, rule in
             acc[rule.descriptor.identifier] = rule
         }
 
-        let results: [LintRuleResult] = try configuration.all.rules.keys
+        let typedLintRules: [TypedLintRule] = try configuration.all.rules.keys
             .sorted()
             .map { LintRuleIdentifier(rawValue: $0) }
             .compactMap { ruleIdentifier in
-                guard let ruleType = rulesMap[ruleIdentifier] else {
+                guard let typedLintRule = rulesMap[ruleIdentifier] else {
                     throw CoreError
                         .generic("Unknown \(ruleIdentifier.rawValue.quoted()) rule found in the configuration")
                 }
-                let configuration = configuration.all.rules[ruleIdentifier.rawValue]!
-                switch ruleType {
-                case let .file(rule):
-                    if var configurableRule = rule as? LintRuleConfigurationModifier {
-                        try configurableRule.apply(configuration: configuration)
-                        guard configurableRule.isEnabled() else {
-                            return nil
-                        }
-                    }
-                    return try rule.lint(with: content.ipaPath)
-                case let .content(rule):
-                    if var configurableRule = rule as? LintRuleConfigurationModifier {
-                        try configurableRule.apply(configuration: configuration)
-                        guard configurableRule.isEnabled() else {
-                            return nil
-                        }
-                    }
-                    return try rule.lint(with: content)
-                }
+                return typedLintRule
             }
 
+        try typedLintRules.forEach {
+            try $0.apply(configuration: configuration.all.rules[$0.lintRule.descriptor.identifier.rawValue])
+        }
+
+        let enabledTypedLintRules = typedLintRules.filter { $0.isEnabled() }
+
+        let content = try contentExtractor.content(from: context)
+        let fileSystemTree = try fileSystem.tree(at: content.payloadPath)
+
+        let results: [LintRuleResult] = try enabledTypedLintRules.map { typedLintRule in
+            switch typedLintRule {
+            case let .file(rule):
+                return try rule.lint(with: content.ipaPath)
+            case let .content(rule):
+                return try rule.lint(with: content)
+            case let .fileSystemTree(rule):
+                return try rule.lint(wiht: fileSystemTree)
+            }
+        }
         return .init(ruleResults: results)
     }
-
-    // MARK: - Private
 }

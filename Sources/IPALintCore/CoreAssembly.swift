@@ -16,7 +16,7 @@ public final class CoreAssembly: Assembly {
     // MARK: - Private
 
     private func assembleRules(_ registry: Registry) {
-        registry.register([LintRuleType].self) { r in
+        registry.register([TypedLintRule].self) { r in
             [
                 .file(IPAFileSizeLintRule(fileSystem: r.resolve(FileSystem.self))),
                 .content(PayloadSizeLintRule(fileSystem: r.resolve(FileSystem.self))),
@@ -75,7 +75,7 @@ public final class CoreAssembly: Assembly {
             DefaultLintInteractor(fileSystem: r.resolve(FileSystem.self),
                                   contentExtractor: r.resolve(ContentExtractor.self),
                                   configurationLoader: r.resolve(ConfigurationLoader.self),
-                                  rules: r.resolve([LintRuleType].self))
+                                  rules: r.resolve([TypedLintRule].self))
         }
     }
 }

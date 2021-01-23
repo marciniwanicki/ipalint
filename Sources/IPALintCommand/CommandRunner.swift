@@ -78,6 +78,9 @@ private final class ErrorHandler {
         if let error = error as? CoreError {
             return handleCoreError(error)
         }
+        if let error = error as? CommandError {
+            return handleCommandError(error)
+        }
         return handleError(error)
     }
 
@@ -89,6 +92,10 @@ private final class ErrorHandler {
             printer.error(message)
             return 1
         }
+    }
+
+    private func handleCommandError(_ error: CommandError) -> Int32 {
+        error.exitCode
     }
 
     private func handleError(_ error: Error) -> Int32 {

@@ -2,25 +2,21 @@ import Foundation
 import TSCBasic
 
 struct LintRuleResult {
-    struct GenericViolation {
-        let severity: ViolationSeverity
-        let message: String
-    }
-
     enum ViolationSeverity: String {
         case warning
         case error
     }
 
-    enum Violation {
-        case generic(GenericViolation)
+    struct Violation {
+        let severity: ViolationSeverity
+        let message: String
 
         static func warning(message: String) -> Violation {
-            return .generic(.init(severity: .warning, message: message))
+            return .init(severity: .warning, message: message)
         }
 
         static func error(message: String) -> Violation {
-            return .generic(.init(severity: .error, message: message))
+            return .init(severity: .error, message: message)
         }
     }
 
@@ -91,16 +87,43 @@ protocol ContentLintRule: LintRule {
     func lint(with content: Content) throws -> LintRuleResult
 }
 
-enum LintRuleType {
+protocol FileSystemTreeLintRule: LintRule {
+    func lint(wiht fileSystemTree: FileSystemTree) throws -> LintRuleResult
+}
+
+enum TypedLintRule {
     case file(FileLintRule)
     case content(ContentLintRule)
+    case fileSystemTree(FileSystemTreeLintRule)
 
-    var descriptor: LintRuleDescriptor {
+    var lintRule: LintRule {
         switch self {
         case let .file(rule):
-            return rule.descriptor
+            return rule
         case let .content(rule):
-            return rule.descriptor
+            return rule
+        case let .fileSystemTree(rule):
+            return rule
+        }
+    }
+
+    var descriptor: LintRuleDescriptor {
+        lintRule.descriptor
+    }
+
+    func isEnabled() -> Bool {
+        if let configurableRule = lintRule as? LintRuleConfigurationModifier {
+            return configurableRule.isEnabled()
+        }
+        return true
+    }
+
+    func apply(configuration: Any?) throws {
+        guard let configuration = configuration else {
+            return
+        }
+        if var configurableRule = lintRule as? LintRuleConfigurationModifier {
+            try configurableRule.apply(configuration: configuration)
         }
     }
 }

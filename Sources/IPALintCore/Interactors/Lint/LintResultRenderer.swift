@@ -30,15 +30,12 @@ public final class TextLintResultRenderer: LintResultRenderer {
     }
 
     private func renderViolation(_ violation: LintRuleResult.Violation, ruleIdentifier: String) {
-        switch violation {
-        case let .generic(violation):
-            output.write(
-                .text("\(violation.severity.rawValue.lowercased()):", .color(color(from: violation.severity)))
-                    + .text(" \(violation.message)", .color(color(from: violation.severity)))
-                    + .text(" (\(ruleIdentifier))", .color(.darkGray))
-                    + .newLine
-            )
-        }
+        output.write(
+            .text("\(violation.severity.rawValue.lowercased()):", .color(color(from: violation.severity)))
+                + .text(" \(violation.message)", .color(color(from: violation.severity)))
+                + .text(" (\(ruleIdentifier))", .color(.darkGray))
+                + .newLine
+        )
     }
 
     private func color(from severity: LintRuleResult.ViolationSeverity) -> RichText.Color {
