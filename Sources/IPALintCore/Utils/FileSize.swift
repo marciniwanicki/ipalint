@@ -50,6 +50,14 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
 
     // MARK: - Public
 
+    public static var min: FileSize {
+        .init(bytes: .min)
+    }
+
+    public static var max: FileSize {
+        .init(bytes: .max)
+    }
+
     public func delta(_ rhs: FileSize) -> DeltaFileSize {
         if rhs.bytes > bytes {
             return .greater(.init(bytes: rhs.bytes - bytes))

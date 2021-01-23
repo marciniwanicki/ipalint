@@ -20,38 +20,44 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
     func lint(with ipaPath: AbsolutePath) throws -> LintRuleResult {
         let fileSize = try fileSystem.fileSize(at: ipaPath)
         var violations: [LintRuleResult.Violation] = []
-        if let minSize = configuration.warning.minSize, fileSize < minSize {
+
+        let errorMinSize = configuration.error.minSize ?? .min
+        let errorMaxSize = configuration.error.maxSize ?? .max
+        let warningMinSize = configuration.warning.minSize ?? .min
+        let warningMaxSize = configuration.warning.maxSize ?? .max
+
+        if fileSize < errorMinSize {
             violations.append(
                 .warning(
                     message: "The .ipa package size is smaller than min_size"
-                        + " -- min_size=\(minSize), ipa_size=\(fileSize)"
+                        + " -- min_size=\(errorMinSize), ipa_size=\(fileSize)"
                 )
             )
-        }
-        if let maxSize = configuration.warning.maxSize, fileSize > maxSize {
-            violations.append(
-                .warning(
-                    message: "The .ipa package size is bigger than max_size"
-                        + " -- max_size=\(maxSize), ipa_size=\(fileSize)"
-                )
-            )
-        }
-        if let minSize = configuration.error.minSize, fileSize < minSize {
+        } else if fileSize < warningMinSize {
             violations.append(
                 .error(
                     message: "The .ipa package size is smaller than min_size"
-                        + " -- min_size=\(minSize), ipa_size=\(fileSize)"
+                        + " -- min_size=\(warningMinSize), ipa_size=\(fileSize)"
                 )
             )
         }
-        if let maxSize = configuration.error.maxSize, fileSize > maxSize {
+
+        if fileSize > errorMaxSize {
+            violations.append(
+                .warning(
+                    message: "The .ipa package size is bigger than max_size"
+                        + " -- max_size=\(errorMaxSize), ipa_size=\(fileSize)"
+                )
+            )
+        } else if fileSize > warningMaxSize {
             violations.append(
                 .error(
                     message: "The .ipa package size is bigger than max_size"
-                        + " -- max_size=\(maxSize), ipa_size=\(fileSize)"
+                        + " -- max_size=\(warningMaxSize), ipa_size=\(fileSize)"
                 )
             )
         }
+
         return .init(rule: descriptor, violations: violations)
     }
 }

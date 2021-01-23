@@ -29,6 +29,9 @@ struct LintCommand: Command {
     )
     var config: String?
 
+    @Flag
+    var noColors: Bool = false
+
     final class Executor: CommandExecutor {
         private let interactor: LintInteractor
         private let printer: Printer
@@ -43,13 +46,13 @@ struct LintCommand: Command {
                                       tempPath: command.temp,
                                       configPath: command.config)
             let result = try interactor.lint(with: context)
-            renderer().render(result: result)
+            renderer(colorsEnabled: !command.noColors).render(result: result)
         }
 
         // MARK: - Private
 
-        private func renderer() -> LintResultRenderer {
-            TextLintResultRenderer(output: printer.richTextOutput())
+        private func renderer(colorsEnabled: Bool) -> LintResultRenderer {
+            TextLintResultRenderer(output: printer.richTextOutput(colorsEnabled: colorsEnabled))
         }
     }
 

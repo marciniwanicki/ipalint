@@ -18,11 +18,8 @@ public final class TextLintResultRenderer: LintResultRenderer {
     private func renderLintRuleResult(_ result: LintRuleResult) {
         guard !result.violations.isEmpty else {
             output.write(
-                .text("[", .color(.darkGray))
-                    + .text("OK", .color(.green))
-                    + .text("]", .color(.darkGray))
-                    + .text(" \(result.rule.identifier.rawValue)", .color(.lightGray))
-                    + .text(" rule", .color(.darkGray))
+                .text("✓", .color(.green))
+                    + .text(" \(result.rule.identifier.rawValue)", .color(.darkGray))
                     + .newLine
             )
             return
@@ -36,12 +33,9 @@ public final class TextLintResultRenderer: LintResultRenderer {
         switch violation {
         case let .generic(violation):
             output.write(
-                .text("[", .color(.darkGray))
-                    + .text(violation.severity.rawValue.uppercased(), .color(color(from: violation.severity)))
-                    + .text("]", .color(.darkGray))
-                    + .text(" \(ruleIdentifier)", .color(.lightGray))
-                    + .text(" rule:", .color(.darkGray))
+                .text("\(violation.severity.rawValue.lowercased()):", .color(color(from: violation.severity)))
                     + .text(" \(violation.message)", .color(color(from: violation.severity)))
+                    + .text(" (\(ruleIdentifier))", .color(.darkGray))
                     + .newLine
             )
         }
