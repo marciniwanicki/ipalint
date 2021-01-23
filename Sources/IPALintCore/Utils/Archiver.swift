@@ -20,7 +20,7 @@ final class TarArchiver: Archiver {
             "xvzf",
             sourcePath.pathString,
             "-C",
-            destinationPath.pathString
+            destinationPath.pathString,
         ]
         try system.execute(command, output: .muted)
     }
