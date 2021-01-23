@@ -59,7 +59,10 @@ final class Configuration {
     func ruleIdentifiers(bundleIdentifier: BundleIdentifier) -> [LintRuleIdentifier] {
         let bundleRuleKeys = bundles[bundleIdentifier]?.rules.keys.map { String($0) } ?? []
         let allRuleKeys = all?.rules.keys.map { String($0) } ?? []
-        return (bundleRuleKeys + allRuleKeys).map { LintRuleIdentifier(rawValue: $0) }
+        return (bundleRuleKeys + allRuleKeys)
+            .unique()
+            .sorted()
+            .map { LintRuleIdentifier(rawValue: $0) }
     }
 }
 

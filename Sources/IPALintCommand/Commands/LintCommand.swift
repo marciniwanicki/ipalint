@@ -29,10 +29,10 @@ struct LintCommand: Command {
     )
     var config: String?
 
-    @Flag
+    @Flag(help: "Do not use colors in the output.")
     var noColors: Bool = false
 
-    @Flag
+    @Flag(help: "Treat warnings as errors.")
     var strict: Bool = false
 
     final class Executor: CommandExecutor {
