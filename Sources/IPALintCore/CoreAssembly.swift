@@ -60,7 +60,8 @@ public final class CoreAssembly: Assembly {
     private func assembleInteractors(_ registry: Registry) {
         registry.register(InfoInteractor.self) { r in
             DefaultInfoInteractor(fileSystem: r.resolve(FileSystem.self),
-                                  contentExtractor: r.resolve(ContentExtractor.self))
+                                  contentExtractor: r.resolve(ContentExtractor.self),
+                                  codesignExtractor: r.resolve(CodesignExtractor.self))
         }
         registry.register(DiffInteractor.self) { r in
             DefaultDiffInteractor(fileSystem: r.resolve(FileSystem.self),
