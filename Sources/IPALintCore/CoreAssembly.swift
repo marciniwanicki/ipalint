@@ -19,7 +19,7 @@ public final class CoreAssembly: Assembly {
         registry.register([LintRuleType].self) { r in
             [
                 .file(IPAFileSizeLintRule(fileSystem: r.resolve(FileSystem.self))),
-                .content(AppBundlePayloadSizeLintRule(fileSystem: r.resolve(FileSystem.self)))
+                .content(PayloadSizeLintRule(fileSystem: r.resolve(FileSystem.self)))
             ]
         }
     }

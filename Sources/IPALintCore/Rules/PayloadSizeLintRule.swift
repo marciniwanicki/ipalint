@@ -1,11 +1,11 @@
 import Foundation
 import TSCBasic
 
-final class AppBundlePayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
-    var configuration = AppBundlePayloadSizeLintRuleConfiguration()
+final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
+    var configuration = PayloadSizeLintRuleConfiguration()
     let descriptor: LintRuleDescriptor = .init(
-        identifier: .init(rawValue: "app_bundle_payload_size"),
-        name: "App bundle payload directory size",
+        identifier: .init(rawValue: "payload_size"),
+        name: "Payload directory size",
         description: """
         This is some description
         """
@@ -23,32 +23,32 @@ final class AppBundlePayloadSizeLintRule: ContentLintRule, ConfigurableLintRule 
         if let minSize = configuration.warning.minSize, directorySize < minSize {
             violations.append(
                 .warning(
-                    message: "The .app bundle payload size is smaller than min_size"
-                        + " -- min_size=\(minSize), app_bundle_payload_size=\(directorySize)"
+                    message: "The payload directory size is smaller than min_size"
+                        + " -- min_size=\(minSize), payload_size=\(directorySize)"
                 )
             )
         }
         if let maxSize = configuration.warning.maxSize, directorySize > maxSize {
             violations.append(
                 .warning(
-                    message: "The .app bundle payload size is bigger than max_size"
-                        + " -- max_size=\(maxSize), app_bundle_payload_size=\(directorySize)"
+                    message: "The payload directory size is bigger than max_size"
+                        + " -- max_size=\(maxSize), payload_size=\(directorySize)"
                 )
             )
         }
         if let minSize = configuration.error.minSize, directorySize < minSize {
             violations.append(
                 .error(
-                    message: "The .app bundle payload size is smaller than min_size"
-                        + " -- min_size=\(minSize), app_bundle_payload_size=\(directorySize)"
+                    message: "The payload directory size is smaller than min_size"
+                        + " -- min_size=\(minSize), payload_size=\(directorySize)"
                 )
             )
         }
         if let maxSize = configuration.error.maxSize, directorySize > maxSize {
             violations.append(
                 .error(
-                    message: "The .app bundle payload size is bigger than max_size"
-                        + " -- max_size=\(maxSize), app_bundle_payload_size=\(directorySize)"
+                    message: "The payload directory size is bigger than max_size"
+                        + " -- max_size=\(maxSize), payload_size=\(directorySize)"
                 )
             )
         }
@@ -56,7 +56,7 @@ final class AppBundlePayloadSizeLintRule: ContentLintRule, ConfigurableLintRule 
     }
 }
 
-struct AppBundlePayloadSizeLintRuleConfiguration: LintRuleConfiguration {
+struct PayloadSizeLintRuleConfiguration: LintRuleConfiguration {
     struct Warning: Codable {
         var minSize: FileSize?
         var maxSize: FileSize?
