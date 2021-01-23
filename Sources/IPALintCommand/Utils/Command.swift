@@ -19,3 +19,20 @@ extension Command {
 }
 
 protocol CommandAssembly: Assembly {}
+
+enum CommandError: Error {
+    case exit(Int32)
+
+    var exitCode: Int32 {
+        switch self {
+        case let .exit(exitCode):
+            return exitCode
+        }
+    }
+}
+
+extension CommandExecutor {
+    func exit(_ code: Int32) -> CommandError {
+        return CommandError.exit(code)
+    }
+}

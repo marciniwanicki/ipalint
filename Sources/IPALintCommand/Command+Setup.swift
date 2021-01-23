@@ -2,6 +2,16 @@ import ArgumentParser
 import Foundation
 import IPALintCore
 
+private enum Setup {
+    static let allSubcommands: [(ParsableCommand.Type, Assembly)] = [
+        (VersionCommand.self, VersionCommand.Assembly()),
+        (SnapshotCommand.self, SnapshotCommand.Assembly()),
+        (LintCommand.self, LintCommand.Assembly()),
+        (InfoCommand.self, InfoCommand.Assembly()),
+        (DiffCommand.self, DiffCommand.Assembly()),
+    ]
+}
+
 extension Command {
     var resolver: Resolver {
         Assembler(container: DefaultContainer())
@@ -20,13 +30,7 @@ extension Command {
     }
 
     private var commandAssemblies: [Assembly] {
-        [
-            VersionCommand.Assembly(),
-            SnapshotCommand.Assembly(),
-            LintCommand.Assembly(),
-            InfoCommand.Assembly(),
-            DiffCommand.Assembly(),
-        ]
+        Setup.allSubcommands.map { $0.1 }
     }
 
     private var coreAssemblies: [Assembly] {
@@ -38,12 +42,6 @@ extension Command {
 
 extension ParsableCommand {
     static var allSubcommands: [ParsableCommand.Type] {
-        [
-            VersionCommand.self,
-            SnapshotCommand.self,
-            LintCommand.self,
-            InfoCommand.self,
-            DiffCommand.self,
-        ]
+        Setup.allSubcommands.map { $0.0 }
     }
 }

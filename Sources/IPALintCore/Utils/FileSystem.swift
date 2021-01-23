@@ -56,6 +56,8 @@ protocol FileSystem {
 
     func fileSize(at path: AbsolutePath) throws -> FileSize
 
+    func directorySize(at path: AbsolutePath) throws -> FileSize
+
     func temporaryDirectory(at existingPath: AbsolutePath?) throws -> Directory
 
     func write(data: Data, to path: AbsolutePath) throws
@@ -123,6 +125,20 @@ final class DefaultFileSystem: FileSystem {
             throw CoreError.generic("Cannot calculate size of the file at path=\(path.pathString)")
         }
         return .init(bytes: size)
+    }
+
+    func directorySize(at path: AbsolutePath) throws -> FileSize {
+        guard let enumerator = fileManager.enumerator(at: path.asURL, includingPropertiesForKeys: [.fileSizeKey]) else {
+            throw CoreError.generic("Cannot enumerate files at path=\(path.pathString)")
+        }
+
+        return try .init(
+            bytes: enumerator
+                .compactMap { $0 as? URL }
+                .compactMap { try $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
+                .map { UInt64($0) }
+                .reduce(UInt64(), +)
+        )
     }
 
     func temporaryDirectory(at existingPath: AbsolutePath?) throws -> Directory {
