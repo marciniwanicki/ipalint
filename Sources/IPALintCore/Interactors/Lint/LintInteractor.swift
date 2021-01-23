@@ -51,8 +51,7 @@ final class DefaultLintInteractor: LintInteractor {
             .map { LintRuleIdentifier(rawValue: $0) }
             .compactMap { ruleIdentifier in
                 guard let ruleType = rulesMap[ruleIdentifier] else {
-                    print("UNKNOWN RULE")
-                    return nil
+                    throw CoreError.generic("Unknown \(ruleIdentifier.rawValue.quoted()) rule found in the configuration")
                 }
                 let configuration = configuration.all.rules[ruleIdentifier.rawValue]!
                 switch ruleType {
