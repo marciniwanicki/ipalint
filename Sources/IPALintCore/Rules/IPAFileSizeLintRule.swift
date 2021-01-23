@@ -21,10 +21,10 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         let fileSize = try fileSystem.fileSize(at: ipaPath)
         var violations: [LintRuleResult.Violation] = []
 
-        let errorMinSize = configuration.error.minSize ?? .min
-        let errorMaxSize = configuration.error.maxSize ?? .max
-        let warningMinSize = configuration.warning.minSize ?? .min
-        let warningMaxSize = configuration.warning.maxSize ?? .max
+        let errorMinSize = configuration.error?.minSize ?? .min
+        let errorMaxSize = configuration.error?.maxSize ?? .max
+        let warningMinSize = configuration.warning?.minSize ?? .min
+        let warningMaxSize = configuration.warning?.maxSize ?? .max
 
         if fileSize < errorMinSize {
             violations.append(
@@ -74,6 +74,6 @@ struct IPAFileSizeLintRuleConfiguration: LintRuleConfiguration {
     }
 
     var enabled: Bool?
-    var warning = Warning()
-    var error = Error()
+    var warning: Warning?
+    var error: Error?
 }

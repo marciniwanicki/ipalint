@@ -6,20 +6,26 @@ protocol ConfigurationLoader {
     func load(from path: AbsolutePath) throws -> Configuration
 }
 
-/*
- // .ipalint.yml
+// .ipalint.yml
+//
+// bundles:
+//   com.bloomberg.blabla:
+//     rules:
+//       ipa_file_size:
+//         warning:
+//           min_size: 23 MB
+//             max_size: 43 MB
+//
+//   all:
+//     rules:
+//       ipa_file_size:
+//         warning:
+//           min_size: 23 MB
+//           max_size: 43 MB
+//         error:
+//           min_size: 30 MB
+//           max_size: 31 MB
 
- com.bloomber.app.development:
-  rules:
-    - first_rule
-      - blas: v32
-
- all:
- rules:
-   my_rules:
-     - whatever we want
-
- */
 final class Configuration {
     class BundleConfiguration {
         let rules: [String: Any]
@@ -31,13 +37,29 @@ final class Configuration {
         }
     }
 
-    let bundleSpecific: [String: BundleConfiguration]
-    let all: BundleConfiguration
+    let bundles: [BundleIdentifier: BundleConfiguration]
 
-    init(bundleSpecific: [String: BundleConfiguration],
-         all: BundleConfiguration) {
-        self.bundleSpecific = bundleSpecific
-        self.all = all
+    var all: BundleConfiguration? {
+        bundles[BundleIdentifier(rawValue: "all")]
+    }
+
+    init(bundles: [BundleIdentifier: BundleConfiguration]) {
+        self.bundles = bundles
+    }
+
+    func ruleConfiguration(bundleIdentifier: BundleIdentifier, typedLintRule: TypedLintRule) -> Any? {
+        let lintRoleIdentifier = typedLintRule.lintRule.descriptor.identifier.rawValue
+        if let bundleSpecificConfiguration = bundles[bundleIdentifier],
+           let lintRoleConfiguration = bundleSpecificConfiguration.rules[lintRoleIdentifier] {
+            return lintRoleConfiguration
+        }
+        return all?.rules[lintRoleIdentifier]
+    }
+
+    func ruleIdentifiers(bundleIdentifier: BundleIdentifier) -> [LintRuleIdentifier] {
+        let bundleRuleKeys = bundles[bundleIdentifier]?.rules.keys.map { String($0) } ?? []
+        let allRuleKeys = all?.rules.keys.map { String($0) } ?? []
+        return (bundleRuleKeys + allRuleKeys).map { LintRuleIdentifier(rawValue: $0) }
     }
 }
 
@@ -67,29 +89,26 @@ final class YamlConfigurationLoader: ConfigurationLoader {
                 """
             )
         }
-        let bundleSpecific = self.bundleSpecific(from: rawConfiguration as Any)
-        let all = self.all(from: rawConfiguration as Any)
-        return .init(bundleSpecific: bundleSpecific, all: all)
+        return .init(bundles: bundles(from: rawConfiguration as Any))
     }
 
-    // TODO: Replace by storng type i.e. BundleIdentifier
-    private func bundleSpecific(from rawConfiguration: Any) -> [String: Configuration.BundleConfiguration] {
+    private func bundles(from rawConfiguration: Any) -> [BundleIdentifier: Configuration.BundleConfiguration] {
         guard let dictionary = rawConfiguration as? [String: Any] else {
             return [:]
         }
-        return dictionary.mapValues { all(from: $0) }
+        guard let bundles = dictionary["bundles"] as? [String: Any?] else {
+            return [:]
+        }
+
+        let tuples = bundles.map { (BundleIdentifier(rawValue: $0), configuration(from: $1)) }
+        return Dictionary(tuples, uniquingKeysWith: { lhs, _ in lhs })
     }
 
-    private func all(from rawConfiguration: Any) -> Configuration.BundleConfiguration {
+    private func configuration(from rawConfiguration: Any?) -> Configuration.BundleConfiguration {
         guard let dictionary = rawConfiguration as? [String: Any] else {
             return .empty
         }
-        guard let all = dictionary["all"] as? [String: Any] else {
-            return .empty
-        }
-
-        let rules: [String: Any] = all["rules"] as? [String: Any] ?? [:]
-
+        let rules: [String: Any] = dictionary["rules"] as? [String: Any] ?? [:]
         return .init(rules: rules)
     }
 }

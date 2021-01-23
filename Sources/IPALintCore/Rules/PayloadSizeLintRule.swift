@@ -21,10 +21,10 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
         let directorySize = try fileSystem.directorySize(at: content.payloadPath)
         var violations: [LintRuleResult.Violation] = []
 
-        let errorMinSize = configuration.error.minSize ?? .min
-        let errorMaxSize = configuration.error.maxSize ?? .max
-        let warningMinSize = configuration.warning.minSize ?? .min
-        let warningMaxSize = configuration.warning.maxSize ?? .max
+        let errorMinSize = configuration.error?.minSize ?? .min
+        let errorMaxSize = configuration.error?.maxSize ?? .max
+        let warningMinSize = configuration.warning?.minSize ?? .min
+        let warningMaxSize = configuration.warning?.maxSize ?? .max
 
         if directorySize < errorMinSize {
             violations.append(
@@ -74,6 +74,6 @@ struct PayloadSizeLintRuleConfiguration: LintRuleConfiguration {
     }
 
     var enabled: Bool?
-    var warning = Warning()
-    var error = Error()
+    var warning: Warning?
+    var error: Error?
 }
