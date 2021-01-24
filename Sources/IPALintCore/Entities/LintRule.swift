@@ -45,12 +45,12 @@ protocol LintRuleConfigurationModifier {
 }
 
 protocol LintRuleConfiguration: Codable {
-    associatedtype S: Codable
+    associatedtype Settings: Codable
 
     var enabled: Bool? { get set }
 
-    var warning: S? { get set }
-    var error: S? { get set }
+    var warning: Settings? { get set }
+    var error: Settings? { get set }
 }
 
 struct LintRuleConfigurationSetting<T> {
@@ -63,7 +63,7 @@ extension LintRuleConfiguration {
         enabled ?? true
     }
 
-    func setting<T>(_ keyPath: KeyPath<S, T?>) -> LintRuleConfigurationSetting<T>? {
+    func setting<T>(_ keyPath: KeyPath<Settings, T?>) -> LintRuleConfigurationSetting<T>? {
         if let error = error {
             if let value = error[keyPath: keyPath] {
                 return .init(value: value, severity: .error)

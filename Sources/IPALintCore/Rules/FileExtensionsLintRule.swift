@@ -15,7 +15,7 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
         let relativePaths = fileSystemTree.allFilesIterator().all().map {
             $0.relative(to: fileSystemTree.path)
         }
-    
+
         if let expectOnly = configuration.setting(\.expectOnly), let value = expectOnly.value {
             relativePaths.forEach { path in
                 if let fileExtension = path.extension, !value.contains(fileExtension) {
