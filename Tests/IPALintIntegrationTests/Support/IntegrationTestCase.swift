@@ -18,7 +18,7 @@ class IntegrationTestCase: XCTestCase {
         output.stdout.joined()
     }
 
-    var output: DebugCaptureOutput {
-        DebugCaptureOutput.tests
+    var output: CaptureOutput {
+        CaptureOutput.tests
     }
 }

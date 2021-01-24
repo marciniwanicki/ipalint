@@ -27,4 +27,20 @@ public enum CoreError: Error {
             throw coreError(String(describing: error))
         }
     }
+
+    static func rethrowCommand<T>(_ closure: () throws -> T,
+                                  command: [String],
+                                  message: String) throws -> T {
+        do {
+            return try closure()
+        } catch is SubprocessCoreError {
+            throw CoreError.generic("""
+            \(message)
+
+            Failed command:
+            > \(command.command())
+
+            """)
+        }
+    }
 }

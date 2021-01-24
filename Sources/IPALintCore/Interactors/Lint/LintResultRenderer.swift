@@ -31,7 +31,7 @@ public final class TextLintResultRenderer: LintResultRenderer {
 
     private func renderViolation(_ violation: LintRuleResult.Violation, ruleIdentifier: String) {
         output.write(
-            .text("\(violation.severity.rawValue.lowercased()):", .color(color(from: violation.severity)))
+            .text("\(violation.severity.rawValue.capitalizingFirstLetter()):", .color(color(from: violation.severity)))
                 + .text(" \(violation.message)", .color(color(from: violation.severity)))
                 + .text(" (\(ruleIdentifier))", .color(.darkGray))
                 + .newLine

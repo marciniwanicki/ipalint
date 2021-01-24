@@ -39,6 +39,9 @@ public final class CoreAssembly: Assembly {
                                     fileSystem: r.resolve(FileSystem.self),
                                     archiver: r.resolve(Archiver.self))
         }
+        registry.register(CodesignExtractor.self) { r in
+            DefaultCodesignExtractor(system: r.resolve(System.self))
+        }
         registry.register(Crypto.self) { _ in
             DefaultCrypto()
         }
@@ -57,7 +60,8 @@ public final class CoreAssembly: Assembly {
     private func assembleInteractors(_ registry: Registry) {
         registry.register(InfoInteractor.self) { r in
             DefaultInfoInteractor(fileSystem: r.resolve(FileSystem.self),
-                                  contentExtractor: r.resolve(ContentExtractor.self))
+                                  contentExtractor: r.resolve(ContentExtractor.self),
+                                  codesignExtractor: r.resolve(CodesignExtractor.self))
         }
         registry.register(DiffInteractor.self) { r in
             DefaultDiffInteractor(fileSystem: r.resolve(FileSystem.self),
@@ -74,6 +78,7 @@ public final class CoreAssembly: Assembly {
         registry.register(LintInteractor.self) { r in
             DefaultLintInteractor(fileSystem: r.resolve(FileSystem.self),
                                   contentExtractor: r.resolve(ContentExtractor.self),
+                                  codesignExtractor: r.resolve(CodesignExtractor.self),
                                   configurationLoader: r.resolve(ConfigurationLoader.self),
                                   rules: r.resolve([TypedLintRule].self))
         }

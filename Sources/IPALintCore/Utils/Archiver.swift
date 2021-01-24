@@ -22,6 +22,9 @@ final class TarArchiver: Archiver {
             "-C",
             destinationPath.pathString,
         ]
-        try system.execute(command, output: .muted)
+
+        try CoreError.rethrowCommand({ try system.execute(command, output: .muted) },
+                                     command: command,
+                                     message: "Cannot extract the .ipa file.")
     }
 }

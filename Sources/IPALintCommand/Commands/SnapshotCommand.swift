@@ -5,7 +5,7 @@ import IPALintCore
 struct SnapshotCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "snapshot",
-        abstract: "Creates a snapshot file of a given .ipa package."
+        abstract: "Create a snapshot file of a given .ipa package."
     )
 
     @Option(

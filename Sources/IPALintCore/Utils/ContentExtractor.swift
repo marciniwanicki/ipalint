@@ -23,6 +23,30 @@ final class DefaultContentExtractor: ContentExtractor {
 
         try archiver.extract(source: ipaPath, destination: temporaryDirectory.path)
 
-        return Content(ipaPath: ipaPath, temporaryDirectory: temporaryDirectory)
+        let appPath = try self.appPath(in: temporaryDirectory)
+        return Content(ipaPath: ipaPath,
+                       appPath: appPath,
+                       temporaryDirectory: temporaryDirectory)
+    }
+
+    // MARK: - Private
+
+    private func appPath(in temporaryDirectory: Directory) throws -> AbsolutePath {
+        let payloadPath = temporaryDirectory.path.appending(component: "Payload")
+        let appPaths: [AbsolutePath] = try fileSystem.list(at: payloadPath)
+            .compactMap {
+                if case let .directory(directory) = $0 {
+                    return payloadPath.appending(directory.path)
+                }
+                return nil
+            }
+            .filter { $0.extension == "app" }
+        guard let appPath = appPaths.first else {
+            throw CoreError.generic("Payload does not contain any .app bundles")
+        }
+        guard appPaths.count == 1 else {
+            throw CoreError.generic("Payload contains multiple .app bundles (\(appPaths.count))")
+        }
+        return appPath
     }
 }

@@ -74,22 +74,26 @@ final class ForwardOutput: Output {
     }
 }
 
-public final class DebugCaptureOutput: Output {
+public final class CaptureOutput: Output {
     #if DEBUG
-        public static let tests = DebugCaptureOutput()
+        public static let tests = CaptureOutput()
     #endif
 
     public let redirected = true
 
     private let lock = NSLock()
 
-    private init() {}
+    init() {}
 
     public private(set) var captured: [(OutputStream, String)] = []
 
     public var stdout: [String] { captured.filter { $0.0 == .stdout }.map { $0.1 } }
     public var stderr: [String] { captured.filter { $0.0 == .stderr }.map { $0.1 } }
     public var output: [String] { captured.map { $0.1 } }
+
+    public var stdoutString: String { stdout.joined(separator: "\n") }
+    public var stderrString: String { stderr.joined(separator: "\n") }
+    public var outputString: String { output.joined(separator: "\n") }
 
     public func write(_ string: String, to stream: OutputStream) {
         lock.lock(); defer { lock.unlock() }

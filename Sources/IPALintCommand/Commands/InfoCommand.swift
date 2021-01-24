@@ -6,7 +6,7 @@ import TSCBasic
 struct InfoCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "info",
-        abstract: "Shows info about the ipa package."
+        abstract: "Show info about the ipa package."
     )
 
     @Option(
@@ -30,6 +30,9 @@ struct InfoCommand: Command {
     )
     var format: String?
 
+    @Flag(help: "Do not use colors in the output.")
+    var noColors: Bool = false
+
     final class Executor: CommandExecutor {
         private let interactor: InfoInteractor
         private let printer: Printer
@@ -42,13 +45,13 @@ struct InfoCommand: Command {
         func execute(command: InfoCommand) throws {
             let context = InfoContext(ipaPath: command.path, tempPath: command.temp)
             let result = try interactor.info(with: context)
-            renderer().render(result: result, to: printer.output)
+            renderer(colorsEnabled: !command.noColors).render(result: result)
         }
 
         // MARK: - Private
 
-        private func renderer() -> InfoResultRenderer {
-            return TextInfoResultRenderer()
+        private func renderer(colorsEnabled: Bool) -> InfoResultRenderer {
+            TextInfoResultRenderer(output: printer.richTextOutput(colorsEnabled: colorsEnabled))
         }
     }
 
