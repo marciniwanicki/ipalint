@@ -3,7 +3,7 @@ import TSCBasic
 
 final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
     var configuration = IPAFileSizeLintRuleConfiguration()
-    let descriptor: LintRuleDescriptor = .init(
+    let descriptor = LintRuleDescriptor(
         identifier: .init(rawValue: "ipa_file_size"),
         name: "Package size",
         description: """

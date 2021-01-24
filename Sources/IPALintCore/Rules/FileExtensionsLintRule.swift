@@ -2,7 +2,7 @@ import Foundation
 
 final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule {
     var configuration = FileExtensionsLintRuleConfiguration()
-    let descriptor: LintRuleDescriptor = .init(
+    let descriptor = LintRuleDescriptor(
         identifier: .init(rawValue: "file_extensions"),
         name: "File extensions",
         description: """
