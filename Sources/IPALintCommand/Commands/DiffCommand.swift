@@ -5,7 +5,7 @@ import IPALintCore
 struct DiffCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "diff",
-        abstract: "Diffs two ipa packages."
+        abstract: "Diff two ipa packages."
     )
 
     @Option(

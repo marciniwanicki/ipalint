@@ -6,7 +6,7 @@ import TSCBasic
 struct InfoCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "info",
-        abstract: "Shows info about the ipa package."
+        abstract: "Show info about the ipa package."
     )
 
     @Option(

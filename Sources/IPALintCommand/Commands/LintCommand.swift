@@ -5,7 +5,7 @@ import IPALintCore
 struct LintCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "lint",
-        abstract: "Lints given ipa package."
+        abstract: "Lint given ipa package."
     )
 
     @Option(
