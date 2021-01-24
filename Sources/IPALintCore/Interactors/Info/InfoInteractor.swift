@@ -67,7 +67,8 @@ final class DefaultInfoInteractor: InfoInteractor {
             "entitlements.application_identifier": .string(entitlements.applicationIdentifier ?? .empty),
             "entitlements.bundle_identifier": .string(entitlements.bundleIdentifier?.rawValue ?? .empty),
             "entitlements.aps_environment": .string(entitlements.apsEnvironment ?? .empty),
-            "entitlements.beta_reports_active": .string(entitlements.betaReportsActive.map { $0.description } ?? .empty),
+            "entitlements.beta_reports_active": .string(entitlements.betaReportsActive
+                .map { $0.description } ?? .empty),
             "entitlements.associated_domains": .array(entitlements.associatedDomains ?? []),
             "entitlements.team_identifier": .string(entitlements.teamIdentifier ?? .empty),
             "entitlements.application_groups": .array(entitlements.applicationGroups ?? []),
