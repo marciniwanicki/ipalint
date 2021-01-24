@@ -20,6 +20,7 @@ public final class CoreAssembly: Assembly {
             [
                 .file(IPAFileSizeLintRule(fileSystem: r.resolve(FileSystem.self))),
                 .content(PayloadSizeLintRule(fileSystem: r.resolve(FileSystem.self))),
+                .content(EntitlementsLintRule(codesignExtractor: r.resolve(CodesignExtractor.self))),
                 .fileSystemTree(FileExtensionsLintRule()),
             ]
         }

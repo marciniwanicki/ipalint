@@ -3,7 +3,7 @@ import TSCBasic
 
 final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
     var configuration = PayloadSizeLintRuleConfiguration()
-    let descriptor: LintRuleDescriptor = .init(
+    let descriptor = LintRuleDescriptor(
         identifier: .init(rawValue: "payload_size"),
         name: "Payload directory size",
         description: """
