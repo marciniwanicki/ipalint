@@ -12,10 +12,10 @@ final class HelpCommandIntegrationTests: IntegrationTestCase {
 
     SUBCOMMANDS:
       version                 Show version.
-      snapshot                Creates a snapshot file of a given .ipa package.
-      lint                    Lints given ipa package.
-      info                    Shows info about the ipa package.
-      diff                    Diffs two ipa packages.
+      snapshot                Create a snapshot file of a given .ipa package.
+      lint                    Lint given ipa package.
+      info                    Show info about the ipa package.
+      diff                    Diff two ipa packages.
 
       See 'ipalint help <subcommand>' for detailed help.
 
