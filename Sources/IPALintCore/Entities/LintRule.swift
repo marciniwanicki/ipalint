@@ -45,12 +45,34 @@ protocol LintRuleConfigurationModifier {
 }
 
 protocol LintRuleConfiguration: Codable {
+    associatedtype S: Codable
+
     var enabled: Bool? { get set }
+
+    var warning: S? { get set }
+    var error: S? { get set }
+}
+
+struct LintRuleConfigurationSetting<T> {
+    var value: T?
+    var severity: LintRuleResult.ViolationSeverity
 }
 
 extension LintRuleConfiguration {
     func isEnabled() -> Bool {
         enabled ?? true
+    }
+
+    func setting<T>(_ keyPath: KeyPath<S, T?>) -> LintRuleConfigurationSetting<T>? {
+        if let error = error {
+            if let value = error[keyPath: keyPath] {
+                return .init(value: value, severity: .error)
+            }
+        }
+        if let warning = warning {
+            return .init(value: warning[keyPath: keyPath], severity: .warning)
+        }
+        return nil
     }
 }
 
@@ -88,7 +110,7 @@ protocol ContentLintRule: LintRule {
 }
 
 protocol FileSystemTreeLintRule: LintRule {
-    func lint(wiht fileSystemTree: FileSystemTree) throws -> LintRuleResult
+    func lint(with fileSystemTree: FileSystemTree) throws -> LintRuleResult
 }
 
 enum TypedLintRule {

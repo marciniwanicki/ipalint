@@ -93,7 +93,7 @@ final class DefaultLintInteractor: LintInteractor {
             case let .content(rule):
                 return try rule.lint(with: content)
             case let .fileSystemTree(rule):
-                return try rule.lint(wiht: fileSystemTree)
+                return try rule.lint(with: fileSystemTree)
             }
         }
         return .init(ruleResults: results)
