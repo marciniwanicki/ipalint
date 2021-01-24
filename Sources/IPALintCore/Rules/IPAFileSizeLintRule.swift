@@ -21,59 +21,31 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         let fileSize = try fileSystem.fileSize(at: ipaPath)
         var violations: [LintRuleResult.Violation] = []
 
-        let errorMinSize = configuration.error?.minSize ?? .min
-        let errorMaxSize = configuration.error?.maxSize ?? .max
-        let warningMinSize = configuration.warning?.minSize ?? .min
-        let warningMaxSize = configuration.warning?.maxSize ?? .max
-
-        if fileSize < errorMinSize {
+        if let maxSize = configuration.setting(\.maxSize), let value = maxSize.value, fileSize > value {
             violations.append(
-                .warning(
-                    message: "The .ipa package size is smaller than min_size"
-                        + " -- min_size=\(errorMinSize), ipa_size=\(fileSize)"
-                )
-            )
-        } else if fileSize < warningMinSize {
-            violations.append(
-                .error(
-                    message: "The .ipa package size is smaller than min_size"
-                        + " -- min_size=\(warningMinSize), ipa_size=\(fileSize)"
-                )
+                .init(severity: maxSize.severity,
+                      message: "The .ipa package size is bigger than max_size"
+                          + " -- max_size=\(value), ipa_size=\(fileSize)")
             )
         }
-
-        if fileSize > errorMaxSize {
+        if let minSize = configuration.setting(\.minSize), let value = minSize.value, fileSize < value {
             violations.append(
-                .warning(
-                    message: "The .ipa package size is bigger than max_size"
-                        + " -- max_size=\(errorMaxSize), ipa_size=\(fileSize)"
-                )
-            )
-        } else if fileSize > warningMaxSize {
-            violations.append(
-                .error(
-                    message: "The .ipa package size is bigger than max_size"
-                        + " -- max_size=\(warningMaxSize), ipa_size=\(fileSize)"
-                )
+                .init(severity: minSize.severity,
+                      message: "The .ipa package size is smaller than min_size"
+                          + " -- min_size=\(value), ipa_size=\(fileSize)")
             )
         }
-
-        return .init(rule: descriptor, violations: violations)
+        return result(violations: violations)
     }
 }
 
 struct IPAFileSizeLintRuleConfiguration: LintRuleConfiguration {
-    struct Warning: Codable {
-        var minSize: FileSize?
-        var maxSize: FileSize?
-    }
-
-    struct Error: Codable {
+    struct Settings: Codable {
         var minSize: FileSize?
         var maxSize: FileSize?
     }
 
     var enabled: Bool?
-    var warning: Warning?
-    var error: Error?
+    var warning: Settings?
+    var error: Settings?
 }

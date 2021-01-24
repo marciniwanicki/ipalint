@@ -21,59 +21,31 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
         let directorySize = try fileSystem.directorySize(at: content.payloadPath)
         var violations: [LintRuleResult.Violation] = []
 
-        let errorMinSize = configuration.error?.minSize ?? .min
-        let errorMaxSize = configuration.error?.maxSize ?? .max
-        let warningMinSize = configuration.warning?.minSize ?? .min
-        let warningMaxSize = configuration.warning?.maxSize ?? .max
-
-        if directorySize < errorMinSize {
+        if let maxSize = configuration.setting(\.maxSize), let value = maxSize.value, directorySize > value {
             violations.append(
-                .error(
-                    message: "The payload directory size is smaller than min_size"
-                        + " -- min_size=\(errorMinSize), payload_size=\(directorySize)"
-                )
-            )
-        } else if directorySize < warningMinSize {
-            violations.append(
-                .warning(
-                    message: "The payload directory size is smaller than min_size"
-                        + " -- min_size=\(warningMinSize), payload_size=\(directorySize)"
-                )
+                .init(severity: maxSize.severity,
+                      message: "The payload directory size is bigger than max_size"
+                          + " -- max_size=\(value), payload_size=\(directorySize)")
             )
         }
-
-        if directorySize > errorMaxSize {
+        if let minSize = configuration.setting(\.minSize), let value = minSize.value, directorySize < value {
             violations.append(
-                .error(
-                    message: "The payload directory size is bigger than max_size"
-                        + " -- max_size=\(errorMaxSize), payload_size=\(directorySize)"
-                )
-            )
-        } else if directorySize > warningMaxSize {
-            violations.append(
-                .warning(
-                    message: "The payload directory size is bigger than max_size"
-                        + " -- max_size=\(warningMaxSize), payload_size=\(directorySize)"
-                )
+                .init(severity: minSize.severity,
+                      message: "The payload directory size is smaller than min_size"
+                          + " -- min_size=\(value), payload_size=\(directorySize)")
             )
         }
-
-        return .init(rule: descriptor, violations: violations)
+        return result(violations: violations)
     }
 }
 
 struct PayloadSizeLintRuleConfiguration: LintRuleConfiguration {
-    struct Warning: Codable {
-        var minSize: FileSize?
-        var maxSize: FileSize?
-    }
-
-    struct Error: Codable {
+    struct Settings: Codable {
         var minSize: FileSize?
         var maxSize: FileSize?
     }
 
     var enabled: Bool?
-    var warning: Warning?
-    var error: Error?
+    var warning: Settings?
+    var error: Settings?
 }
