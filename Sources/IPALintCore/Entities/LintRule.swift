@@ -92,6 +92,12 @@ extension ConfigurableLintRule {
     }
 }
 
+extension LintRule {
+    func result(violations: [LintRuleResult.Violation]) -> LintRuleResult {
+        .init(rule: descriptor, violations: violations)
+    }
+}
+
 extension LintRule where Self: ConfigurableLintRule {
     mutating func apply(configuration: Any) throws {
         let data = try JSONSerialization.data(withJSONObject: configuration, options: .fragmentsAllowed)

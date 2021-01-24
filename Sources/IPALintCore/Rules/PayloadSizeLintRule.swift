@@ -35,7 +35,7 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
                           + " -- min_size=\(value), payload_size=\(directorySize)")
             )
         }
-        return .init(rule: descriptor, violations: violations)
+        return result(violations: violations)
     }
 }
 

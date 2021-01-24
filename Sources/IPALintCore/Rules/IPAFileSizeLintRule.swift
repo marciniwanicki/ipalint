@@ -35,7 +35,7 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
                           + " -- min_size=\(value), ipa_size=\(fileSize)")
             )
         }
-        return .init(rule: descriptor, violations: violations)
+        return result(violations: violations)
     }
 }
 
