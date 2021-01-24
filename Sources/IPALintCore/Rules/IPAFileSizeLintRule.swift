@@ -18,9 +18,8 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
     }
 
     func lint(with ipaPath: AbsolutePath) throws -> LintRuleResult {
-        let fileSize = try fileSystem.fileSize(at: ipaPath)
         var violations: [LintRuleResult.Violation] = []
-
+        let fileSize = try fileSystem.fileSize(at: ipaPath)
         if let maxSize = configuration.setting(\.maxSize), let value = maxSize.value, fileSize > value {
             violations.append(
                 .init(severity: maxSize.severity,

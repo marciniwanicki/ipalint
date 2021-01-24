@@ -18,9 +18,8 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
     }
 
     func lint(with content: Content) throws -> LintRuleResult {
-        let directorySize = try fileSystem.directorySize(at: content.payloadPath)
         var violations: [LintRuleResult.Violation] = []
-
+        let directorySize = try fileSystem.directorySize(at: content.payloadPath)
         if let maxSize = configuration.setting(\.maxSize), let value = maxSize.value, directorySize > value {
             violations.append(
                 .init(severity: maxSize.severity,
