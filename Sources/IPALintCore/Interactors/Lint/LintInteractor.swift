@@ -1,12 +1,12 @@
 import Foundation
 
 public struct LintContext {
-    public let ipaPath: String?
+    public let inputPath: String?
     public let tempPath: String?
     public let configPath: String?
 
-    public init(ipaPath: String?, tempPath: String?, configPath: String?) {
-        self.ipaPath = ipaPath
+    public init(inputPath: String?, tempPath: String?, configPath: String?) {
+        self.inputPath = inputPath
         self.tempPath = tempPath
         self.configPath = configPath
     }

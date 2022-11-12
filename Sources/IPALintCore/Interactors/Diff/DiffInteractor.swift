@@ -78,7 +78,7 @@ final class DefaultDiffInteractor: DiffInteractor {
     // MARK: - Private
 
     private func snapshot(at path: String) throws -> Snapshot { // .ipalint-temp directory?
-        let snapshotContext = SnapshotContext(ipaPath: path, tempPath: nil, outputPath: nil)
+        let snapshotContext = SnapshotContext(inputPath: path, tempPath: nil, outputPath: nil)
         let content = try contentExtractor.content(from: snapshotContext)
         return try snapshotGenerator.snapshot(of: content)
     }

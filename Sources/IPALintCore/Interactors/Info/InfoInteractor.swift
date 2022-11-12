@@ -2,11 +2,11 @@ import Foundation
 import TSCBasic
 
 public struct InfoContext {
-    public let ipaPath: String?
+    public let inputPath: String?
     public let tempPath: String?
 
-    public init(ipaPath: String?, tempPath: String?) {
-        self.ipaPath = ipaPath
+    public init(inputPath: String?, tempPath: String?) {
+        self.inputPath = inputPath
         self.tempPath = tempPath
     }
 }

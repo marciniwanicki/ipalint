@@ -43,7 +43,10 @@ struct InfoCommand: Command {
         }
 
         func execute(command: InfoCommand) throws {
-            let context = InfoContext(ipaPath: command.path, tempPath: command.temp)
+            let context = InfoContext(
+                inputPath: command.path,
+                tempPath: command.temp
+            )
             let result = try interactor.info(with: context)
             renderer(colorsEnabled: !command.noColors).render(result: result)
         }

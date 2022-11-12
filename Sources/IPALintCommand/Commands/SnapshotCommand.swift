@@ -43,7 +43,7 @@ struct SnapshotCommand: Command {
 
         func execute(command: SnapshotCommand) throws {
             let context = SnapshotContext(
-                ipaPath: command.path,
+                inputPath: command.path,
                 tempPath: command.temp,
                 outputPath: command.output
             )

@@ -46,7 +46,7 @@ struct LintCommand: Command {
 
         func execute(command: LintCommand) throws {
             let context = LintContext(
-                ipaPath: command.path,
+                inputPath: command.path,
                 tempPath: command.temp,
                 configPath: command.config
             )

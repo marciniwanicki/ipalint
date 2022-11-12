@@ -1,21 +1,21 @@
 import Foundation
 import TSCBasic
 
-protocol HasIPAPath {
-    var ipaPath: String? { get }
+protocol HasInputPath {
+    var inputPath: String? { get }
 }
 
 protocol HasTempPath {
     var tempPath: String? { get }
 }
 
-extension InfoContext: HasIPAPath, HasTempPath {}
-extension SnapshotContext: HasIPAPath, HasTempPath {}
-extension LintContext: HasIPAPath, HasTempPath {}
+extension InfoContext: HasInputPath, HasTempPath {}
+extension SnapshotContext: HasInputPath, HasTempPath {}
+extension LintContext: HasInputPath, HasTempPath {}
 
 extension FileSystem {
-    func ipaFilePath(from context: HasIPAPath) throws -> AbsolutePath {
-        if let ipaPath = context.ipaPath {
+    func ipaFilePath(from context: HasInputPath) throws -> AbsolutePath {
+        if let ipaPath = context.inputPath {
             return try absolutePath(from: ipaPath)
         }
 

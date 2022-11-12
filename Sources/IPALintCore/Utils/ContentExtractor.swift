@@ -2,7 +2,7 @@ import Foundation
 import TSCBasic
 
 protocol ContentExtractor {
-    func content(from context: HasIPAPath & HasTempPath) throws -> Content
+    func content(from context: HasInputPath & HasTempPath) throws -> Content
 }
 
 final class DefaultContentExtractor: ContentExtractor {
@@ -16,7 +16,7 @@ final class DefaultContentExtractor: ContentExtractor {
         self.archiver = archiver
     }
 
-    func content(from context: HasIPAPath & HasTempPath) throws -> Content {
+    func content(from context: HasInputPath & HasTempPath) throws -> Content {
         let ipaPath = try fileSystem.ipaFilePath(from: context)
         let tempDirOptionalPath = try context.tempPath.map { try fileSystem.absolutePath(from: $0) }
         let temporaryDirectory = try fileSystem.temporaryDirectory(at: tempDirOptionalPath)

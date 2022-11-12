@@ -3,12 +3,12 @@ import TSCBasic
 import TSCUtility
 
 public struct SnapshotContext {
-    public let ipaPath: String?
+    public let inputPath: String?
     public let tempPath: String?
     public let outputPath: String?
 
-    public init(ipaPath: String?, tempPath: String?, outputPath: String?) {
-        self.ipaPath = ipaPath
+    public init(inputPath: String?, tempPath: String?, outputPath: String?) {
+        self.inputPath = inputPath
         self.tempPath = tempPath
         self.outputPath = outputPath
     }
