@@ -31,12 +31,16 @@ private extension Snapshot {
         let codableFiles: [SnapshotCodable.File] = files.map { file in
             .init(path: file.path.pathString, sha256: file.sha256, size: file.size.bytes)
         }
-        let codableDescriptor = SnapshotCodable.Descriptor(filename: descriptor.filename,
-                                                           createdAt: descriptor.createdAt,
-                                                           sha256: descriptor.sha256)
-        return SnapshotCodable(version: codableVersion,
-                               descriptor: codableDescriptor,
-                               files: codableFiles)
+        let codableDescriptor = SnapshotCodable.Descriptor(
+            filename: descriptor.filename,
+            createdAt: descriptor.createdAt,
+            sha256: descriptor.sha256
+        )
+        return SnapshotCodable(
+            version: codableVersion,
+            descriptor: codableDescriptor,
+            files: codableFiles
+        )
     }
 }
 

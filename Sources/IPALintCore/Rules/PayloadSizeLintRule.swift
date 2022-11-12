@@ -22,16 +22,20 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
         let directorySize = try fileSystem.directorySize(at: content.payloadPath)
         if let maxSize = configuration.setting(\.maxSize), let value = maxSize.value, directorySize > value {
             violations.append(
-                .init(severity: maxSize.severity,
-                      message: "The payload directory size is bigger than max_size"
-                          + " -- max_size=\(value), payload_size=\(directorySize)")
+                .init(
+                    severity: maxSize.severity,
+                    message: "The payload directory size is bigger than max_size"
+                        + " -- max_size=\(value), payload_size=\(directorySize)"
+                )
             )
         }
         if let minSize = configuration.setting(\.minSize), let value = minSize.value, directorySize < value {
             violations.append(
-                .init(severity: minSize.severity,
-                      message: "The payload directory size is smaller than min_size"
-                          + " -- min_size=\(value), payload_size=\(directorySize)")
+                .init(
+                    severity: minSize.severity,
+                    message: "The payload directory size is smaller than min_size"
+                        + " -- min_size=\(value), payload_size=\(directorySize)"
+                )
             )
         }
         return result(violations: violations)

@@ -33,16 +33,20 @@ struct SnapshotCommand: Command {
         private let interactor: SnapshotInteractor
         private let printer: Printer
 
-        init(interactor: SnapshotInteractor,
-             printer: Printer) {
+        init(
+            interactor: SnapshotInteractor,
+            printer: Printer
+        ) {
             self.interactor = interactor
             self.printer = printer
         }
 
         func execute(command: SnapshotCommand) throws {
-            let context = SnapshotContext(ipaPath: command.path,
-                                          tempPath: command.temp,
-                                          outputPath: command.output)
+            let context = SnapshotContext(
+                ipaPath: command.path,
+                tempPath: command.temp,
+                outputPath: command.output
+            )
             let result = try interactor.snapshot(with: context)
             renderer().render(result: result, to: printer.output)
         }
@@ -57,8 +61,10 @@ struct SnapshotCommand: Command {
     final class Assembly: CommandAssembly {
         func assemble(_ registry: Registry) {
             registry.register(Executor.self) { r in
-                Executor(interactor: r.resolve(SnapshotInteractor.self),
-                         printer: r.resolve(Printer.self))
+                Executor(
+                    interactor: r.resolve(SnapshotInteractor.self),
+                    printer: r.resolve(Printer.self)
+                )
             }
         }
     }

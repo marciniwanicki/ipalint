@@ -20,9 +20,11 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
             relativePaths.forEach { path in
                 if let fileExtension = path.extension, !value.contains(fileExtension) {
                     violations.append(
-                        .init(severity: expectOnly.severity,
-                              message: "The .ipa bundle contains a file with an unexpected estension"
-                                  + " -- extension=\(fileExtension), path=\(path.pathString)")
+                        .init(
+                            severity: expectOnly.severity,
+                            message: "The .ipa bundle contains a file with an unexpected estension"
+                                + " -- extension=\(fileExtension), path=\(path.pathString)"
+                        )
                     )
                 }
             }
@@ -31,9 +33,11 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
             relativePaths.forEach { path in
                 if let fileExtension = path.extension, value.contains(fileExtension) {
                     violations.append(
-                        .init(severity: forbidden.severity,
-                              message: "The .ipa bundle contains a file with forbidden extension"
-                                  + " -- extension=\(fileExtension), path=\(path.pathString)")
+                        .init(
+                            severity: forbidden.severity,
+                            message: "The .ipa bundle contains a file with forbidden extension"
+                                + " -- extension=\(fileExtension), path=\(path.pathString)"
+                        )
                     )
                 }
             }

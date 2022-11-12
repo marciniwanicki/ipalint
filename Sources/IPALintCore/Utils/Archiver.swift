@@ -2,8 +2,10 @@ import Foundation
 import TSCBasic
 
 protocol Archiver {
-    func extract(source sourcePath: AbsolutePath,
-                 destination destinationPath: AbsolutePath) throws
+    func extract(
+        source sourcePath: AbsolutePath,
+        destination destinationPath: AbsolutePath
+    ) throws
 }
 
 final class TarArchiver: Archiver {
@@ -13,8 +15,10 @@ final class TarArchiver: Archiver {
         self.system = system
     }
 
-    func extract(source sourcePath: AbsolutePath,
-                 destination destinationPath: AbsolutePath) throws {
+    func extract(
+        source sourcePath: AbsolutePath,
+        destination destinationPath: AbsolutePath
+    ) throws {
         let command = [
             "tar",
             "xvzf",
@@ -23,8 +27,10 @@ final class TarArchiver: Archiver {
             destinationPath.pathString,
         ]
 
-        try CoreError.rethrowCommand({ try system.execute(command, output: .muted) },
-                                     command: command,
-                                     message: "Cannot extract the .ipa file.")
+        try CoreError.rethrowCommand(
+            { try system.execute(command, output: .muted) },
+            command: command,
+            message: "Cannot extract the .ipa file."
+        )
     }
 }

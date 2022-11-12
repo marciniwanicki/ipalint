@@ -23,28 +23,38 @@ public struct RichText: ExpressibleByStringLiteral {
         let style: Style?
         let color: Color?
 
-        static let none = Attributes(style: nil,
-                                     color: nil)
+        static let none = Attributes(
+            style: nil,
+            color: nil
+        )
 
-        private init(style: Style?,
-                     color: Color?) {
+        private init(
+            style: Style?,
+            color: Color?
+        ) {
             self.style = style
             self.color = color
         }
 
         static func style(_ style: Style) -> Attributes {
-            Attributes(style: style,
-                       color: nil)
+            Attributes(
+                style: style,
+                color: nil
+            )
         }
 
         static func color(_ color: Color) -> Attributes {
-            Attributes(style: nil,
-                       color: color)
+            Attributes(
+                style: nil,
+                color: color
+            )
         }
 
         static func + (lhs: Attributes, rhs: Attributes) -> Attributes {
-            Attributes(style: rhs.style ?? lhs.style,
-                       color: rhs.color ?? lhs.color)
+            Attributes(
+                style: rhs.style ?? lhs.style,
+                color: rhs.color ?? lhs.color
+            )
         }
     }
 

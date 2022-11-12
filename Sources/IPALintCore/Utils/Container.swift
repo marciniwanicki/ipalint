@@ -51,7 +51,7 @@ public final class DefaultContainer: Container {
         return nil
     }
 
-    private func identifier(of type: (some Any).Type) -> ObjectIdentifier {
+    private func identifier(of type: some Any.Type) -> ObjectIdentifier {
         ObjectIdentifier(type)
     }
 }
