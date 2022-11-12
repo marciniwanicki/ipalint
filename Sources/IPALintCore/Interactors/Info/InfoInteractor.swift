@@ -47,9 +47,11 @@ final class DefaultInfoInteractor: InfoInteractor {
     private let contentExtractor: ContentExtractor
     private let codesignExtractor: CodesignExtractor
 
-    init(fileSystem: FileSystem,
-         contentExtractor: ContentExtractor,
-         codesignExtractor: CodesignExtractor) {
+    init(
+        fileSystem: FileSystem,
+        contentExtractor: ContentExtractor,
+        codesignExtractor: CodesignExtractor
+    ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.codesignExtractor = codesignExtractor
@@ -67,8 +69,10 @@ final class DefaultInfoInteractor: InfoInteractor {
             "entitlements.application_identifier": .string(entitlements.applicationIdentifier ?? .empty),
             "entitlements.bundle_identifier": .string(entitlements.bundleIdentifier?.rawValue ?? .empty),
             "entitlements.aps_environment": .string(entitlements.apsEnvironment ?? .empty),
-            "entitlements.beta_reports_active": .string(entitlements.betaReportsActive
-                .map(\.description) ?? .empty),
+            "entitlements.beta_reports_active": .string(
+                entitlements.betaReportsActive
+                    .map(\.description) ?? .empty
+            ),
             "entitlements.associated_domains": .array(entitlements.associatedDomains ?? []),
             "entitlements.team_identifier": .string(entitlements.teamIdentifier ?? .empty),
             "entitlements.application_groups": .array(entitlements.applicationGroups ?? []),

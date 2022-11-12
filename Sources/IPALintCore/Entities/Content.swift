@@ -6,9 +6,11 @@ final class Content {
     let appPath: AbsolutePath
     let temporaryDirectory: Directory
 
-    init(ipaPath: AbsolutePath,
-         appPath: AbsolutePath,
-         temporaryDirectory: Directory) {
+    init(
+        ipaPath: AbsolutePath,
+        appPath: AbsolutePath,
+        temporaryDirectory: Directory
+    ) {
         self.ipaPath = ipaPath
         self.appPath = appPath
         self.temporaryDirectory = temporaryDirectory

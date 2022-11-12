@@ -57,8 +57,10 @@ private struct MainCommand: ParsableCommand {
     final class Assembly: CommandAssembly {
         func assemble(_ registry: Registry) {
             registry.register(Executor.self) { r in
-                Executor(printer: r.resolve(Printer.self),
-                         errorHandler: r.resolve(ErrorHandler.self))
+                Executor(
+                    printer: r.resolve(Printer.self),
+                    errorHandler: r.resolve(ErrorHandler.self)
+                )
             }
             registry.register(ErrorHandler.self) { r in
                 ErrorHandler(printer: r.resolve(Printer.self))

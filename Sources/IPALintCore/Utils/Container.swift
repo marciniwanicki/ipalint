@@ -51,9 +51,11 @@ public final class DefaultContainer: Container {
         return nil
     }
 
+    // swiftformat:disable all
     private func identifier(of type: (some Any).Type) -> ObjectIdentifier {
         ObjectIdentifier(type)
     }
+    // swiftformat:enable all
 }
 
 public final class Assembler {

@@ -1,11 +1,8 @@
-#!/bin/bash
+#!/bin/bash -e
 
 source Scripts/common.sh
 
 function main {
-    # exit when any command fails
-    set -e
-
     log_info "swiftlint version"
     swiftlint version
 

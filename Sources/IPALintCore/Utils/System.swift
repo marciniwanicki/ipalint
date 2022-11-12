@@ -34,10 +34,12 @@ final class DefaultSystem: System {
     func execute(_ arguments: [String], output: OutputType) throws {
         let result: ProcessResult
         do {
-            let process = Process(arguments: arguments,
-                                  outputRedirection: output.outputRedirection(),
-                                  verbose: false,
-                                  startNewProcessGroup: false)
+            let process = Process(
+                arguments: arguments,
+                outputRedirection: output.outputRedirection(),
+                verbose: false,
+                startNewProcessGroup: false
+            )
             try process.launch()
             result = try process.waitUntilExit()
         } catch {

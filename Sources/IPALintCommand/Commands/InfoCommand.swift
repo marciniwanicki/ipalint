@@ -58,8 +58,10 @@ struct InfoCommand: Command {
     final class Assembly: CommandAssembly {
         func assemble(_ registry: Registry) {
             registry.register(Executor.self) { r in
-                Executor(interactor: r.resolve(InfoInteractor.self),
-                         printer: r.resolve(Printer.self))
+                Executor(
+                    interactor: r.resolve(InfoInteractor.self),
+                    printer: r.resolve(Printer.self)
+                )
             }
         }
     }

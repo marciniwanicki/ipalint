@@ -22,16 +22,20 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         let fileSize = try fileSystem.fileSize(at: ipaPath)
         if let maxSize = configuration.setting(\.maxSize), let value = maxSize.value, fileSize > value {
             violations.append(
-                .init(severity: maxSize.severity,
-                      message: "The .ipa package size is bigger than max_size"
-                          + " -- max_size=\(value), ipa_size=\(fileSize)")
+                .init(
+                    severity: maxSize.severity,
+                    message: "The .ipa package size is bigger than max_size"
+                        + " -- max_size=\(value), ipa_size=\(fileSize)"
+                )
             )
         }
         if let minSize = configuration.setting(\.minSize), let value = minSize.value, fileSize < value {
             violations.append(
-                .init(severity: minSize.severity,
-                      message: "The .ipa package size is smaller than min_size"
-                          + " -- min_size=\(value), ipa_size=\(fileSize)")
+                .init(
+                    severity: minSize.severity,
+                    message: "The .ipa package size is smaller than min_size"
+                        + " -- min_size=\(value), ipa_size=\(fileSize)"
+                )
             )
         }
         return result(violations: violations)

@@ -33,23 +33,29 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
 
         if let maxCount = configuration.setting(\.maxCount), let value = maxCount.value, frameworks.count > value {
             violations.append(
-                .init(severity: maxCount.severity,
-                      message: "Too many dynamic frameworks"
-                          + " -- min_count=\(value), frameworks_count=\(frameworks.count)")
+                .init(
+                    severity: maxCount.severity,
+                    message: "Too many dynamic frameworks"
+                        + " -- min_count=\(value), frameworks_count=\(frameworks.count)"
+                )
             )
         }
         if let minCount = configuration.setting(\.minCount), let value = minCount.value, frameworks.count < value {
             violations.append(
-                .init(severity: minCount.severity,
-                      message: "Too few dynamic frameworks"
-                          + " -- max_count=\(value), frameworks_count=\(frameworks.count)")
+                .init(
+                    severity: minCount.severity,
+                    message: "Too few dynamic frameworks"
+                        + " -- max_count=\(value), frameworks_count=\(frameworks.count)"
+                )
             )
         }
         if let count = configuration.setting(\.count), let value = count.value, frameworks.count != value {
             violations.append(
-                .init(severity: count.severity,
-                      message: "Unexpected number of dynamic frameworks"
-                          + " -- count=\(value), frameworks_count=\(frameworks.count)")
+                .init(
+                    severity: count.severity,
+                    message: "Unexpected number of dynamic frameworks"
+                        + " -- count=\(value), frameworks_count=\(frameworks.count)"
+                )
             )
         }
 
@@ -58,9 +64,11 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
             let missing = value.subtracting(frameworks).sorted()
             let unexpected = frameworks.subtracting(value).sorted()
             violations.append(
-                .init(severity: list.severity,
-                      message: "Unexpected dynamic framework(s)"
-                          + " -- missing_frameworks=\(missing), unexpected_frameworks=\(unexpected)")
+                .init(
+                    severity: list.severity,
+                    message: "Unexpected dynamic framework(s)"
+                        + " -- missing_frameworks=\(missing), unexpected_frameworks=\(unexpected)"
+                )
             )
         }
 
@@ -68,9 +76,11 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
            frameworks.isStrictSuperset(of: value) {
             let missing = value.subtracting(frameworks).sorted()
             violations.append(
-                .init(severity: include.severity,
-                      message: "Missing dynamic framework(s)"
-                          + " -- missing_frameworks=\(missing)")
+                .init(
+                    severity: include.severity,
+                    message: "Missing dynamic framework(s)"
+                        + " -- missing_frameworks=\(missing)"
+                )
             )
         }
 
@@ -79,9 +89,11 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
            !frameworks.isDisjoint(with: value) {
             let unexpected = frameworks.intersection(value)
             violations.append(
-                .init(severity: exclude.severity,
-                      message: "Found unexpected dynamic framework(s)"
-                          + " -- unexpected_frameworks=\(unexpected)")
+                .init(
+                    severity: exclude.severity,
+                    message: "Found unexpected dynamic framework(s)"
+                        + " -- unexpected_frameworks=\(unexpected)"
+                )
             )
         }
 

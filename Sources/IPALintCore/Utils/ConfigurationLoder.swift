@@ -78,8 +78,10 @@ final class YamlConfigurationLoader: ConfigurationLoader {
             throw CoreError.generic("Config file at path '\(path.pathString)' does not exist")
         }
 
-        let data = try CoreError.rethrow(try fileSystem.read(from: path),
-                                         "Failed to read config file at path '\(path.pathString)'")
+        let data = try CoreError.rethrow(
+            try fileSystem.read(from: path),
+            "Failed to read config file at path '\(path.pathString)'"
+        )
         guard let string = String(data: data, encoding: .utf8) else {
             throw CoreError.generic("Config file at path '\(path.pathString)' does not use UTF-8 encoding")
         }
