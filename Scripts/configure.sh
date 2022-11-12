@@ -3,25 +3,23 @@
 source Scripts/common.sh
 
 function install_formula {
-    log_info "brew version"
-    brew --version
+    brew list $1 2> /dev/null
+    if [[ $? == 0 ]] ; then
+        log_info "uninstall $1"
+        brew list "$1" && brew uninstall "$1"
+    fi
 
     log_info "install $1"
-    brew install "$2"
+    brew install "$1.rb"
 }
 
 function main {
     # exit when any command fails
     set -e
 
-    # 0.35.0
-    SWIFTLINT_FORMULA="swiftlint.rb"
-
-    # 0.47.9
-    SWIFTFORMAT_FORMULA="swiftformat.rb"
-
-    # FIXME
-    brew unlink swiftlint
+    # log brea version
+    log_info "brew version"
+    brew --version
 
     # disable homebrew auto update
     export HOMEBREW_NO_AUTO_UPDATE=1
@@ -30,10 +28,10 @@ function main {
     pushd "Scripts/Formulas"
 
     # install (or reinstall) swiftlint
-    install_formula swiftlint $SWIFTLINT_FORMULA
+    install_formula swiftlint
 
     # install (or reinstall) swiftformat
-    install_formula swiftformat $SWIFTFORMAT_FORMULA
+    install_formula swiftformat
 
     # pop
     popd

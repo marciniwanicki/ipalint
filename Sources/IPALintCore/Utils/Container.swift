@@ -25,7 +25,7 @@ public final class DefaultContainer: Container {
     // MARK: - Registry
 
     public func register<T>(_ type: T.Type, closure: @escaping (Resolver) -> T) {
-        let identifier = self.identifier(of: type)
+        let identifier = identifier(of: type)
         factories[identifier] = SingletonReferenceResolver(factory: closure)
     }
 
@@ -41,18 +41,18 @@ public final class DefaultContainer: Container {
     // MARK: - Private
 
     private func resolveIfPossible<T>(_ type: T.Type) -> T? {
-        let identifier = self.identifier(of: type)
+        let identifier = identifier(of: type)
         if let factory = factories[identifier] {
             return factory.resolve(with: self) as? T
         }
-        if let parent = parent {
+        if let parent {
             return parent.resolve(type)
         }
         return nil
     }
 
-    private func identifier<T>(of type: T.Type) -> ObjectIdentifier {
-        return ObjectIdentifier(type)
+    private func identifier(of type: (some Any).Type) -> ObjectIdentifier {
+        ObjectIdentifier(type)
     }
 }
 
@@ -71,7 +71,7 @@ public final class Assembler {
     }
 
     public func resolver() -> Resolver {
-        return container
+        container
     }
 }
 
@@ -89,7 +89,7 @@ private final class SingletonReferenceResolver: ReferenceResolver {
     }
 
     func resolve(with resolver: Resolver) -> Any {
-        if let singleInstance = singleInstance {
+        if let singleInstance {
             return singleInstance
         }
         let newSingleInstance = factory(resolver)

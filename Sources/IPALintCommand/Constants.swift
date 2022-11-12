@@ -20,11 +20,11 @@ final class Constants {
     // MARK: - Private
 
     private static func debugVersionIdentifier() -> String? {
-        return debug ? "debug" : nil
+        debug ? "debug" : nil
     }
 
     private static func gitHashVersionIdentifier() -> String? {
-        return !gitHash.hasPrefix("#") ? gitHash : "local"
+        !gitHash.hasPrefix("#") ? gitHash : "local"
     }
 
     private static var debug: Bool {

@@ -23,7 +23,7 @@ final class DefaultContentExtractor: ContentExtractor {
 
         try archiver.extract(source: ipaPath, destination: temporaryDirectory.path)
 
-        let appPath = try self.appPath(in: temporaryDirectory)
+        let appPath = try appPath(in: temporaryDirectory)
         return Content(ipaPath: ipaPath,
                        appPath: appPath,
                        temporaryDirectory: temporaryDirectory)

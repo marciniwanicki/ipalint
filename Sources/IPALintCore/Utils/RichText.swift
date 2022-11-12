@@ -53,7 +53,7 @@ public struct RichText: ExpressibleByStringLiteral {
         let attributes: Attributes
 
         static func plain(_ string: String) -> Token {
-            return Token(rawText: string, attributes: .none)
+            Token(rawText: string, attributes: .none)
         }
     }
 
@@ -78,14 +78,14 @@ public struct RichText: ExpressibleByStringLiteral {
     }
 
     public static var newLine: RichText {
-        return RichText(stringLiteral: "\n")
+        RichText(stringLiteral: "\n")
     }
 
     public static func text(_ string: String, _ attributes: Attributes) -> RichText {
-        return RichText(tokens: [.init(rawText: string, attributes: attributes)])
+        RichText(tokens: [.init(rawText: string, attributes: attributes)])
     }
 
     public static func + (lhs: RichText, rhs: RichText) -> RichText {
-        return RichText(tokens: lhs.tokens + rhs.tokens)
+        RichText(tokens: lhs.tokens + rhs.tokens)
     }
 }

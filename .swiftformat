@@ -1,4 +1,7 @@
---swiftversion 5
+--swiftversion 5.7
 --maxwidth 120
 --allman false
 --disable wrapMultilineStatementBraces
+--funcattributes prev-line
+--typeattributes prev-line
+--varattributes prev-line

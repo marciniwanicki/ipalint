@@ -12,11 +12,11 @@ struct LintRuleResult {
         let message: String
 
         static func warning(message: String) -> Violation {
-            return .init(severity: .warning, message: message)
+            .init(severity: .warning, message: message)
         }
 
         static func error(message: String) -> Violation {
-            return .init(severity: .error, message: message)
+            .init(severity: .error, message: message)
         }
     }
 
@@ -64,12 +64,12 @@ extension LintRuleConfiguration {
     }
 
     func setting<T>(_ keyPath: KeyPath<Settings, T?>) -> LintRuleConfigurationSetting<T>? {
-        if let error = error {
+        if let error {
             if let value = error[keyPath: keyPath] {
                 return .init(value: value, severity: .error)
             }
         }
-        if let warning = warning {
+        if let warning {
             return .init(value: warning[keyPath: keyPath], severity: .warning)
         }
         return nil
@@ -147,7 +147,7 @@ enum TypedLintRule {
     }
 
     func apply(configuration: Any?) throws {
-        guard let configuration = configuration else {
+        guard let configuration else {
             return
         }
         if var configurableRule = lintRule as? LintRuleConfigurationModifier {

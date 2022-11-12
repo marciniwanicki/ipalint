@@ -12,7 +12,7 @@ struct Entitlements {
     }
 
     var bundleIdentifier: BundleIdentifier? {
-        guard let applicationIdentifier = applicationIdentifier else {
+        guard let applicationIdentifier else {
             return nil
         }
         guard let firstDotIndex = applicationIdentifier.firstIndex(of: ".") else {
