@@ -10,13 +10,10 @@ function install_formula {
     fi
 
     log_info "install $1"
-    brew install "$1.rb"
+    brew install --formula "$1.rb"
 }
 
 function main {
-    # exit when any command fails
-    set -e
-
     # log brea version
     log_info "brew version"
     brew --version
