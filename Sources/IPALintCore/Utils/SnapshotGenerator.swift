@@ -8,8 +8,10 @@ final class DefaultSnapshotGenerator: SnapshotGenerator {
     private let fileSystem: FileSystem
     private let crypto: Crypto
 
-    init(fileSystem: FileSystem,
-         crypto: Crypto) {
+    init(
+        fileSystem: FileSystem,
+        crypto: Crypto
+    ) {
         self.fileSystem = fileSystem
         self.crypto = crypto
     }
@@ -20,14 +22,18 @@ final class DefaultSnapshotGenerator: SnapshotGenerator {
             let relativePath = path.relative(to: content.temporaryDirectory.path)
             let sha256 = try crypto.sha256String(at: path)
             let fileSize = try fileSystem.fileSize(at: path)
-            acc.append(.init(path: relativePath,
-                             sha256: sha256,
-                             size: fileSize))
+            acc.append(.init(
+                path: relativePath,
+                sha256: sha256,
+                size: fileSize
+            ))
         }
         let ipaSha256 = try crypto.sha256String(at: content.ipaPath)
-        let descriptor = Snapshot.Descriptor(filename: content.ipaPath.basename,
-                                             createdAt: Date() /* FIXME: */,
-                                             sha256: ipaSha256)
+        let descriptor = Snapshot.Descriptor(
+            filename: content.ipaPath.basename,
+            createdAt: Date() /* FIXME: */,
+            sha256: ipaSha256
+        )
         return Snapshot(descriptor: descriptor, files: files)
     }
 }

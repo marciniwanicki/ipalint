@@ -5,8 +5,10 @@ public struct DiffContext {
     let path1: String
     let path2: String
 
-    public init(path1: String,
-                path2: String) {
+    public init(
+        path1: String,
+        path2: String
+    ) {
         self.path1 = path1
         self.path2 = path2
     }
@@ -26,10 +28,12 @@ final class DefaultDiffInteractor: DiffInteractor {
     private let snapshotGenerator: SnapshotGenerator
     private let snapshotParser: SnapshotParser
 
-    init(fileSystem: FileSystem,
-         contentExtractor: ContentExtractor,
-         snapshotGenerator: SnapshotGenerator,
-         snapshotParser: SnapshotParser) {
+    init(
+        fileSystem: FileSystem,
+        contentExtractor: ContentExtractor,
+        snapshotGenerator: SnapshotGenerator,
+        snapshotParser: SnapshotParser
+    ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.snapshotGenerator = snapshotGenerator
@@ -59,11 +63,13 @@ final class DefaultDiffInteractor: DiffInteractor {
                 return nil
             }
 
-            return .difference(.init(path: path,
-                                     firstSha256: firstFile.sha256,
-                                     firstSize: firstFile.size,
-                                     secondSha256: secondFile.sha256,
-                                     secondSize: secondFile.size))
+            return .difference(.init(
+                path: path,
+                firstSha256: firstFile.sha256,
+                firstSize: firstFile.size,
+                secondSha256: secondFile.sha256,
+                secondSize: secondFile.size
+            ))
         }
 
         return DiffResult(diff: .init(differences: onlyInFirstFiles + onlyInSecondFiles + differentFiles))

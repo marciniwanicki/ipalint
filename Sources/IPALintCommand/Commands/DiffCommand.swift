@@ -29,8 +29,10 @@ struct DiffCommand: Command {
         private let interactor: DiffInteractor
         private let printer: Printer
 
-        init(interactor: DiffInteractor,
-             printer: Printer) {
+        init(
+            interactor: DiffInteractor,
+            printer: Printer
+        ) {
             self.interactor = interactor
             self.printer = printer
         }
@@ -51,8 +53,10 @@ struct DiffCommand: Command {
     final class Assembly: CommandAssembly {
         func assemble(_ registry: Registry) {
             registry.register(Executor.self) { r in
-                Executor(interactor: r.resolve(DiffInteractor.self),
-                         printer: r.resolve(Printer.self))
+                Executor(
+                    interactor: r.resolve(DiffInteractor.self),
+                    printer: r.resolve(Printer.self)
+                )
             }
         }
     }

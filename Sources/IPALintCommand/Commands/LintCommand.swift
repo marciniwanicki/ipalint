@@ -45,9 +45,11 @@ struct LintCommand: Command {
         }
 
         func execute(command: LintCommand) throws {
-            let context = LintContext(ipaPath: command.path,
-                                      tempPath: command.temp,
-                                      configPath: command.config)
+            let context = LintContext(
+                ipaPath: command.path,
+                tempPath: command.temp,
+                configPath: command.config
+            )
             let result = try interactor.lint(with: context)
 
             renderer(colorsEnabled: !command.noColors).render(result: result)
@@ -70,8 +72,10 @@ struct LintCommand: Command {
     final class Assembly: CommandAssembly {
         func assemble(_ registry: Registry) {
             registry.register(Executor.self) { r in
-                Executor(interactor: r.resolve(LintInteractor.self),
-                         printer: r.resolve(Printer.self))
+                Executor(
+                    interactor: r.resolve(LintInteractor.self),
+                    printer: r.resolve(Printer.self)
+                )
             }
         }
     }

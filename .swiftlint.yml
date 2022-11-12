@@ -1,6 +1,7 @@
 disabled_rules:
   - todo
   - trailing_comma
+  - opening_brace
 
 included:
   - Sources/

@@ -43,11 +43,13 @@ final class DefaultLintInteractor: LintInteractor {
     private let configurationLoader: ConfigurationLoader
     private let rules: [TypedLintRule]
 
-    init(fileSystem: FileSystem,
-         contentExtractor: ContentExtractor,
-         codesignExtractor: CodesignExtractor,
-         configurationLoader: ConfigurationLoader,
-         rules: [TypedLintRule]) {
+    init(
+        fileSystem: FileSystem,
+        contentExtractor: ContentExtractor,
+        codesignExtractor: CodesignExtractor,
+        configurationLoader: ConfigurationLoader,
+        rules: [TypedLintRule]
+    ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
         self.codesignExtractor = codesignExtractor
@@ -79,8 +81,10 @@ final class DefaultLintInteractor: LintInteractor {
             }
 
         try typedLintRules.forEach {
-            try $0.apply(configuration: configuration.ruleConfiguration(bundleIdentifier: bundleIdentifier,
-                                                                        typedLintRule: $0))
+            try $0.apply(configuration: configuration.ruleConfiguration(
+                bundleIdentifier: bundleIdentifier,
+                typedLintRule: $0
+            ))
         }
 
         let enabledTypedLintRules = typedLintRules.filter { $0.isEnabled() }

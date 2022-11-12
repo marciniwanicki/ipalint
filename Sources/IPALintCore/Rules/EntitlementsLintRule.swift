@@ -24,9 +24,11 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
                 let presentValue = try EntitlementsLintRuleConfiguration.Value(entitlements.dictionary[key])
                 if presentValue != value {
                     violations.append(
-                        .init(severity: content.severity,
-                              message: "Invalid entitlements property value"
-                                  + " -- property=\(key), expected_value=\(value), present_value=\(presentValue)")
+                        .init(
+                            severity: content.severity,
+                            message: "Invalid entitlements property value"
+                                + " -- property=\(key), expected_value=\(value), present_value=\(presentValue)"
+                        )
                     )
                 }
             }

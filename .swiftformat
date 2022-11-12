@@ -5,3 +5,5 @@
 --funcattributes prev-line
 --typeattributes prev-line
 --varattributes prev-line
+--wraparguments before-first
+--wrapparameters before-first
