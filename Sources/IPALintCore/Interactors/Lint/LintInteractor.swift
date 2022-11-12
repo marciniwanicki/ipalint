@@ -60,6 +60,9 @@ final class DefaultLintInteractor: LintInteractor {
     func lint(with context: LintContext) throws -> LintResult {
         let content = try contentExtractor.content(from: context)
         let entitlements = try codesignExtractor.entitlements(at: content.appPath)
+        guard let entitlements else {
+            throw CoreError.generic("Cannot read the entitlements -- PATH=\(content.appPath)")
+        }
         guard let bundleIdentifier = entitlements.bundleIdentifier else {
             throw CoreError.generic("Cannot determine bundle-identifier")
         }

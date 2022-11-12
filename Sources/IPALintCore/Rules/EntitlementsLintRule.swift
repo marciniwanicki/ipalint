@@ -19,6 +19,9 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
     func lint(with content: Content) throws -> LintRuleResult {
         var violations: [LintRuleResult.Violation] = []
         let entitlements = try codesignExtractor.entitlements(at: content.appPath)
+        guard let entitlements else {
+            throw CoreError.generic("Cannot read the entitlements -- PATH=\(content.appPath)")
+        }
         if let content = configuration.setting(\.content), let values = content.value {
             try values.forEach { key, value in
                 let presentValue = try EntitlementsLintRuleConfiguration.Value(entitlements.dictionary[key])

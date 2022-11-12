@@ -61,6 +61,9 @@ final class DefaultInfoInteractor: InfoInteractor {
         let content = try contentExtractor.content(from: context)
         let allFilesIterator = try fileSystem.tree(at: content.temporaryDirectory.path).allFilesIterator()
         let entitlements = try codesignExtractor.entitlements(at: content.appPath)
+        guard let entitlements else {
+            throw CoreError.generic("Cannot read the entitlements -- PATH=\(content.appPath)")
+        }
         return InfoResult(properties: [
             "general.ipa_path": .string(content.ipaPath.pathString),
             "general.ipa_size": .fileSize(try fileSystem.fileSize(at: content.ipaPath)),

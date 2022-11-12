@@ -25,7 +25,8 @@ final class DefaultSnapshotGenerator: SnapshotGenerator {
             acc.append(.init(
                 path: relativePath,
                 sha256: sha256,
-                size: fileSize
+                size: fileSize,
+                metadata: []
             ))
         }
         let ipaSha256 = try crypto.sha256String(at: content.ipaPath)
