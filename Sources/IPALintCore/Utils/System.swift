@@ -37,7 +37,6 @@ final class DefaultSystem: System {
             let process = Process(
                 arguments: arguments,
                 outputRedirection: output.outputRedirection(),
-                verbose: false,
                 startNewProcessGroup: false
             )
             try process.launch()
