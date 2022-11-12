@@ -33,6 +33,6 @@ enum CommandError: Error {
 
 extension CommandExecutor {
     func exit(_ code: Int32) -> CommandError {
-        return CommandError.exit(code)
+        CommandError.exit(code)
     }
 }

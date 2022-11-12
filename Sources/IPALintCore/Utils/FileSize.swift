@@ -92,31 +92,31 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
     // MARK: - Private
 
     private var kilobytes: Float {
-        return Float(bytes) / Float(FileSize.KB)
+        Float(bytes) / Float(FileSize.KB)
     }
 
     private var megabytes: Float {
-        return Float(bytes) / Float(FileSize.MB)
+        Float(bytes) / Float(FileSize.MB)
     }
 
     private var gigabytes: Float {
-        return Float(bytes) / Float(FileSize.GB)
+        Float(bytes) / Float(FileSize.GB)
     }
 
     private var bytesString: String {
-        return String(format: "%ld B", bytes)
+        String(format: "%ld B", bytes)
     }
 
     private var kilobytesString: String {
-        return String(format: "%.2f KB", kilobytes)
+        String(format: "%.2f KB", kilobytes)
     }
 
     private var metabytesString: String {
-        return String(format: "%.2f MB", megabytes)
+        String(format: "%.2f MB", megabytes)
     }
 
     private var gigabytesString: String {
-        return String(format: "%.2f GB", gigabytes)
+        String(format: "%.2f GB", gigabytes)
     }
 
     private static func unit(from string: String) -> UInt64? {

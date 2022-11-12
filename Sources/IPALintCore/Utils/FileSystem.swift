@@ -69,11 +69,11 @@ final class DefaultFileSystem: FileSystem {
     private let fileManager = FileManager.default
 
     var currentWorkingDirectory: AbsolutePath {
-        return AbsolutePath(fileManager.currentDirectoryPath)
+        AbsolutePath(fileManager.currentDirectoryPath)
     }
 
     func exists(at path: AbsolutePath) -> Bool {
-        return fileManager.fileExists(atPath: path.pathString)
+        fileManager.fileExists(atPath: path.pathString)
     }
 
     func move(from fromPath: AbsolutePath, to toPath: AbsolutePath) throws {
@@ -112,7 +112,7 @@ final class DefaultFileSystem: FileSystem {
     }
 
     func makeTemporaryDirectory() throws -> TemporaryDirectory {
-        return try TemporaryDirectory()
+        try TemporaryDirectory()
     }
 
     func absolutePath(from string: String) throws -> AbsolutePath {
@@ -142,7 +142,7 @@ final class DefaultFileSystem: FileSystem {
     }
 
     func temporaryDirectory(at existingPath: AbsolutePath?) throws -> Directory {
-        if let existingPath = existingPath {
+        if let existingPath {
             let items = try list(at: existingPath)
             guard items.isEmpty else {
                 throw CoreError.generic("Temporary directory is not empty (path=\(existingPath.pathString))")
@@ -158,7 +158,7 @@ final class DefaultFileSystem: FileSystem {
     }
 
     func read(from path: AbsolutePath) throws -> Data {
-        return try Data(contentsOf: path.asURL)
+        try Data(contentsOf: path.asURL)
     }
 
     // MARK: - Private

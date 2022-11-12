@@ -1,29 +1,28 @@
 class Swiftformat < Formula
   desc "Formatting tool for reformatting Swift code"
   homepage "https://github.com/nicklockwood/SwiftFormat"
-  url "https://github.com/nicklockwood/SwiftFormat/archive/0.47.9.tar.gz"
-  sha256 "29d017bad7b3acc914466260825b0a3ce3b57f4d8dd0971329e6bb90ece449e2"
+  url "https://github.com/nicklockwood/SwiftFormat/archive/0.50.3.tar.gz"
+  sha256 "ec7dd4f0ac892f99e174ea952a5395b2649c337670f7dac0a5b871fd741073c1"
   license "MIT"
-  revision 1
-  head "https://github.com/nicklockwood/SwiftFormat.git", shallow: false
+  head "https://github.com/nicklockwood/SwiftFormat.git", branch: "master"
 
   bottle do
-    cellar :any_skip_relocation
-    sha256 "52fadcec99e32ce8f47668c23e52e06ce1a8062003bdcf2a10700e21c15f27ca" => :big_sur
-    sha256 "e3c523d91834373b22730be7758ae5d00488c70da4bae0dc698bedd24b7b1057" => :arm64_big_sur
-    sha256 "dbcb5268ffbf6a972b7e438f734a586af07c1986868e440c65b27652a3f5c9c5" => :catalina
-    sha256 "c896f5f8212cc2f5b14b0303c55828808abb28c5a66b2964a9a20aaa13c9f9d6" => :mojave
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "fca75bfe7fda2151c2972e7e9262e9ca6ce2f50e3fc562e0688dd817550813c2"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "f03398746b42c97a4057eb74c740a842b96b7fbb49b003057daf114d72db74b4"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "ff1b0f20ebaaa03a580817e8f4c670e54227c86c3c53d813899c276d03415461"
+    sha256 cellar: :any_skip_relocation, monterey:       "5dddca5459af2ad28f1a9ef1e664da40ed664ae907c0351dc92b3cd0af52c29e"
+    sha256 cellar: :any_skip_relocation, big_sur:        "7427e072a246141371df90135c5cea00c832bf2c511b62ef1cf49c1148b5bf23"
+    sha256 cellar: :any_skip_relocation, catalina:       "a3de195f76316795eb6a56e240265a8fd41c042c7d515ae1df254aa3f577b540"
+    sha256                               x86_64_linux:   "8557726207a8ce0871b950bf44ae9f2b8e95973ba026a77cf728d31cefc3ac00"
   end
 
   depends_on xcode: ["10.1", :build]
 
+  uses_from_macos "swift"
+
   def install
-    xcodebuild "-project",
-        "SwiftFormat.xcodeproj",
-        "-scheme", "SwiftFormat (Command Line Tool)",
-        "CODE_SIGN_IDENTITY=",
-        "SYMROOT=build", "OBJROOT=build"
-    bin.install "build/Release/swiftformat"
+    system "swift", "build", "--disable-sandbox", "--configuration", "release"
+    bin.install ".build/release/swiftformat"
   end
 
   test do

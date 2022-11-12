@@ -30,7 +30,7 @@ extension Command {
     }
 
     private var commandAssemblies: [Assembly] {
-        Setup.allSubcommands.map { $0.1 }
+        Setup.allSubcommands.map(\.1)
     }
 
     private var coreAssemblies: [Assembly] {
@@ -42,6 +42,6 @@ extension Command {
 
 extension ParsableCommand {
     static var allSubcommands: [ParsableCommand.Type] {
-        Setup.allSubcommands.map { $0.0 }
+        Setup.allSubcommands.map(\.0)
     }
 }

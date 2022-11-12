@@ -21,7 +21,7 @@ extension Sequence where Iterator.Element: Hashable {
     }
 }
 
-extension Array where Element == String {
+extension [String] {
     func command() -> String {
         map { $0.containsWhitespaceAndNewlines() ? $0.quoted() : $0 }.joined(separator: " ")
     }
