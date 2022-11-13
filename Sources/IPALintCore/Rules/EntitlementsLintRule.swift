@@ -23,14 +23,16 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
             throw CoreError.generic("Cannot read the entitlements -- PATH=\(content.appPath)")
         }
         if let content = configuration.setting(\.content), let values = content.value {
-            try values.forEach { key, value in
-                let presentValue = try EntitlementsLintRuleConfiguration.Value(entitlements.dictionary[key])
+            values.forEach { key, value in
+                let presentValue = entitlements.properties[key]
                 if presentValue != value {
                     violations.append(
                         .init(
                             severity: content.severity,
                             message: "Invalid entitlements property value"
-                                + " -- property=\(key), expected_value=\(value), present_value=\(presentValue)"
+                                + " -- property=\(key),"
+                                + " expected_value=\(value),"
+                                + " present_value=\(String(describing: presentValue))"
                         )
                     )
                 }
@@ -41,41 +43,8 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
 }
 
 struct EntitlementsLintRuleConfiguration: LintRuleConfiguration {
-    enum Value: Codable, Equatable {
-        case string(String)
-        case array([String])
-
-        init(from decoder: Decoder) throws {
-            do {
-                let container = try decoder.singleValueContainer()
-                self = .string(try container.decode(String.self))
-            } catch {
-                do {
-                    let container = try decoder.singleValueContainer()
-                    self = .array(try container.decode([String].self))
-                } catch {
-                    throw CoreError.generic("Cannot parse 'entitlements' rule configuration")
-                }
-            }
-        }
-
-        func encode(to _: Encoder) throws {
-            // TODO:
-        }
-
-        init(_ anyValue: Any?) throws {
-            if let string = anyValue as? String {
-                self = .string(string)
-            } else if let array = anyValue as? [String] {
-                self = .array(array)
-            } else {
-                throw CoreError.generic("Cannot parse Entitlemenets value -- value=\(anyValue ?? "<nil>")")
-            }
-        }
-    }
-
     struct Settings: Codable {
-        var content: [String: Value]?
+        var content: [String: Property]?
     }
 
     var enabled: Bool?

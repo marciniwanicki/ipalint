@@ -12,30 +12,7 @@ public struct InfoContext {
 }
 
 public struct InfoResult: Equatable {
-    public enum Value: Equatable, CustomStringConvertible {
-        case fileSize(FileSize)
-        case string(String)
-        case uint(UInt)
-        case int(Int)
-        case array([String])
-
-        public var description: String {
-            switch self {
-            case let .fileSize(value):
-                return value.description
-            case let .int(value):
-                return value.description
-            case let .string(value):
-                return value
-            case let .uint(value):
-                return value.description
-            case let .array(value):
-                return value.description
-            }
-        }
-    }
-
-    public let properties: [String: Value]
+    public let properties: [String: Property]
 }
 
 public protocol InfoInteractor {
@@ -64,24 +41,18 @@ final class DefaultInfoInteractor: InfoInteractor {
         guard let entitlements else {
             throw CoreError.generic("Cannot read the entitlements -- PATH=\(content.appPath)")
         }
-        return InfoResult(properties: [
+        let entitlementsDictionary = Dictionary(uniqueKeysWithValues: entitlements.properties.map {
+            ("entitlements.\($0)", $1)
+        })
+        let generalDictionary: [String: Property] = [
             "general.ipa_path": .string(content.ipaPath.pathString),
             "general.ipa_size": .fileSize(try fileSystem.fileSize(at: content.ipaPath)),
             "general.payload_size": .fileSize(try fileSystem.directorySize(at: content.appPath)),
             "general.total_number_of_files": .int(allFilesIterator.all().count),
-            "entitlements.application_identifier": .string(entitlements.applicationIdentifier ?? .empty),
-            "entitlements.bundle_identifier": .string(entitlements.bundleIdentifier?.rawValue ?? .empty),
-            "entitlements.aps_environment": .string(entitlements.apsEnvironment ?? .empty),
-            "entitlements.beta_reports_active": .string(
-                entitlements.betaReportsActive
-                    .map(\.description) ?? .empty
-            ),
-            "entitlements.associated_domains": .array(entitlements.associatedDomains ?? []),
-            "entitlements.team_identifier": .string(entitlements.teamIdentifier ?? .empty),
-            "entitlements.application_groups": .array(entitlements.applicationGroups ?? []),
-            "entitlements.get_task_allow": .string(entitlements.getTaskAllow.map(\.description) ?? .empty),
-            "entitlements.keychainAccessGroups": .array(entitlements.keychainAccessGroups ?? []),
-        ])
+        ]
+        let properties = entitlementsDictionary
+            .merging(generalDictionary, uniquingKeysWith: { lhs, _ in lhs })
+        return InfoResult(properties: properties)
     }
 }
 

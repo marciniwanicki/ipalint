@@ -10,7 +10,7 @@ struct LintCommand: Command {
 
     @Option(
         name: .shortAndLong,
-        help: "Path to .ipa file.",
+        help: Help.Option.bundlePath,
         completion: .directory
     )
     var path: String

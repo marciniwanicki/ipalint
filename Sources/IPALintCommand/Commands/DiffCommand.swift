@@ -10,14 +10,14 @@ struct DiffCommand: Command {
 
     @Option(
         name: .long,
-        help: "Path to the first .ipa file.",
+        help: Help.Option.bundlePath1,
         completion: .directory
     )
     var path1: String
 
     @Option(
         name: .long,
-        help: "Path to the first .ipa file.",
+        help: Help.Option.bundlePath2,
         completion: .directory
     )
     var path2: String

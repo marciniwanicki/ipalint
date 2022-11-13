@@ -25,6 +25,7 @@ final class DefaultCodesignExtractor: CodesignExtractor {
         else {
             throw CoreError.generic("Cannot read the codesign entitlements -- PATH=\(path)")
         }
-        return Entitlements(dictionary: dictionary)
+
+        return Entitlements(properties: try Property.dictionary(from: dictionary))
     }
 }
