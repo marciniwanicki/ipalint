@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "ipalint",
+    products: [
+        .executable(name: "ipalint", targets: ["ipalint"]),
+    ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMajor(from: "0.2.7")),
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMajor(from: "1.2.0")),
@@ -24,16 +27,12 @@ let package = Package(
             dependencies: ["SwiftToolsSupport-auto", "Yams"]
         ),
         .testTarget(
-            name: "IPALintFixtures",
-            dependencies: []
-        ),
-        .testTarget(
             name: "IPALintCoreTests",
-            dependencies: ["IPALintCore", "IPALintFixtures"]
+            dependencies: ["IPALintCore"]
         ),
         .testTarget(
             name: "IPALintIntegrationTests",
-            dependencies: ["IPALintCommand", "IPALintCore", "IPALintFixtures"]
+            dependencies: ["IPALintCommand", "IPALintCore"]
         ),
     ]
 )
