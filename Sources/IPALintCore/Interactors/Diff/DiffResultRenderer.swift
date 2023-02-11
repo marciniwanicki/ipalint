@@ -16,11 +16,12 @@ public final class TextDiffResultRenderer: DiffResultRenderer {
             switch diff {
             case let .onlyInFirst(file):
                 output.write(
-                    .text("- \(file.path)", .color(.red)) + .text(" (only in first)\n", .color(.darkGray))
+                    .text("- \(file.path) \(file.size)", .color(.red)) + .text(" (only in first)\n", .color(.darkGray))
                 )
             case let .onlyInSecond(file):
                 output.write(
-                    .text("+ \(file.path)", .color(.green)) + .text(" (only in second)\n", .color(.darkGray))
+                    .text("+ \(file.path) \(file.size)", .color(.green)) +
+                        .text(" (only in second)\n", .color(.darkGray))
                 )
             case let .difference(difference):
                 output.write(
