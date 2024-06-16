@@ -1,6 +1,4 @@
-// swift-tools-version:5.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
@@ -14,25 +12,39 @@ let package = Package(
         .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.1"),
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "ipalint",
-            dependencies: ["IPALintCommand"]
+            dependencies: [
+                .target(name: "IPALintCommand"),
+            ]
         ),
         .target(
             name: "IPALintCommand",
-            dependencies: ["IPALintCore", "SwiftToolsSupport-auto", "ArgumentParser"]
+            dependencies: [
+                .target(name: "IPALintCore"),
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "SwiftToolsSupport-auto", package: "swift-tools-support-core"),
+            ]
         ),
         .target(
             name: "IPALintCore",
-            dependencies: ["SwiftToolsSupport-auto", "Yams"]
+            dependencies: [
+                .product(name: "Yams", package: "Yams"),
+                .product(name: "SwiftToolsSupport-auto", package: "swift-tools-support-core"),
+            ]
         ),
         .testTarget(
             name: "IPALintCoreTests",
-            dependencies: ["IPALintCore"]
+            dependencies: [
+                .target(name: "IPALintCore"),
+            ]
         ),
         .testTarget(
             name: "IPALintIntegrationTests",
-            dependencies: ["IPALintCommand", "IPALintCore"]
+            dependencies: [
+                .target(name: "IPALintCommand"),
+                .target(name: "IPALintCore"),
+            ]
         ),
     ]
 )

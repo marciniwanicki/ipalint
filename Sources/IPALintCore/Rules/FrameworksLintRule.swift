@@ -22,7 +22,7 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
 
         // TODO: Fix linting ipa without any dynamic libraries
         let frameworksPath = content.appPath.appending(component: "Frameworks")
-        let frameworks: Set<String> = Set(try fileSystem.list(at: frameworksPath).compactMap {
+        let frameworks: Set<String> = try Set(fileSystem.list(at: frameworksPath).compactMap {
             switch $0 {
             case let .directory(frameworksPath):
                 return String(frameworksPath.path.basename.dropLast(10)) // ".framework"

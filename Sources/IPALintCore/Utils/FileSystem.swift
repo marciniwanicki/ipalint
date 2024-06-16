@@ -100,7 +100,7 @@ final class DefaultFileSystem: FileSystem {
     }
 
     func tree(at path: AbsolutePath) throws -> FileSystemTree {
-        FileSystemTree(path: path, items: try treeItems(at: path))
+        try FileSystemTree(path: path, items: treeItems(at: path))
     }
 
     func createDirectory(at path: AbsolutePath) throws {

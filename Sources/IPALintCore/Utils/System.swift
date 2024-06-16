@@ -55,7 +55,7 @@ private extension OutputType {
             return .none
         default:
             return .stream { [output] bytes in output.write(bytes, to: .stdout) }
-            stderr: { [output] bytes in output.write(bytes, to: .stderr)
+                stderr: { [output] bytes in output.write(bytes, to: .stderr)
                 }
         }
     }
