@@ -45,11 +45,11 @@ struct EntitlementsLintRuleConfiguration: LintRuleConfiguration {
         init(from decoder: Decoder) throws {
             do {
                 let container = try decoder.singleValueContainer()
-                self = .string(try container.decode(String.self))
+                self = try .string(container.decode(String.self))
             } catch {
                 do {
                     let container = try decoder.singleValueContainer()
-                    self = .array(try container.decode([String].self))
+                    self = try .array(container.decode([String].self))
                 } catch {
                     throw CoreError.generic("Cannot parse 'entitlements' rule configuration")
                 }

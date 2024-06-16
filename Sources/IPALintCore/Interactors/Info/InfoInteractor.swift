@@ -61,10 +61,10 @@ final class DefaultInfoInteractor: InfoInteractor {
         let content = try contentExtractor.content(from: context)
         let allFilesIterator = try fileSystem.tree(at: content.temporaryDirectory.path).allFilesIterator()
         let entitlements = try codesignExtractor.entitlements(at: content.appPath)
-        return InfoResult(properties: [
+        return try InfoResult(properties: [
             "general.ipa_path": .string(content.ipaPath.pathString),
-            "general.ipa_size": .fileSize(try fileSystem.fileSize(at: content.ipaPath)),
-            "general.payload_size": .fileSize(try fileSystem.directorySize(at: content.appPath)),
+            "general.ipa_size": .fileSize(fileSystem.fileSize(at: content.ipaPath)),
+            "general.payload_size": .fileSize(fileSystem.directorySize(at: content.appPath)),
             "general.total_number_of_files": .int(allFilesIterator.all().count),
             "entitlements.application_identifier": .string(entitlements.applicationIdentifier ?? .empty),
             "entitlements.bundle_identifier": .string(entitlements.bundleIdentifier?.rawValue ?? .empty),

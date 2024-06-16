@@ -79,13 +79,13 @@ final class YamlConfigurationLoader: ConfigurationLoader {
         }
 
         let data = try CoreError.rethrow(
-            try fileSystem.read(from: path),
+            fileSystem.read(from: path),
             "Failed to read config file at path '\(path.pathString)'"
         )
         guard let string = String(data: data, encoding: .utf8) else {
             throw CoreError.generic("Config file at path '\(path.pathString)' does not use UTF-8 encoding")
         }
-        let rawConfiguration = try CoreError.rethrow(try Yams.load(yaml: string)) { description in
+        let rawConfiguration = try CoreError.rethrow(Yams.load(yaml: string)) { description in
             .generic(
                 """
                 Config file at path '\(path.pathString)' cannot be parsed

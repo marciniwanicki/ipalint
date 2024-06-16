@@ -18,7 +18,7 @@ public struct FileSize: Equatable, Codable, CustomStringConvertible, Comparable 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        guard let value = FileSize(string: try container.decode(String.self)) else {
+        guard let value = try FileSize(string: container.decode(String.self)) else {
             throw CoreError.generic("Cannot decode FileSize")
         }
         self = value
