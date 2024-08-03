@@ -5,10 +5,14 @@ import XCTest
 
 class IntegrationTestCase: XCTestCase {
     let subject = CommandRunner()
+    let fixtures = Fixtures()
 
-    override func setUpWithError() throws {}
+    override func setUpWithError() throws {
+        try fixtures.setUp()
+    }
 
     override func tearDownWithError() throws {
+        try fixtures.tearDown()
         output.clear()
     }
 
