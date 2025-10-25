@@ -26,10 +26,6 @@ struct LintRuleResult {
 
 struct LintRuleIdentifier: RawRepresentable, Hashable {
     let rawValue: String
-
-    init(rawValue: String) {
-        self.rawValue = rawValue
-    }
 }
 
 struct LintRuleDescriptor: Equatable {
