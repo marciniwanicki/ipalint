@@ -1,5 +1,6 @@
 import Foundation
 import IPALintCore
+import SCInject
 
 final class CommonAssembly: Assembly {
     func assemble(_ registry: Registry) {

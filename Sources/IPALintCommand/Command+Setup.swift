@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 import IPALintCore
+import SCInject
 
 private enum Setup {
     static let allSubcommands: [(ParsableCommand.Type, Assembly)] = [

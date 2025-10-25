@@ -2,6 +2,7 @@ import ArgumentParser
 import Foundation
 import IPALintCore
 import TSCBasic
+import SCInject
 
 struct InfoCommand: Command {
     static let configuration: CommandConfiguration = .init(

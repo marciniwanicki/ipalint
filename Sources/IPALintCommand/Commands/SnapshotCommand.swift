@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 import IPALintCore
+import SCInject
 
 struct SnapshotCommand: Command {
     static let configuration: CommandConfiguration = .init(
