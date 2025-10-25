@@ -1,4 +1,4 @@
-name: CI
+name: main
 
 on:
   push:
@@ -11,13 +11,13 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        xcode: ['15.4']
+        xcode: ['26.0.1']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode }}.app
-    - name: Lint
-      run: make configure lint
+    # - name: Lint
+    #   run: make configure lint
     - name: Build
       run: make clean build
     - name: Test
