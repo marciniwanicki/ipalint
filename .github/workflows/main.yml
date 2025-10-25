@@ -1,26 +1,66 @@
-name: main
-
+name: Main
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
+  schedule:
+    # 20:00 UTC 
+    - cron: "0 20 * * *"
+
+env:
+  DEVELOPER_DIR: "/Applications/Xcode_26.0.app/Contents/Developer"
+  MISE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Limit GITHUB_TOKEN permissions to read-only for repo contents
+# https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+permissions:
+  contents: read
 
 jobs:
-  build:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        xcode: ['26.0.1']
+  lint:
+    name: Lint
+    runs-on: macos-14
+    timeout-minutes: 5
     steps:
     - uses: actions/checkout@v4
-    - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Run setup
       run: make setup
     - name: Run lint
       run: make lint
+
+  build:
+    name: Build
+    runs-on: macos-14
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/cache@v4
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    - name: Run setup
+      run: make setup
     - name: Run build
-      run: make clean build
+      run: make build
+
+  test:
+    name: Test
+    runs-on: macos-14
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/cache@v4
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    - name: Run setup
+      run: make setup
     - name: Run tests
       run: make test
