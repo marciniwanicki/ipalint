@@ -6,7 +6,7 @@ VERSION_PATCH = 0
 VERSION = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 GIT_SHORT_HASH = $(shell git rev-parse --short HEAD)
 
-setup:
+configure:
 	curl "https://mise.run" | sh
 
 env:
