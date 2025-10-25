@@ -1,8 +1,6 @@
-<p align="center">
-  <img src="Documentation/Resources/ipalint.png" alt="ipalint logo" />
-</p>
-
 # ipalint
+
+[![Build Status](https://github.com/marciniwanicki/ipalint/actions/workflows/main.yml/badge.svg)](https://github.com/marciniwanicki/ipalint/actions/workflows/main.yml) [![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=F0F0F0)](#)
 
 A macOS command-line tool for static analysis of iOS `.ipa` (iOS App Store Package) files. Analyze app bundles for configuration issues, enforce size constraints, validate entitlements, and detect prohibited file extensions using declarative YAML-based rules.
 
