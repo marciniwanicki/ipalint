@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 import IPALintCore
+import SCInject
 import TSCUtility
 
 struct VersionCommand: Command {
