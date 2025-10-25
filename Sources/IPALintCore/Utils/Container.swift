@@ -66,8 +66,8 @@ public final class Assembler {
     }
 
     public func assemble(_ assemblies: [Assembly]) -> Assembler {
-        assemblies.forEach {
-            $0.assemble(container)
+        for assembly in assemblies {
+            assembly.assemble(container)
         }
         return self
     }

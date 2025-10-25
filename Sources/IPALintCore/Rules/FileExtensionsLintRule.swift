@@ -17,7 +17,7 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
         }
 
         if let expectOnly = configuration.setting(\.expectOnly), let value = expectOnly.value {
-            relativePaths.forEach { path in
+            for path in relativePaths {
                 if let fileExtension = path.extension, !value.contains(fileExtension) {
                     violations.append(
                         .init(
@@ -30,7 +30,7 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
             }
         }
         if let forbidden = configuration.setting(\.forbidden), let value = forbidden.value {
-            relativePaths.forEach { path in
+            for path in relativePaths {
                 if let fileExtension = path.extension, value.contains(fileExtension) {
                     violations.append(
                         .init(

@@ -24,7 +24,7 @@ public final class TextLintResultRenderer: LintResultRenderer {
             )
             return
         }
-        result.violations.forEach { violation in
+        for violation in result.violations {
             renderViolation(violation, ruleIdentifier: result.rule.identifier.rawValue)
         }
     }

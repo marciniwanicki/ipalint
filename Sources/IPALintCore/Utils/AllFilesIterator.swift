@@ -9,14 +9,14 @@ final class AllFilesIterator {
     }
 
     func forEach(_ closure: (AbsolutePath) -> Void) {
-        fileSystemTree.items.forEach { item in
+        for item in fileSystemTree.items {
             visit(item, parent: fileSystemTree.path, closure: closure)
         }
     }
 
     func all() -> [AbsolutePath] {
         var paths = [AbsolutePath]()
-        fileSystemTree.items.forEach { item in
+        for item in fileSystemTree.items {
             visit(item, parent: fileSystemTree.path) {
                 paths.append($0)
             }
@@ -37,7 +37,7 @@ final class AllFilesIterator {
             closure(absolutePath)
         case let .directory(dictionary):
             let childParent = parent.appending(dictionary.path)
-            dictionary.items.forEach { child in
+            for child in dictionary.items {
                 visit(child, parent: childParent, closure: closure)
             }
         }
