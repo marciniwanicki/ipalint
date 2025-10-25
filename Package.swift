@@ -3,13 +3,16 @@ import PackageDescription
 
 let package = Package(
     name: "ipalint",
+    platforms: [
+        .macOS(.v14),
+    ],
     products: [
         .executable(name: "ipalint", targets: ["ipalint"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMajor(from: "0.2.7")),
-        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMajor(from: "1.2.0")),
-        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.1"),
+        .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMajor(from: "0.7.3")),
+        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMajor(from: "1.6.2")),
+        .package(url: "https://github.com/jpsim/Yams.git", from: "6.2.0"),
     ],
     targets: [
         .executableTarget(
