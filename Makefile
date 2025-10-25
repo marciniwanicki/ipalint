@@ -1,23 +1,29 @@
+mise := ~/.local/bin/mise
+
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
 VERSION_PATCH = 0
 VERSION = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 GIT_SHORT_HASH = $(shell git rev-parse --short HEAD)
 
-configure:
-	./Scripts/configure.sh
+setup:
+	curl "https://mise.run" | sh
+	mise install
+
+env:
+	@$(mise) run env
+
+build: env
+	@$(mise) run build
 
 clean:
-	./Scripts/clean.sh
-
-build:
-	./Scripts/build.sh
+	@$(mise) run clean
 
 test:
-	./Scripts/test.sh
+	@$(mise) run test
 
 lint:
-	./Scripts/lint.sh
+	@$(mise) run lint
 
 format:
-	./Scripts/format.sh
+	@$(mise) run format

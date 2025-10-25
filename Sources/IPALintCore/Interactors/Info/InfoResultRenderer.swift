@@ -12,7 +12,7 @@ public final class TextInfoResultRenderer: InfoResultRenderer {
     }
 
     public func render(result: InfoResult) {
-        result.properties.keys.sorted().forEach { key in
+        for key in result.properties.keys.sorted() {
             let value = result.properties[key]?.description ?? "<nil>"
             output.write(
                 .text("· \(key) =", .color(.lightGray))

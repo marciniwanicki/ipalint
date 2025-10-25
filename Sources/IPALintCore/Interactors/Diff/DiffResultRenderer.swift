@@ -12,7 +12,7 @@ public final class TextDiffResultRenderer: DiffResultRenderer {
     }
 
     public func render(result: DiffResult) {
-        result.diff.differences.forEach { diff in
+        for diff in result.diff.differences {
             switch diff {
             case let .onlyInFirst(file):
                 output.write(
