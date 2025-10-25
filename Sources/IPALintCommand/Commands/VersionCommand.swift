@@ -1,8 +1,8 @@
 import ArgumentParser
 import Foundation
 import IPALintCore
-import TSCUtility
 import SCInject
+import TSCUtility
 
 struct VersionCommand: Command {
     static let configuration = CommandConfiguration(
