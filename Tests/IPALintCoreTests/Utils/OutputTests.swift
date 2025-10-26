@@ -18,7 +18,7 @@ import Testing
 
 @testable import IPALintCore
 
-@Suite("CaptureOutput Tests")
+@Suite("CaptureOutput Tests", .serialized)
 struct CaptureOutputTests {
     private let subject = CaptureOutput()
 
