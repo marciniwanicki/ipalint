@@ -6,8 +6,8 @@ A macOS command-line tool for static analysis of iOS `.ipa` (iOS App Store Packa
 
 ## Requirements
 
-- **macOS 14+** (Sonoma or later)
-- **Xcode** with Swift 5.9+ toolchain
+- **macOS 26.0.1+** (Tahoe)
+- **Xcode 16.0.1+** with Swift 6.2+ toolchain
 - **System Dependencies**: `tar`, `codesign` (provided by macOS Command Line Tools)
 
 ## Installation
