@@ -4,4 +4,4 @@ set -euo pipefail
 
 source "$MISE_PROJECT_ROOT/.mise/helpers/common"
 
-xcrun swift test
+xcrun swift test --no-parallel
