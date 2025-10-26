@@ -1,6 +1,10 @@
 // swift-tools-version:5.9
 import PackageDescription
 
+let commonSwiftSettings: [SwiftSetting] = [
+    .unsafeFlags(["-warnings-as-errors"]),
+]
+
 let package = Package(
     name: "ipalint",
     platforms: [
@@ -20,7 +24,8 @@ let package = Package(
             name: "ipalint",
             dependencies: [
                 .target(name: "IPALintCommand"),
-            ]
+            ],
+            swiftSettings: commonSwiftSettings
         ),
         .target(
             name: "IPALintCommand",
@@ -29,7 +34,8 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "SwiftToolsSupport-auto", package: "swift-tools-support-core"),
                 .product(name: "SCInject", package: "SwiftCommons"),
-            ]
+            ],
+            swiftSettings: commonSwiftSettings
         ),
         .target(
             name: "IPALintCore",
@@ -37,20 +43,23 @@ let package = Package(
                 .product(name: "Yams", package: "Yams"),
                 .product(name: "SwiftToolsSupport-auto", package: "swift-tools-support-core"),
                 .product(name: "SCInject", package: "SwiftCommons"),
-            ]
+            ],
+            swiftSettings: commonSwiftSettings
         ),
         .testTarget(
             name: "IPALintCoreTests",
             dependencies: [
                 .target(name: "IPALintCore"),
-            ]
+            ],
+            swiftSettings: commonSwiftSettings
         ),
         .testTarget(
             name: "IPALintIntegrationTests",
             dependencies: [
                 .target(name: "IPALintCommand"),
                 .target(name: "IPALintCore"),
-            ]
+            ],
+            swiftSettings: commonSwiftSettings
         ),
     ]
 )
