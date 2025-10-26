@@ -44,7 +44,7 @@ extension Output {
     }
 }
 
-public final class StandardOutput: Output, @unchecked Sendable {
+public final class StandardOutput: Output, Sendable {
     public static let shared = StandardOutput()
 
     private let lock = NSLock()
