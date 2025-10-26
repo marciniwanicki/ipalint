@@ -92,7 +92,8 @@ struct CryptoTests {
 
         // Then
         #expect(hash.count == 64) // 32 bytes * 2 hex chars = 64 characters
-        #expect(hash.allSatisfy(\.isHexDigit))
+        // swiftformat:disable:next preferKeyPath
+        #expect(hash.allSatisfy { $0.isHexDigit })
         #expect(hash == hash.lowercased()) // Verify lowercase
     }
 
