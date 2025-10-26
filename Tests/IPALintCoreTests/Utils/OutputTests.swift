@@ -118,7 +118,7 @@ struct CaptureOutputTests {
     @Test("Writes Data to stdout")
     func writeDataToStdout() {
         // Given
-        let data = "Data content".data(using: .utf8)!
+        let data = Data("Data content".utf8)
 
         // When
         subject.write(data, to: .stdout)
@@ -130,7 +130,7 @@ struct CaptureOutputTests {
     @Test("Writes Data to stderr")
     func writeDataToStderr() {
         // Given
-        let data = "Error data".data(using: .utf8)!
+        let data = Data("Error data".utf8)
 
         // When
         subject.write(data, to: .stderr)

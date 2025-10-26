@@ -43,12 +43,21 @@ make clean  # Clean build artifacts
 
 ## Code Change Workflow
 
-**IMPORTANT**: After making any code changes to Swift files, you MUST run:
+**IMPORTANT**: After making any code changes to Swift files, you MUST run the following commands in order:
+
+1. **Format the code**:
 ```bash
 make format
 ```
+This ensures all code is properly formatted according to the project's swiftformat configuration.
 
-This ensures all code is properly formatted according to the project's swiftformat configuration. The formatting step is required before committing any changes.
+2. **Run linting checks**:
+```bash
+make lint
+```
+This verifies code quality and adherence to Swift style guidelines. Fix any linting violations before committing.
+
+Both steps are required before committing any changes.
 
 ## Architecture
 
