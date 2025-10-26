@@ -16,9 +16,10 @@
 import Foundation
 import IPALintCommand
 import IPALintCore
-import XCTest
+import Testing
 
-final class HelpCommandIntegrationTests: IntegrationTestCase {
+@Suite("Help Command Integration Tests")
+struct HelpCommandIntegrationTests {
     private let expectedHelpOutput = """
     USAGE: ipalint <subcommand>
 
@@ -36,21 +37,29 @@ final class HelpCommandIntegrationTests: IntegrationTestCase {
 
     """
 
-    func testHelp() {
+    @Test("Help command with --help flag")
+    func help() {
+        let context = IntegrationTestContext()
+        defer { context.cleanup() }
+
         // When
-        let exitCode = subject.run(with: ["--help"])
+        let exitCode = context.subject.run(with: ["--help"])
 
         // Then
-        XCTAssertEqual(exitCode, 0)
-        XCTAssertEqual(stdout, expectedHelpOutput)
+        #expect(exitCode == 0)
+        #expect(context.stdout == expectedHelpOutput)
     }
 
-    func testHelpWhenNoParameters() {
+    @Test("Help command when no parameters provided")
+    func helpWhenNoParameters() {
+        let context = IntegrationTestContext()
+        defer { context.cleanup() }
+
         // When
-        let exitCode = subject.run(with: [])
+        let exitCode = context.subject.run(with: [])
 
         // Then
-        XCTAssertEqual(exitCode, 0)
-        XCTAssertEqual(stdout, expectedHelpOutput)
+        #expect(exitCode == 0)
+        #expect(context.stdout == expectedHelpOutput)
     }
 }

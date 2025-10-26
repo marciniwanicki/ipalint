@@ -16,15 +16,20 @@
 import Foundation
 import IPALintCommand
 import IPALintCore
-import XCTest
+import Testing
 
-final class VersionCommandIntegrationTests: IntegrationTestCase {
-    func testVersion() {
+@Suite("Version Command Integration Tests")
+struct VersionCommandIntegrationTests {
+    @Test("Version command")
+    func version() {
+        let context = IntegrationTestContext()
+        defer { context.cleanup() }
+
         // When
-        let exitCode = subject.run(with: ["version"])
+        let exitCode = context.subject.run(with: ["version"])
 
         // Then
-        XCTAssertEqual(exitCode, 0)
-        XCTAssertEqual(stdout, "0.1.0+debug.local\n")
+        #expect(exitCode == 0)
+        #expect(context.stdout == "0.1.0+debug.local\n")
     }
 }
