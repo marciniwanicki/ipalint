@@ -157,7 +157,7 @@ final class DefaultFileSystem: FileSystem {
                 .compactMap { $0 as? URL }
                 .compactMap { try $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
                 .map { UInt64($0) }
-                .reduce(UInt64(), +)
+                .reduce(UInt64(), +),
         )
     }
 

@@ -19,7 +19,7 @@ import TSCBasic
 protocol Archiver {
     func extract(
         source sourcePath: AbsolutePath,
-        destination destinationPath: AbsolutePath
+        destination destinationPath: AbsolutePath,
     ) throws
 }
 
@@ -32,7 +32,7 @@ final class TarArchiver: Archiver {
 
     func extract(
         source sourcePath: AbsolutePath,
-        destination destinationPath: AbsolutePath
+        destination destinationPath: AbsolutePath,
     ) throws {
         let command = [
             "tar",
@@ -45,7 +45,7 @@ final class TarArchiver: Archiver {
         try CoreError.rethrowCommand(
             { try system.execute(command, output: .muted) },
             command: command,
-            message: "Cannot extract the .ipa file."
+            message: "Cannot extract the .ipa file.",
         )
     }
 }

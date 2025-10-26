@@ -21,20 +21,20 @@ import SCInject
 struct DiffCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "diff",
-        abstract: "Diff two ipa packages."
+        abstract: "Diff two ipa packages.",
     )
 
     @Option(
         name: .long,
         help: "Path to the first .ipa file.",
-        completion: .directory
+        completion: .directory,
     )
     var path1: String
 
     @Option(
         name: .long,
         help: "Path to the first .ipa file.",
-        completion: .directory
+        completion: .directory,
     )
     var path2: String
 
@@ -47,7 +47,7 @@ struct DiffCommand: Command {
 
         init(
             interactor: DiffInteractor,
-            printer: Printer
+            printer: Printer,
         ) {
             self.interactor = interactor
             self.printer = printer
@@ -71,7 +71,7 @@ struct DiffCommand: Command {
             registry.register(Executor.self) { r in
                 Executor(
                     interactor: r.resolve(DiffInteractor.self),
-                    printer: r.resolve(Printer.self)
+                    printer: r.resolve(Printer.self),
                 )
             }
         }

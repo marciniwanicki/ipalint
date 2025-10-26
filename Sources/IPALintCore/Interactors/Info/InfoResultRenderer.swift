@@ -32,7 +32,7 @@ public final class TextInfoResultRenderer: InfoResultRenderer {
             output.write(
                 .text("· \(key) =", .color(.lightGray))
                     + .text(" \(value)", .color(.white))
-                    + .newLine
+                    + .newLine,
             )
         }
     }

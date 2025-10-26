@@ -63,7 +63,7 @@ final class DefaultLintInteractor: LintInteractor {
         contentExtractor: ContentExtractor,
         codesignExtractor: CodesignExtractor,
         configurationLoader: ConfigurationLoader,
-        rules: [TypedLintRule]
+        rules: [TypedLintRule],
     ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
@@ -98,7 +98,7 @@ final class DefaultLintInteractor: LintInteractor {
         try typedLintRules.forEach {
             try $0.apply(configuration: configuration.ruleConfiguration(
                 bundleIdentifier: bundleIdentifier,
-                typedLintRule: $0
+                typedLintRule: $0,
             ))
         }
 
@@ -108,11 +108,11 @@ final class DefaultLintInteractor: LintInteractor {
         let results: [LintRuleResult] = try enabledTypedLintRules.map { typedLintRule in
             switch typedLintRule {
             case let .file(rule):
-                return try rule.lint(with: content.ipaPath)
+                try rule.lint(with: content.ipaPath)
             case let .content(rule):
-                return try rule.lint(with: content)
+                try rule.lint(with: content)
             case let .fileSystemTree(rule):
-                return try rule.lint(with: fileSystemTree)
+                try rule.lint(with: fileSystemTree)
             }
         }
         return .init(ruleResults: results)

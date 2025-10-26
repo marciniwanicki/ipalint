@@ -20,14 +20,14 @@ public enum CoreError: Error {
 
     static func rethrow<T>(
         _ closure: @autoclosure () throws -> T,
-        _ message: @autoclosure () -> String
+        _ message: @autoclosure () -> String,
     ) throws -> T {
         try rethrow(closure(), .generic(message()))
     }
 
     static func rethrow<T>(
         _ closure: @autoclosure () throws -> T,
-        _ coreError: @autoclosure () -> CoreError
+        _ coreError: @autoclosure () -> CoreError,
     ) throws -> T {
         do {
             return try closure()
@@ -38,7 +38,7 @@ public enum CoreError: Error {
 
     static func rethrow<T>(
         _ closure: @autoclosure () throws -> T,
-        _ coreError: (String) -> CoreError
+        _ coreError: (String) -> CoreError,
     ) throws -> T {
         do {
             return try closure()
@@ -52,7 +52,7 @@ public enum CoreError: Error {
     static func rethrowCommand<T>(
         _ closure: () throws -> T,
         command: [String],
-        message: String
+        message: String,
     ) throws -> T {
         do {
             return try closure()

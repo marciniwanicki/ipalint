@@ -42,7 +42,7 @@ final class DefaultContentExtractor: ContentExtractor {
         return Content(
             ipaPath: ipaPath,
             appPath: appPath,
-            temporaryDirectory: temporaryDirectory
+            temporaryDirectory: temporaryDirectory,
         )
     }
 

@@ -21,27 +21,27 @@ import SCInject
 struct LintCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "lint",
-        abstract: "Lint given ipa package."
+        abstract: "Lint given ipa package.",
     )
 
     @Option(
         name: .shortAndLong,
         help: "Path to .ipa file.",
-        completion: .directory
+        completion: .directory,
     )
     var path: String
 
     @Option(
         name: .shortAndLong,
         help: "Path to temp directory.",
-        completion: .directory
+        completion: .directory,
     )
     var temp: String?
 
     @Option(
         name: .shortAndLong,
         help: "Path to config file.",
-        completion: .directory
+        completion: .directory,
     )
     var config: String?
 
@@ -64,7 +64,7 @@ struct LintCommand: Command {
             let context = LintContext(
                 ipaPath: command.path,
                 tempPath: command.temp,
-                configPath: command.config
+                configPath: command.config,
             )
             let result = try interactor.lint(with: context)
 
@@ -90,7 +90,7 @@ struct LintCommand: Command {
             registry.register(Executor.self) { r in
                 Executor(
                     interactor: r.resolve(LintInteractor.self),
-                    printer: r.resolve(Printer.self)
+                    printer: r.resolve(Printer.self),
                 )
             }
         }

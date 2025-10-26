@@ -49,12 +49,12 @@ private extension Snapshot {
         let codableDescriptor = SnapshotCodable.Descriptor(
             filename: descriptor.filename,
             createdAt: descriptor.createdAt,
-            sha256: descriptor.sha256
+            sha256: descriptor.sha256,
         )
         return SnapshotCodable(
             version: codableVersion,
             descriptor: codableDescriptor,
-            files: codableFiles
+            files: codableFiles,
         )
     }
 }

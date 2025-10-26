@@ -47,7 +47,7 @@ final class DefaultSnapshotInteractor: SnapshotInteractor {
         fileSystem: FileSystem,
         contentExtractor: ContentExtractor,
         snapshotGenerator: SnapshotGenerator,
-        snapshotParser: SnapshotParser
+        snapshotParser: SnapshotParser,
     ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
@@ -76,12 +76,12 @@ private extension Snapshot {
         let codableDescriptor = SnapshotCodable.Descriptor(
             filename: descriptor.filename,
             createdAt: descriptor.createdAt,
-            sha256: descriptor.sha256
+            sha256: descriptor.sha256,
         )
         return SnapshotCodable(
             version: codableVersion,
             descriptor: codableDescriptor,
-            files: codableFiles
+            files: codableFiles,
         )
     }
 }

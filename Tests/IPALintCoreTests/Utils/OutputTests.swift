@@ -182,7 +182,7 @@ struct ForwardOutputTests {
         var capturedStdout: [String] = []
         let subject = ForwardOutput(
             stdout: { capturedStdout.append($0) },
-            stderr: nil
+            stderr: nil,
         )
 
         // When
@@ -198,7 +198,7 @@ struct ForwardOutputTests {
         var capturedStderr: [String] = []
         let subject = ForwardOutput(
             stdout: nil,
-            stderr: { capturedStderr.append($0) }
+            stderr: { capturedStderr.append($0) },
         )
 
         // When
@@ -215,7 +215,7 @@ struct ForwardOutputTests {
         var capturedStderr: [String] = []
         let subject = ForwardOutput(
             stdout: { capturedStdout.append($0) },
-            stderr: { capturedStderr.append($0) }
+            stderr: { capturedStderr.append($0) },
         )
 
         // When

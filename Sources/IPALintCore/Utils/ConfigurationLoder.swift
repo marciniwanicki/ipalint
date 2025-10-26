@@ -95,7 +95,7 @@ final class YamlConfigurationLoader: ConfigurationLoader {
 
         let data = try CoreError.rethrow(
             fileSystem.read(from: path),
-            "Failed to read config file at path '\(path.pathString)'"
+            "Failed to read config file at path '\(path.pathString)'",
         )
         guard let string = String(data: data, encoding: .utf8) else {
             throw CoreError.generic("Config file at path '\(path.pathString)' does not use UTF-8 encoding")
@@ -106,7 +106,7 @@ final class YamlConfigurationLoader: ConfigurationLoader {
                 Config file at path '\(path.pathString)' cannot be parsed
 
                 - \(description)
-                """
+                """,
             )
         }
         return .init(bundles: bundles(from: rawConfiguration as Any))

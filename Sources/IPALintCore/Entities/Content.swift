@@ -24,7 +24,7 @@ final class Content {
     init(
         ipaPath: AbsolutePath,
         appPath: AbsolutePath,
-        temporaryDirectory: Directory
+        temporaryDirectory: Directory,
     ) {
         self.ipaPath = ipaPath
         self.appPath = appPath

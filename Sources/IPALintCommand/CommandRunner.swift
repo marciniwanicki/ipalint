@@ -30,7 +30,7 @@ public final class CommandRunner {
 private struct MainCommand: ParsableCommand {
     static let configuration: CommandConfiguration = .init(
         commandName: "ipalint",
-        subcommands: MainCommand.allSubcommands
+        subcommands: MainCommand.allSubcommands,
     )
 
     func run() throws {
@@ -75,7 +75,7 @@ private struct MainCommand: ParsableCommand {
             registry.register(Executor.self) { r in
                 Executor(
                     printer: r.resolve(Printer.self),
-                    errorHandler: r.resolve(ErrorHandler.self)
+                    errorHandler: r.resolve(ErrorHandler.self),
                 )
             }
             registry.register(ErrorHandler.self) { r in

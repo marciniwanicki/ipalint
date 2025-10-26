@@ -25,7 +25,7 @@ let package = Package(
             dependencies: [
                 .target(name: "IPALintCommand"),
             ],
-            swiftSettings: commonSwiftSettings
+            swiftSettings: commonSwiftSettings,
         ),
         .target(
             name: "IPALintCommand",
@@ -35,7 +35,7 @@ let package = Package(
                 .product(name: "SwiftToolsSupport-auto", package: "swift-tools-support-core"),
                 .product(name: "SCInject", package: "SwiftCommons"),
             ],
-            swiftSettings: commonSwiftSettings
+            swiftSettings: commonSwiftSettings,
         ),
         .target(
             name: "IPALintCore",
@@ -44,14 +44,14 @@ let package = Package(
                 .product(name: "SwiftToolsSupport-auto", package: "swift-tools-support-core"),
                 .product(name: "SCInject", package: "SwiftCommons"),
             ],
-            swiftSettings: commonSwiftSettings
+            swiftSettings: commonSwiftSettings,
         ),
         .testTarget(
             name: "IPALintCoreTests",
             dependencies: [
                 .target(name: "IPALintCore"),
             ],
-            swiftSettings: commonSwiftSettings
+            swiftSettings: commonSwiftSettings,
         ),
         .testTarget(
             name: "IPALintIntegrationTests",
@@ -59,7 +59,7 @@ let package = Package(
                 .target(name: "IPALintCommand"),
                 .target(name: "IPALintCore"),
             ],
-            swiftSettings: commonSwiftSettings
+            swiftSettings: commonSwiftSettings,
         ),
-    ]
+    ],
 )
