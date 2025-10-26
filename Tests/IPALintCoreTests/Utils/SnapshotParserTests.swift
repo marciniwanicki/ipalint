@@ -20,8 +20,8 @@ import TSCUtility
 
 @testable import IPALintCore
 
-@Suite("SnapshotParser Basic Tests")
-struct SnapshotParserBasicTests {
+@Suite("SnapshotParser Tests")
+struct SnapshotParserTests {
     private let fileSystem = DefaultFileSystem()
 
     @Test("Write snapshot with single file")
@@ -56,8 +56,7 @@ struct SnapshotParserBasicTests {
         // Then
         #expect(fileSystem.exists(at: outputPath))
 
-        let data = try fileSystem.read(from: outputPath)
-        let jsonString = String(data: data, encoding: .utf8)
+        let jsonString = try readJSONString(from: outputPath)
 
         let expectedJSON = """
         {
@@ -107,11 +106,7 @@ struct SnapshotParserBasicTests {
         try subject.write(snapshot: snapshot, to: outputPath)
 
         // Then
-        let data = try fileSystem.read(from: outputPath)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            Issue.record("Failed to convert data to string")
-            return
-        }
+        let jsonString = try readJSONString(from: outputPath)
 
         #expect(jsonString == """
         {
@@ -156,11 +151,7 @@ struct SnapshotParserBasicTests {
         try subject.write(snapshot: snapshot, to: outputPath)
 
         // Then
-        let data = try fileSystem.read(from: outputPath)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            Issue.record("Failed to convert data to string")
-            return
-        }
+        let jsonString = try readJSONString(from: outputPath)
 
         let expectedJSON = """
         {
@@ -178,11 +169,6 @@ struct SnapshotParserBasicTests {
 
         #expect(jsonString == expectedJSON)
     }
-}
-
-@Suite("SnapshotParser Advanced Tests")
-struct SnapshotParserAdvancedTests {
-    private let fileSystem = DefaultFileSystem()
 
     @Test("Write snapshot with different version numbers")
     func writeVersionNumbers() throws {
@@ -208,11 +194,7 @@ struct SnapshotParserAdvancedTests {
         try subject.write(snapshot: snapshot, to: outputPath)
 
         // Then
-        let data = try fileSystem.read(from: outputPath)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            Issue.record("Failed to convert data to string")
-            return
-        }
+        let jsonString = try readJSONString(from: outputPath)
 
         let expectedJSON = """
         {
@@ -227,6 +209,7 @@ struct SnapshotParserAdvancedTests {
           "version" : "1.2.3"
         }
         """
+
         #expect(jsonString == expectedJSON)
     }
 
@@ -259,11 +242,7 @@ struct SnapshotParserAdvancedTests {
         try subject.write(snapshot: snapshot, to: outputPath)
 
         // Then
-        let data = try fileSystem.read(from: outputPath)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            Issue.record("Failed to convert data to string")
-            return
-        }
+        let jsonString = try readJSONString(from: outputPath)
 
         let expectedJSON = """
         {
@@ -282,6 +261,7 @@ struct SnapshotParserAdvancedTests {
           "version" : "0.1.0"
         }
         """
+
         #expect(jsonString == expectedJSON)
     }
 
@@ -315,11 +295,7 @@ struct SnapshotParserAdvancedTests {
         try subject.write(snapshot: snapshot, to: outputPath)
 
         // Then
-        let data = try fileSystem.read(from: outputPath)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            Issue.record("Failed to convert data to string")
-            return
-        }
+        let jsonString = try readJSONString(from: outputPath)
 
         let expectedJSON = """
         {
@@ -340,5 +316,15 @@ struct SnapshotParserAdvancedTests {
         """
 
         #expect(jsonString == expectedJSON)
+    }
+
+    // MARK: - Private
+
+    private func readJSONString(from path: AbsolutePath) throws -> String {
+        let data = try fileSystem.read(from: path)
+        guard let string = String(data: data, encoding: .utf8) else {
+            throw CoreError.generic("Failed to convert data to UTF-8 string")
+        }
+        return string
     }
 }
