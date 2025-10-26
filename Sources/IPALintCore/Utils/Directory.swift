@@ -46,7 +46,12 @@ final class TemporaryDirectory: Directory {
             throw MakeDirectoryError.other(errno)
         }
 
-        self.path = try AbsolutePath(validating: String(cString: template))
+        // Convert the C string to Swift String, removing the null terminator
+        let pathBytes = template.prefix(while: { $0 != 0 }).map { UInt8(bitPattern: $0) }
+        guard let pathString = String(bytes: pathBytes, encoding: .utf8) else {
+            throw MakeDirectoryError.other(errno)
+        }
+        self.path = try AbsolutePath(validating: pathString)
     }
 
     deinit {

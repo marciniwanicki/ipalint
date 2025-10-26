@@ -42,7 +42,7 @@ protocol ConfigurationLoader {
 //           max_size: 31 MB
 
 final class Configuration {
-    class BundleConfiguration {
+    final class BundleConfiguration: @unchecked Sendable {
         let rules: [String: Any]
 
         static let empty = BundleConfiguration(rules: [:])

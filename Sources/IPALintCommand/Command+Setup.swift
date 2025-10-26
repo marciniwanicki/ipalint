@@ -19,7 +19,7 @@ import IPALintCore
 import SCInject
 
 private enum Setup {
-    static let allSubcommands: [(ParsableCommand.Type, Assembly)] = [
+    nonisolated(unsafe) static let allSubcommands: [(ParsableCommand.Type, Assembly)] = [
         (VersionCommand.self, VersionCommand.Assembly()),
         (SnapshotCommand.self, SnapshotCommand.Assembly()),
         (LintCommand.self, LintCommand.Assembly()),
