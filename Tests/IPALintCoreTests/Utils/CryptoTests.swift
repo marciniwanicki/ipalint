@@ -21,8 +21,8 @@ import TSCBasic
 
 @Suite("Crypto Tests")
 struct CryptoTests {
-    let crypto = DefaultCrypto()
-    let fileSystem = TSCBasic.localFileSystem
+    private let subject = DefaultCrypto()
+    private let fileSystem = TSCBasic.localFileSystem
 
     @Test("SHA256 hash of empty file")
     func sha256EmptyFile() throws {
@@ -35,7 +35,7 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile, bytes: ByteString([]))
 
         // When
-        let hash = try crypto.sha256String(at: testFile)
+        let hash = try subject.sha256String(at: testFile)
 
         // Then
         // SHA256 of empty file is e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
@@ -53,7 +53,7 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile, bytes: ByteString("hello world\n".utf8))
 
         // When
-        let hash = try crypto.sha256String(at: testFile)
+        let hash = try subject.sha256String(at: testFile)
 
         // Then
         // SHA256 of "hello world\n" is a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447
@@ -71,7 +71,7 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile, bytes: ByteString("test".utf8))
 
         // When
-        let hashData = try crypto.sha256(at: testFile)
+        let hashData = try subject.sha256(at: testFile)
 
         // Then
         #expect(hashData.count == 32) // SHA256 produces 32 bytes (256 bits)
@@ -88,11 +88,11 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile, bytes: ByteString("test".utf8))
 
         // When
-        let hash = try crypto.sha256String(at: testFile)
+        let hash = try subject.sha256String(at: testFile)
 
         // Then
         #expect(hash.count == 64) // 32 bytes * 2 hex chars = 64 characters
-        #expect(hash.allSatisfy(\.isHexDigit))
+        #expect(hash.allSatisfy { $0.isHexDigit })
         #expect(hash == hash.lowercased()) // Verify lowercase
     }
 
@@ -110,8 +110,8 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile2, bytes: ByteString(content.utf8))
 
         // When
-        let hash1 = try crypto.sha256String(at: testFile1)
-        let hash2 = try crypto.sha256String(at: testFile2)
+        let hash1 = try subject.sha256String(at: testFile1)
+        let hash2 = try subject.sha256String(at: testFile2)
 
         // Then
         #expect(hash1 == hash2)
@@ -130,8 +130,8 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile2, bytes: ByteString("content B".utf8))
 
         // When
-        let hash1 = try crypto.sha256String(at: testFile1)
-        let hash2 = try crypto.sha256String(at: testFile2)
+        let hash1 = try subject.sha256String(at: testFile1)
+        let hash2 = try subject.sha256String(at: testFile2)
 
         // Then
         #expect(hash1 != hash2)
@@ -150,7 +150,7 @@ struct CryptoTests {
         try fileSystem.writeFileContents(testFile, bytes: ByteString(largeContent))
 
         // When
-        let hash = try crypto.sha256String(at: testFile)
+        let hash = try subject.sha256String(at: testFile)
 
         // Then
         #expect(hash.count == 64)
@@ -164,7 +164,7 @@ struct CryptoTests {
 
         // When/Then
         #expect(throws: Error.self) {
-            _ = try crypto.sha256(at: nonExistentPath)
+            _ = try subject.sha256(at: nonExistentPath)
         }
     }
 }
