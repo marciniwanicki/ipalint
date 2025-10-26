@@ -43,12 +43,21 @@ make clean  # Clean build artifacts
 
 ## Code Change Workflow
 
-**IMPORTANT**: After making any code changes to Swift files, you MUST run:
+**IMPORTANT**: After making any code changes to Swift files, you MUST run the following commands in order:
+
+1. **Format the code**:
 ```bash
 make format
 ```
+This ensures all code is properly formatted according to the project's swiftformat configuration.
 
-This ensures all code is properly formatted according to the project's swiftformat configuration. The formatting step is required before committing any changes.
+2. **Run linting checks**:
+```bash
+make lint
+```
+This verifies code quality and adherence to Swift style guidelines. Fix any linting violations before committing.
+
+Both steps are required before committing any changes.
 
 ## Architecture
 
@@ -170,7 +179,12 @@ When writing tests, follow these conventions:
    - Integration tests that share resources (like `CaptureOutput`) must use the `.serialized` trait
    - Example: `@Suite("Help Command Integration Tests", .serialized)`
 
-4. **Test Structure**:
+4. **Test Descriptions**:
+   - All `@Test` descriptions must start with a capitalized letter
+   - Example: `@Test("SHA256 hash of empty file")` ✓
+   - Example: `@Test("writes to stdout")` ✗ (should be "Writes to stdout")
+
+5. **Test Structure**:
    - Use Given/When/Then comments to structure test logic
    - Include descriptive test names in the `@Test` attribute
 
