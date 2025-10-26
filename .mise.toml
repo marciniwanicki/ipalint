@@ -1,5 +1,5 @@
 [tools]
-swiftlint = "0.57.0"
+swiftlint = "0.62.1"
 swiftformat = "0.58.5"
 
 [settings]
