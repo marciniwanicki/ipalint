@@ -18,7 +18,7 @@ import IPALintCommand
 import IPALintCore
 import Testing
 
-@Suite("Version Command Integration Tests")
+@Suite("Version Command Integration Tests", .serialized)
 struct VersionCommandIntegrationTests {
     @Test("Version command")
     func version() {
