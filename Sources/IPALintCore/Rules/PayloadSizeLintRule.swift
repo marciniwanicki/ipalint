@@ -23,7 +23,7 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
         name: "Payload directory size",
         description: """
         This is some description
-        """
+        """,
     )
 
     private let fileSystem: FileSystem
@@ -40,8 +40,8 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: maxSize.severity,
                     message: "The payload directory size is bigger than max_size"
-                        + " -- max_size=\(value), payload_size=\(directorySize)"
-                )
+                        + " -- max_size=\(value), payload_size=\(directorySize)",
+                ),
             )
         }
         if let minSize = configuration.setting(\.minSize), let value = minSize.value, directorySize < value {
@@ -49,8 +49,8 @@ final class PayloadSizeLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: minSize.severity,
                     message: "The payload directory size is smaller than min_size"
-                        + " -- min_size=\(value), payload_size=\(directorySize)"
-                )
+                        + " -- min_size=\(value), payload_size=\(directorySize)",
+                ),
             )
         }
         return result(violations: violations)

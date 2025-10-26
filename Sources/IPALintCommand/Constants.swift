@@ -22,7 +22,7 @@ final class Constants {
         let identifiers = [
             debugVersionIdentifier(),
             gitHashVersionIdentifier(),
-        ].compactMap { $0 }
+        ].compactMap(\.self)
         return Version(0, 1, 0, buildMetadataIdentifiers: identifiers)
     }()
 

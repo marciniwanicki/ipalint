@@ -35,7 +35,7 @@ public final class TextLintResultRenderer: LintResultRenderer {
             output.write(
                 .text("✓", .color(.green))
                     + .text(" \(result.rule.identifier.rawValue)", .color(.darkGray))
-                    + .newLine
+                    + .newLine,
             )
             return
         }
@@ -49,16 +49,16 @@ public final class TextLintResultRenderer: LintResultRenderer {
             .text("\(violation.severity.rawValue.capitalizingFirstLetter()):", .color(color(from: violation.severity)))
                 + .text(" \(violation.message)", .color(color(from: violation.severity)))
                 + .text(" (\(ruleIdentifier))", .color(.darkGray))
-                + .newLine
+                + .newLine,
         )
     }
 
     private func color(from severity: LintRuleResult.ViolationSeverity) -> RichText.Color {
         switch severity {
         case .warning:
-            return .yellow
+            .yellow
         case .error:
-            return .red
+            .red
         }
     }
 }

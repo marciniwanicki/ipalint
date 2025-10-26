@@ -22,27 +22,27 @@ import TSCBasic
 struct InfoCommand: Command {
     static let configuration: CommandConfiguration = .init(
         commandName: "info",
-        abstract: "Show info about the ipa package."
+        abstract: "Show info about the ipa package.",
     )
 
     @Option(
         name: .shortAndLong,
         help: "Path to .ipa file.",
-        completion: .directory
+        completion: .directory,
     )
     var path: String
 
     @Option(
         name: .shortAndLong,
         help: "Path to temp directory.",
-        completion: .directory
+        completion: .directory,
     )
     var temp: String?
 
     @Option(
         name: .shortAndLong,
         help: "Format of the output.",
-        completion: .list(["text"])
+        completion: .list(["text"]),
     )
     var format: String?
 
@@ -76,7 +76,7 @@ struct InfoCommand: Command {
             registry.register(Executor.self) { r in
                 Executor(
                     interactor: r.resolve(InfoInteractor.self),
-                    printer: r.resolve(Printer.self)
+                    printer: r.resolve(Printer.self),
                 )
             }
         }

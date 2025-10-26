@@ -37,15 +37,15 @@ public struct InfoResult: Equatable {
         public var description: String {
             switch self {
             case let .fileSize(value):
-                return value.description
+                value.description
             case let .int(value):
-                return value.description
+                value.description
             case let .string(value):
-                return value
+                value
             case let .uint(value):
-                return value.description
+                value.description
             case let .array(value):
-                return value.description
+                value.description
             }
         }
     }
@@ -65,7 +65,7 @@ final class DefaultInfoInteractor: InfoInteractor {
     init(
         fileSystem: FileSystem,
         contentExtractor: ContentExtractor,
-        codesignExtractor: CodesignExtractor
+        codesignExtractor: CodesignExtractor,
     ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
@@ -86,7 +86,7 @@ final class DefaultInfoInteractor: InfoInteractor {
             "entitlements.aps_environment": .string(entitlements.apsEnvironment ?? .empty),
             "entitlements.beta_reports_active": .string(
                 entitlements.betaReportsActive
-                    .map(\.description) ?? .empty
+                    .map(\.description) ?? .empty,
             ),
             "entitlements.associated_domains": .array(entitlements.associatedDomains ?? []),
             "entitlements.team_identifier": .string(entitlements.teamIdentifier ?? .empty),

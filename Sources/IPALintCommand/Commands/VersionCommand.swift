@@ -22,7 +22,7 @@ import TSCUtility
 struct VersionCommand: Command {
     static let configuration = CommandConfiguration(
         commandName: "version",
-        abstract: "Show version."
+        abstract: "Show version.",
     )
 
     final class Executor: CommandExecutor {

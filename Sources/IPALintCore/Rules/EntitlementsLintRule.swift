@@ -22,7 +22,7 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
         name: "Entitlements",
         description: """
         This is some description
-        """
+        """,
     )
 
     private let codesignExtractor: CodesignExtractor
@@ -42,8 +42,8 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
                         .init(
                             severity: content.severity,
                             message: "Invalid entitlements property value"
-                                + " -- property=\(key), expected_value=\(value), present_value=\(presentValue)"
-                        )
+                                + " -- property=\(key), expected_value=\(value), present_value=\(presentValue)",
+                        ),
                     )
                 }
             }

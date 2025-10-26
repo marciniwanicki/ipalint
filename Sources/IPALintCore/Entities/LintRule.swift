@@ -138,11 +138,11 @@ enum TypedLintRule {
     var lintRule: LintRule {
         switch self {
         case let .file(rule):
-            return rule
+            rule
         case let .content(rule):
-            return rule
+            rule
         case let .fileSystemTree(rule):
-            return rule
+            rule
         }
     }
 

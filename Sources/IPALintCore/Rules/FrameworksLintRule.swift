@@ -22,7 +22,7 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
         name: "Frameworks",
         description: """
         This is some description
-        """
+        """,
     )
 
     private let fileSystem: FileSystem
@@ -40,9 +40,9 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
         let frameworks: Set<String> = try Set(fileSystem.list(at: frameworksPath).compactMap {
             switch $0 {
             case let .directory(frameworksPath):
-                return String(frameworksPath.path.basename.dropLast(10)) // ".framework"
+                String(frameworksPath.path.basename.dropLast(10)) // ".framework"
             case .file:
-                return nil
+                nil
             }
         })
 
@@ -51,8 +51,8 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: maxCount.severity,
                     message: "Too many dynamic frameworks"
-                        + " -- min_count=\(value), frameworks_count=\(frameworks.count)"
-                )
+                        + " -- min_count=\(value), frameworks_count=\(frameworks.count)",
+                ),
             )
         }
         if let minCount = configuration.setting(\.minCount), let value = minCount.value, frameworks.count < value {
@@ -60,8 +60,8 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: minCount.severity,
                     message: "Too few dynamic frameworks"
-                        + " -- max_count=\(value), frameworks_count=\(frameworks.count)"
-                )
+                        + " -- max_count=\(value), frameworks_count=\(frameworks.count)",
+                ),
             )
         }
         if let count = configuration.setting(\.count), let value = count.value, frameworks.count != value {
@@ -69,8 +69,8 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: count.severity,
                     message: "Unexpected number of dynamic frameworks"
-                        + " -- count=\(value), frameworks_count=\(frameworks.count)"
-                )
+                        + " -- count=\(value), frameworks_count=\(frameworks.count)",
+                ),
             )
         }
 
@@ -82,8 +82,8 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: list.severity,
                     message: "Unexpected dynamic framework(s)"
-                        + " -- missing_frameworks=\(missing), unexpected_frameworks=\(unexpected)"
-                )
+                        + " -- missing_frameworks=\(missing), unexpected_frameworks=\(unexpected)",
+                ),
             )
         }
 
@@ -94,8 +94,8 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: include.severity,
                     message: "Missing dynamic framework(s)"
-                        + " -- missing_frameworks=\(missing)"
-                )
+                        + " -- missing_frameworks=\(missing)",
+                ),
             )
         }
 
@@ -107,8 +107,8 @@ final class FrameworksLintRule: ContentLintRule, ConfigurableLintRule {
                 .init(
                     severity: exclude.severity,
                     message: "Found unexpected dynamic framework(s)"
-                        + " -- unexpected_frameworks=\(unexpected)"
-                )
+                        + " -- unexpected_frameworks=\(unexpected)",
+                ),
             )
         }
 

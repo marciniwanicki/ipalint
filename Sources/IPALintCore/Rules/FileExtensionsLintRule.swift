@@ -22,7 +22,7 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
         name: "File extensions",
         description: """
         This is some description
-        """
+        """,
     )
 
     func lint(with fileSystemTree: FileSystemTree) throws -> LintRuleResult {
@@ -38,8 +38,8 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
                         .init(
                             severity: expectOnly.severity,
                             message: "The .ipa bundle contains a file with an unexpected estension"
-                                + " -- extension=\(fileExtension), path=\(path.pathString)"
-                        )
+                                + " -- extension=\(fileExtension), path=\(path.pathString)",
+                        ),
                     )
                 }
             }
@@ -51,8 +51,8 @@ final class FileExtensionsLintRule: FileSystemTreeLintRule, ConfigurableLintRule
                         .init(
                             severity: forbidden.severity,
                             message: "The .ipa bundle contains a file with forbidden extension"
-                                + " -- extension=\(fileExtension), path=\(path.pathString)"
-                        )
+                                + " -- extension=\(fileExtension), path=\(path.pathString)",
+                        ),
                     )
                 }
             }

@@ -16,14 +16,14 @@
 import Foundation
 
 public struct RichText: ExpressibleByStringLiteral {
-    public enum Style {
+    public enum Style: Sendable {
         case bold
         case dim
         case italic
         case underline
     }
 
-    public enum Color {
+    public enum Color: Sendable {
         case black
         case red
         case green
@@ -34,18 +34,18 @@ public struct RichText: ExpressibleByStringLiteral {
         case white
     }
 
-    public class Attributes {
+    public final class Attributes: Sendable {
         let style: Style?
         let color: Color?
 
         static let none = Attributes(
             style: nil,
-            color: nil
+            color: nil,
         )
 
         private init(
             style: Style?,
-            color: Color?
+            color: Color?,
         ) {
             self.style = style
             self.color = color
@@ -54,21 +54,21 @@ public struct RichText: ExpressibleByStringLiteral {
         static func style(_ style: Style) -> Attributes {
             Attributes(
                 style: style,
-                color: nil
+                color: nil,
             )
         }
 
         static func color(_ color: Color) -> Attributes {
             Attributes(
                 style: nil,
-                color: color
+                color: color,
             )
         }
 
         static func + (lhs: Attributes, rhs: Attributes) -> Attributes {
             Attributes(
                 style: rhs.style ?? lhs.style,
-                color: rhs.color ?? lhs.color
+                color: rhs.color ?? lhs.color,
             )
         }
     }

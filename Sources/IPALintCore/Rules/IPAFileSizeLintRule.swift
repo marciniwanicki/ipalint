@@ -23,7 +23,7 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
         name: "Package size",
         description: """
         This is some description
-        """
+        """,
     )
 
     private let fileSystem: FileSystem
@@ -40,8 +40,8 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
                 .init(
                     severity: maxSize.severity,
                     message: "The .ipa package size is bigger than max_size"
-                        + " -- max_size=\(value), ipa_size=\(fileSize)"
-                )
+                        + " -- max_size=\(value), ipa_size=\(fileSize)",
+                ),
             )
         }
         if let minSize = configuration.setting(\.minSize), let value = minSize.value, fileSize < value {
@@ -49,8 +49,8 @@ final class IPAFileSizeLintRule: FileLintRule, ConfigurableLintRule {
                 .init(
                     severity: minSize.severity,
                     message: "The .ipa package size is smaller than min_size"
-                        + " -- min_size=\(value), ipa_size=\(fileSize)"
-                )
+                        + " -- min_size=\(value), ipa_size=\(fileSize)",
+                ),
             )
         }
         return result(violations: violations)

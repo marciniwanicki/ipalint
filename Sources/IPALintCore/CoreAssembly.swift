@@ -57,7 +57,7 @@ public final class CoreAssembly: Assembly {
             DefaultContentExtractor(
                 system: r.resolve(System.self),
                 fileSystem: r.resolve(FileSystem.self),
-                archiver: r.resolve(Archiver.self)
+                archiver: r.resolve(Archiver.self),
             )
         }
         registry.register(CodesignExtractor.self) { r in
@@ -69,7 +69,7 @@ public final class CoreAssembly: Assembly {
         registry.register(SnapshotGenerator.self) { r in
             DefaultSnapshotGenerator(
                 fileSystem: r.resolve(FileSystem.self),
-                crypto: r.resolve(Crypto.self)
+                crypto: r.resolve(Crypto.self),
             )
         }
         registry.register(SnapshotParser.self) { r in
@@ -85,7 +85,7 @@ public final class CoreAssembly: Assembly {
             DefaultInfoInteractor(
                 fileSystem: r.resolve(FileSystem.self),
                 contentExtractor: r.resolve(ContentExtractor.self),
-                codesignExtractor: r.resolve(CodesignExtractor.self)
+                codesignExtractor: r.resolve(CodesignExtractor.self),
             )
         }
         registry.register(DiffInteractor.self) { r in
@@ -93,7 +93,7 @@ public final class CoreAssembly: Assembly {
                 fileSystem: r.resolve(FileSystem.self),
                 contentExtractor: r.resolve(ContentExtractor.self),
                 snapshotGenerator: r.resolve(SnapshotGenerator.self),
-                snapshotParser: r.resolve(SnapshotParser.self)
+                snapshotParser: r.resolve(SnapshotParser.self),
             )
         }
         registry.register(SnapshotInteractor.self) { r in
@@ -101,7 +101,7 @@ public final class CoreAssembly: Assembly {
                 fileSystem: r.resolve(FileSystem.self),
                 contentExtractor: r.resolve(ContentExtractor.self),
                 snapshotGenerator: r.resolve(SnapshotGenerator.self),
-                snapshotParser: r.resolve(SnapshotParser.self)
+                snapshotParser: r.resolve(SnapshotParser.self),
             )
         }
         registry.register(LintInteractor.self) { r in
@@ -110,7 +110,7 @@ public final class CoreAssembly: Assembly {
                 contentExtractor: r.resolve(ContentExtractor.self),
                 codesignExtractor: r.resolve(CodesignExtractor.self),
                 configurationLoader: r.resolve(ConfigurationLoader.self),
-                rules: r.resolve([TypedLintRule].self)
+                rules: r.resolve([TypedLintRule].self),
             )
         }
     }

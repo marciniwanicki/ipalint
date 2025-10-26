@@ -22,7 +22,7 @@ public struct DiffContext {
 
     public init(
         path1: String,
-        path2: String
+        path2: String,
     ) {
         self.path1 = path1
         self.path2 = path2
@@ -47,7 +47,7 @@ final class DefaultDiffInteractor: DiffInteractor {
         fileSystem: FileSystem,
         contentExtractor: ContentExtractor,
         snapshotGenerator: SnapshotGenerator,
-        snapshotParser: SnapshotParser
+        snapshotParser: SnapshotParser,
     ) {
         self.fileSystem = fileSystem
         self.contentExtractor = contentExtractor
@@ -83,7 +83,7 @@ final class DefaultDiffInteractor: DiffInteractor {
                 firstSha256: firstFile.sha256,
                 firstSize: firstFile.size,
                 secondSha256: secondFile.sha256,
-                secondSize: secondFile.size
+                secondSize: secondFile.size,
             ))
         }
 
