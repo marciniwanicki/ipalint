@@ -18,7 +18,7 @@ import IPALintCommand
 import IPALintCore
 import Testing
 
-@Suite("Help Command Integration Tests")
+@Suite("Help Command Integration Tests", .serialized)
 struct HelpCommandIntegrationTests {
     private let expectedHelpOutput = """
     USAGE: ipalint <subcommand>
