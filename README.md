@@ -330,11 +330,12 @@ xcrun swift test --filter IPAFileSizeLintRuleTests
 
 We would like to thank the authors and contributors of the following projects:
 
+- [mise](https://github.com/jdx/mise)
 - [swift-argument-parser](https://github.com/apple/swift-argument-parser)
 - [swift-tools-support-core](https://github.com/apple/swift-tools-support-core)
+- [SwiftCommons](https://github.com/macvmio/SwiftCommons)
 - [SwiftLint](https://github.com/realm/SwiftLint)
 - [SwiftFormat](https://github.com/nicklockwood/SwiftFormat)
-- [mise](https://github.com/jdx/mise)
 
 ## License
 
