@@ -188,6 +188,15 @@ When writing tests, follow these conventions:
    - Use Given/When/Then comments to structure test logic
    - Include descriptive test names in the `@Test` attribute
 
+6. **Method Organization**:
+   - Private methods must be placed at the bottom of the class/struct
+   - Separate private methods from public/internal methods with `// MARK: - Private`
+   - Example organization:
+     1. Properties
+     2. Public/internal methods (tests)
+     3. `// MARK: - Private`
+     4. Private helper methods
+
 Example test structure:
 ```swift
 @Suite("Crypto Tests")
@@ -198,13 +207,19 @@ struct CryptoTests {
     @Test("SHA256 hash of empty file")
     func sha256EmptyFile() throws {
         // Given
-        let testFile = ...
+        let testFile = createTestFile()
 
         // When
         let hash = try subject.sha256String(at: testFile)
 
         // Then
         #expect(hash == "expected_hash")
+    }
+
+    // MARK: - Private
+
+    private func createTestFile() -> AbsolutePath {
+        // Helper implementation
     }
 }
 ```

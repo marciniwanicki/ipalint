@@ -23,7 +23,7 @@ protocol SnapshotParser {
 final class DefaultSnapshotParser: SnapshotParser {
     private let jsonEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+        encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         return encoder
     }()
 
