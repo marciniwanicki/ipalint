@@ -79,7 +79,7 @@ final class ForwardOutput: Output {
         forwardStderr = stderr
     }
 
-    public func write(_ string: String, to stream: OutputStream) {
+    func write(_ string: String, to stream: OutputStream) {
         switch stream {
         case .stdout:
             forwardStdout?(string)
