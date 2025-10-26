@@ -69,7 +69,8 @@ final class DefaultFileSystem: FileSystem {
     private let fileManager = FileManager.default
 
     var currentWorkingDirectory: AbsolutePath {
-        AbsolutePath(fileManager.currentDirectoryPath)
+        // swiftlint:disable:next force_try
+        try! AbsolutePath(validating: fileManager.currentDirectoryPath)
     }
 
     func exists(at path: AbsolutePath) -> Bool {
@@ -86,7 +87,10 @@ final class DefaultFileSystem: FileSystem {
 
     func list(at path: AbsolutePath) throws -> [FileSystemItem] {
         try fileManager.contentsOfDirectory(atPath: path.pathString)
-            .map { RelativePath($0) }
+            .map {
+                // swiftlint:disable:next force_try
+                try! RelativePath(validating: $0)
+            }
             .map {
                 let absolutePath = path.appending($0)
                 var isDir: ObjCBool = false
@@ -116,7 +120,8 @@ final class DefaultFileSystem: FileSystem {
     }
 
     func absolutePath(from string: String) throws -> AbsolutePath {
-        string.hasPrefix("/") ? AbsolutePath(string) : currentWorkingDirectory.appending(RelativePath(string))
+        try string.hasPrefix("/") ? AbsolutePath(validating: string) : currentWorkingDirectory
+            .appending(RelativePath(validating: string))
     }
 
     func fileSize(at path: AbsolutePath) throws -> FileSize {
