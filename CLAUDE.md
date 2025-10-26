@@ -170,7 +170,12 @@ When writing tests, follow these conventions:
    - Integration tests that share resources (like `CaptureOutput`) must use the `.serialized` trait
    - Example: `@Suite("Help Command Integration Tests", .serialized)`
 
-4. **Test Structure**:
+4. **Test Descriptions**:
+   - All `@Test` descriptions must start with a capitalized letter
+   - Example: `@Test("SHA256 hash of empty file")` ✓
+   - Example: `@Test("writes to stdout")` ✗ (should be "Writes to stdout")
+
+5. **Test Structure**:
    - Use Given/When/Then comments to structure test logic
    - Include descriptive test names in the `@Test` attribute
 
