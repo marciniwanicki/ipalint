@@ -16,24 +16,19 @@
 import Foundation
 import IPALintCommand
 import IPALintCore
-import XCTest
+import Testing
 
-class IntegrationTestCase: XCTestCase {
+struct IntegrationTestContext {
     let subject = CommandRunner()
+    let output: CaptureOutput = .tests
 
-    override func setUpWithError() throws {}
-
-    override func tearDownWithError() throws {
-        output.clear()
-    }
-
-    // MARK: - Helpers
+    init() {}
 
     var stdout: String {
         output.stdout.joined()
     }
 
-    var output: CaptureOutput {
-        CaptureOutput.tests
+    func cleanup() {
+        output.clear()
     }
 }
