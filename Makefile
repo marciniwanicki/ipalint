@@ -8,7 +8,6 @@ GIT_SHORT_HASH = $(shell git rev-parse --short HEAD)
 
 setup:
 	curl "https://mise.run" | sh
-	mise install
 
 env:
 	@$(mise) run env
@@ -23,7 +22,9 @@ test:
 	@$(mise) run test
 
 lint:
+	@$(mise) install
 	@$(mise) run lint
 
 format:
+	@$(mise) install
 	@$(mise) run format
