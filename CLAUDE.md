@@ -137,3 +137,51 @@ bundles:
 Tests are organized into:
 - **IPALintCoreTests** - Unit tests for core utilities
 - **IPALintIntegrationTests** - Integration tests for commands
+
+### Testing Framework
+
+The project uses the **Swift Testing framework** (not XCTest). Tests use:
+- `@Suite` for test suites
+- `@Test` for individual tests
+- `#expect` for assertions
+
+### Test Conventions
+
+When writing tests, follow these conventions:
+
+1. **System Under Test Naming**:
+   - The system under test (SUT) must always be named `subject`
+   - Example: `private let subject = DefaultCrypto()`
+
+2. **Property Visibility**:
+   - All test properties must be `private`
+   - Example: `private let fileSystem = TSCBasic.localFileSystem`
+
+3. **Integration Tests**:
+   - Integration tests that share resources (like `CaptureOutput`) must use the `.serialized` trait
+   - Example: `@Suite("Help Command Integration Tests", .serialized)`
+
+4. **Test Structure**:
+   - Use Given/When/Then comments to structure test logic
+   - Include descriptive test names in the `@Test` attribute
+
+Example test structure:
+```swift
+@Suite("Crypto Tests")
+struct CryptoTests {
+    private let subject = DefaultCrypto()
+    private let fileSystem = TSCBasic.localFileSystem
+
+    @Test("SHA256 hash of empty file")
+    func sha256EmptyFile() throws {
+        // Given
+        let testFile = ...
+
+        // When
+        let hash = try subject.sha256String(at: testFile)
+
+        // Then
+        #expect(hash == "expected_hash")
+    }
+}
+```
