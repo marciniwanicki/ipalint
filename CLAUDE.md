@@ -41,6 +41,15 @@ make format  # Format code with swiftformat
 make clean  # Clean build artifacts
 ```
 
+## Code Change Workflow
+
+**IMPORTANT**: After making any code changes to Swift files, you MUST run:
+```bash
+make format
+```
+
+This ensures all code is properly formatted according to the project's swiftformat configuration. The formatting step is required before committing any changes.
+
 ## Architecture
 
 ### Module Structure
