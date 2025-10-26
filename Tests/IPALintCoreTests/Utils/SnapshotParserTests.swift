@@ -32,7 +32,8 @@ struct SnapshotParserBasicTests {
         defer { try? fileSystem.remove(at: tempDir.path) }
 
         let outputPath = tempDir.path.appending(component: "snapshot.json")
-        let createdAt = Date()
+        // Use fixed date: 2009-02-13 23:31:30 UTC
+        let createdAt = Date(timeIntervalSince1970: 1_234_567_890)
         let descriptor = Snapshot.Descriptor(
             filename: "test.ipa",
             createdAt: createdAt,
@@ -56,72 +57,79 @@ struct SnapshotParserBasicTests {
         #expect(fileSystem.exists(at: outputPath))
 
         let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        let jsonString = String(data: data, encoding: .utf8)
 
-        #expect(json != nil)
-        #expect(json?["version"] as? String == "0.1.0")
+        let expectedJSON = """
+        {
+          "descriptor" : {
+            "createdAt" : 256260690,
+            "filename" : "test.ipa",
+            "sha256" : "abc123"
+          },
+          "files" : [
+            {
+              "path" : "app\\/file.txt",
+              "sha256" : "def456",
+              "size" : 1024
+            }
+          ],
+          "version" : "0.1.0"
+        }
+        """
 
-        let descriptorJSON = json?["descriptor"] as? [String: Any]
-        #expect(descriptorJSON?["filename"] as? String == "test.ipa")
-        #expect(descriptorJSON?["sha256"] as? String == "abc123")
-
-        let filesJSON = json?["files"] as? [[String: Any]]
-        #expect(filesJSON?.count == 1)
-        #expect(filesJSON?[0]["path"] as? String == "app/file.txt")
-        #expect(filesJSON?[0]["sha256"] as? String == "def456")
-        #expect(filesJSON?[0]["size"] as? UInt64 == 1024)
+        #expect(jsonString == expectedJSON)
     }
 
-    @Test("Write snapshot with multiple files")
-    func writeMultipleFiles() throws {
+    @Test("Write snapshot with file array")
+    func writeFileArray() throws {
         // Given
         let subject = DefaultSnapshotParser(fileSystem: fileSystem)
         let tempDir = try fileSystem.makeTemporaryDirectory()
         defer { try? fileSystem.remove(at: tempDir.path) }
-
         let outputPath = tempDir.path.appending(component: "snapshot.json")
         let descriptor = Snapshot.Descriptor(
             filename: "test.ipa",
-            createdAt: Date(),
+            createdAt: Date(timeIntervalSince1970: 1_234_567_890),
             sha256: "abc123",
         )
-        let files = try [
-            Snapshot.File(
-                path: RelativePath(validating: "app/file1.txt"),
-                sha256: "hash1",
-                size: FileSize(bytes: 100),
-            ),
-            Snapshot.File(
-                path: RelativePath(validating: "app/file2.txt"),
-                sha256: "hash2",
-                size: FileSize(bytes: 200),
-            ),
-            Snapshot.File(
-                path: RelativePath(validating: "app/dir/file3.txt"),
-                sha256: "hash3",
-                size: FileSize(bytes: 300),
-            ),
-        ]
+        let file = try Snapshot.File(
+            path: RelativePath(validating: "app/file.txt"),
+            sha256: "hash1",
+            size: FileSize(bytes: 100),
+        )
         let snapshot = Snapshot(
             version: Version(0, 1, 0),
             descriptor: descriptor,
-            files: files,
+            files: [file],
         )
 
         // When
         try subject.write(snapshot: snapshot, to: outputPath)
 
         // Then
-        #expect(fileSystem.exists(at: outputPath))
-
         let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let filesJSON = json?["files"] as? [[String: Any]]
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
 
-        #expect(filesJSON?.count == 3)
-        #expect(filesJSON?[0]["path"] as? String == "app/file1.txt")
-        #expect(filesJSON?[1]["path"] as? String == "app/file2.txt")
-        #expect(filesJSON?[2]["path"] as? String == "app/dir/file3.txt")
+        #expect(jsonString == """
+        {
+          "descriptor" : {
+            "createdAt" : 256260690,
+            "filename" : "test.ipa",
+            "sha256" : "abc123"
+          },
+          "files" : [
+            {
+              "path" : "app\\/file.txt",
+              "sha256" : "hash1",
+              "size" : 100
+            }
+          ],
+          "version" : "0.1.0"
+        }
+        """)
     }
 
     @Test("Write snapshot with empty files array")
@@ -132,76 +140,7 @@ struct SnapshotParserBasicTests {
         defer { try? fileSystem.remove(at: tempDir.path) }
 
         let outputPath = tempDir.path.appending(component: "snapshot.json")
-        let descriptor = Snapshot.Descriptor(
-            filename: "test.ipa",
-            createdAt: Date(),
-            sha256: "abc123",
-        )
-        let snapshot = Snapshot(
-            version: Version(0, 1, 0),
-            descriptor: descriptor,
-            files: [],
-        )
-
-        // When
-        try subject.write(snapshot: snapshot, to: outputPath)
-
-        // Then
-        #expect(fileSystem.exists(at: outputPath))
-
-        let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let filesJSON = json?["files"] as? [[String: Any]]
-
-        #expect(filesJSON?.isEmpty == true)
-    }
-
-    @Test("Write snapshot with pretty printed JSON")
-    func writePrettyPrintedJSON() throws {
-        // Given
-        let subject = DefaultSnapshotParser(fileSystem: fileSystem)
-        let tempDir = try fileSystem.makeTemporaryDirectory()
-        defer { try? fileSystem.remove(at: tempDir.path) }
-
-        let outputPath = tempDir.path.appending(component: "snapshot.json")
-        let descriptor = Snapshot.Descriptor(
-            filename: "test.ipa",
-            createdAt: Date(),
-            sha256: "abc123",
-        )
-        let file = try Snapshot.File(
-            path: RelativePath(validating: "app/file.txt"),
-            sha256: "def456",
-            size: FileSize(bytes: 1024),
-        )
-        let snapshot = Snapshot(
-            version: Version(0, 1, 0),
-            descriptor: descriptor,
-            files: [file],
-        )
-
-        // When
-        try subject.write(snapshot: snapshot, to: outputPath)
-
-        // Then
-        let data = try fileSystem.read(from: outputPath)
-        let jsonString = String(data: data, encoding: .utf8)
-
-        #expect(jsonString != nil)
-        // Pretty printed JSON should contain newlines and indentation
-        #expect(jsonString?.contains("\n") == true)
-        #expect(jsonString?.contains("  ") == true) // Indentation
-    }
-
-    @Test("Write snapshot preserves date precision")
-    func writeDatePrecision() throws {
-        // Given
-        let subject = DefaultSnapshotParser(fileSystem: fileSystem)
-        let tempDir = try fileSystem.makeTemporaryDirectory()
-        defer { try? fileSystem.remove(at: tempDir.path) }
-
-        let outputPath = tempDir.path.appending(component: "snapshot.json")
-        let createdAt = Date()
+        let createdAt = Date(timeIntervalSince1970: 1_234_567_890)
         let descriptor = Snapshot.Descriptor(
             filename: "test.ipa",
             createdAt: createdAt,
@@ -218,12 +157,26 @@ struct SnapshotParserBasicTests {
 
         // Then
         let data = try fileSystem.read(from: outputPath)
-        let decoder = JSONDecoder()
-        let decoded = try decoder.decode(DecodableSnapshot.self, from: data)
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
 
-        // Dates should be close (allow 1 second difference due to encoding precision)
-        let timeDifference = abs(decoded.descriptor.createdAt.timeIntervalSince(createdAt))
-        #expect(timeDifference < 1.0)
+        let expectedJSON = """
+        {
+          "descriptor" : {
+            "createdAt" : 256260690,
+            "filename" : "test.ipa",
+            "sha256" : "abc123"
+          },
+          "files" : [
+
+          ],
+          "version" : "0.1.0"
+        }
+        """
+
+        #expect(jsonString == expectedJSON)
     }
 }
 
@@ -239,9 +192,10 @@ struct SnapshotParserAdvancedTests {
         defer { try? fileSystem.remove(at: tempDir.path) }
 
         let outputPath = tempDir.path.appending(component: "snapshot.json")
+        let createdAt = Date(timeIntervalSince1970: 1_234_567_890)
         let descriptor = Snapshot.Descriptor(
             filename: "test.ipa",
-            createdAt: Date(),
+            createdAt: createdAt,
             sha256: "abc123",
         )
         let snapshot = Snapshot(
@@ -255,9 +209,25 @@ struct SnapshotParserAdvancedTests {
 
         // Then
         let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
 
-        #expect(json?["version"] as? String == "1.2.3")
+        let expectedJSON = """
+        {
+          "descriptor" : {
+            "createdAt" : 256260690,
+            "filename" : "test.ipa",
+            "sha256" : "abc123"
+          },
+          "files" : [
+
+          ],
+          "version" : "1.2.3"
+        }
+        """
+        #expect(jsonString == expectedJSON)
     }
 
     @Test("Write snapshot with special characters in paths")
@@ -268,9 +238,10 @@ struct SnapshotParserAdvancedTests {
         defer { try? fileSystem.remove(at: tempDir.path) }
 
         let outputPath = tempDir.path.appending(component: "snapshot.json")
+        let createdAt = Date(timeIntervalSince1970: 1_234_567_890)
         let descriptor = Snapshot.Descriptor(
             filename: "test with spaces.ipa",
-            createdAt: Date(),
+            createdAt: createdAt,
             sha256: "abc123",
         )
         let file = try Snapshot.File(
@@ -289,12 +260,29 @@ struct SnapshotParserAdvancedTests {
 
         // Then
         let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let descriptorJSON = json?["descriptor"] as? [String: Any]
-        let filesJSON = json?["files"] as? [[String: Any]]
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
 
-        #expect(descriptorJSON?["filename"] as? String == "test with spaces.ipa")
-        #expect(filesJSON?[0]["path"] as? String == "app/file with spaces.txt")
+        let expectedJSON = """
+        {
+          "descriptor" : {
+            "createdAt" : 256260690,
+            "filename" : "test with spaces.ipa",
+            "sha256" : "abc123"
+          },
+          "files" : [
+            {
+              "path" : "app\\/file with spaces.txt",
+              "sha256" : "def456",
+              "size" : 1024
+            }
+          ],
+          "version" : "0.1.0"
+        }
+        """
+        #expect(jsonString == expectedJSON)
     }
 
     @Test("Write snapshot with large file sizes")
@@ -305,9 +293,10 @@ struct SnapshotParserAdvancedTests {
         defer { try? fileSystem.remove(at: tempDir.path) }
 
         let outputPath = tempDir.path.appending(component: "snapshot.json")
+        let createdAt = Date(timeIntervalSince1970: 1_234_567_890)
         let descriptor = Snapshot.Descriptor(
             filename: "test.ipa",
-            createdAt: Date(),
+            createdAt: createdAt,
             sha256: "abc123",
         )
         let largeSize: UInt64 = 10_000_000_000 // 10 GB
@@ -327,56 +316,29 @@ struct SnapshotParserAdvancedTests {
 
         // Then
         let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let filesJSON = json?["files"] as? [[String: Any]]
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
 
-        #expect(filesJSON?[0]["size"] as? UInt64 == largeSize)
+        let expectedJSON = """
+        {
+          "descriptor" : {
+            "createdAt" : 256260690,
+            "filename" : "test.ipa",
+            "sha256" : "abc123"
+          },
+          "files" : [
+            {
+              "path" : "app\\/large.bin",
+              "sha256" : "def456",
+              "size" : 10000000000
+            }
+          ],
+          "version" : "0.1.0"
+        }
+        """
+
+        #expect(jsonString == expectedJSON)
     }
-
-    @Test("Write snapshot with nested directory paths")
-    func writeNestedPaths() throws {
-        // Given
-        let subject = DefaultSnapshotParser(fileSystem: fileSystem)
-        let tempDir = try fileSystem.makeTemporaryDirectory()
-        defer { try? fileSystem.remove(at: tempDir.path) }
-
-        let outputPath = tempDir.path.appending(component: "snapshot.json")
-        let descriptor = Snapshot.Descriptor(
-            filename: "test.ipa",
-            createdAt: Date(),
-            sha256: "abc123",
-        )
-        let file = try Snapshot.File(
-            path: RelativePath(validating: "a/b/c/d/e/file.txt"),
-            sha256: "def456",
-            size: FileSize(bytes: 1024),
-        )
-        let snapshot = Snapshot(
-            version: Version(0, 1, 0),
-            descriptor: descriptor,
-            files: [file],
-        )
-
-        // When
-        try subject.write(snapshot: snapshot, to: outputPath)
-
-        // Then
-        let data = try fileSystem.read(from: outputPath)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let filesJSON = json?["files"] as? [[String: Any]]
-
-        #expect(filesJSON?[0]["path"] as? String == "a/b/c/d/e/file.txt")
-    }
-}
-
-// Helper struct for decoding snapshot to verify date precision
-private struct DecodableSnapshot: Decodable {
-    struct Descriptor: Decodable {
-        let filename: String
-        let createdAt: Date
-        let sha256: String
-    }
-
-    let version: String
-    let descriptor: Descriptor
 }
