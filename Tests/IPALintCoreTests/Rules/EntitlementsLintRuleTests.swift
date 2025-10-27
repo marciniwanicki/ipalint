@@ -135,6 +135,51 @@ struct EntitlementsLintRuleTests {
         #expect(result.violations[0].message.contains("Invalid entitlements property value"))
     }
 
+    @Test("No violations when entitlements match expected int value")
+    func noViolationsWithMatchingIntValue() throws {
+        // Given
+        let codesignExtractor = MockCodesignExtractor()
+        codesignExtractor.entitlementsToReturn = Entitlements(dictionary: [
+            "com.apple.security.max-connections": 10,
+        ])
+        let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
+        subject.configuration.error = .init(content: [
+            "com.apple.security.max-connections": .int(10),
+        ])
+        let content = try createContent()
+
+        // When
+        let result = try subject.lint(with: content)
+
+        // Then
+        #expect(result.violations.isEmpty)
+    }
+
+    @Test("Violation when entitlement int value does not match")
+    func violationWithNonMatchingIntValue() throws {
+        // Given
+        let codesignExtractor = MockCodesignExtractor()
+        codesignExtractor.entitlementsToReturn = Entitlements(dictionary: [
+            "com.apple.security.max-connections": 5,
+        ])
+        let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
+        subject.configuration.error = .init(content: [
+            "com.apple.security.max-connections": .int(10),
+        ])
+        let content = try createContent()
+
+        // When
+        let result = try subject.lint(with: content)
+
+        // Then
+        #expect(result.violations.count == 1)
+        #expect(result.violations[0].severity == .error)
+        #expect(result.violations[0].message.contains("Invalid entitlements property value"))
+        #expect(result.violations[0].message.contains("com.apple.security.max-connections"))
+        #expect(result.violations[0].message.contains("expected_value=int(10)"))
+        #expect(result.violations[0].message.contains("present_value=int(5)"))
+    }
+
     @Test("Throws error when entitlement is missing")
     func throwsErrorWithMissingEntitlement() throws {
         // Given
@@ -147,8 +192,67 @@ struct EntitlementsLintRuleTests {
         let content = try createContent()
 
         // When/Then
-        #expect(throws: CoreError.self) {
+        do {
             _ = try subject.lint(with: content)
+            Issue.record("Expected error to be thrown")
+        } catch let error as CoreError {
+            let errorMessage = "\(error)"
+            #expect(errorMessage.contains("Cannot parse Entitlemenets value"))
+            #expect(errorMessage.contains("<nil>"))
+        } catch {
+            Issue.record("Expected CoreError but got \(error)")
+        }
+    }
+
+    @Test("Throws error with unsupported entitlement value type")
+    func throwsErrorWithUnsupportedValueType() throws {
+        // Given
+        let codesignExtractor = MockCodesignExtractor()
+        codesignExtractor.entitlementsToReturn = Entitlements(dictionary: [
+            "com.apple.security.double-value": 42.5,
+        ])
+        let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
+        subject.configuration.error = .init(content: [
+            "com.apple.security.double-value": .string("42.5"),
+        ])
+        let content = try createContent()
+
+        // When/Then
+        do {
+            _ = try subject.lint(with: content)
+            Issue.record("Expected error to be thrown")
+        } catch let error as CoreError {
+            let errorMessage = "\(error)"
+            #expect(errorMessage.contains("Cannot parse Entitlemenets value"))
+            #expect(errorMessage.contains("42.5"))
+        } catch {
+            Issue.record("Expected CoreError but got \(error)")
+        }
+    }
+
+    @Test("Throws error with boolean entitlement value")
+    func throwsErrorWithBooleanValue() throws {
+        // Given
+        let codesignExtractor = MockCodesignExtractor()
+        codesignExtractor.entitlementsToReturn = Entitlements(dictionary: [
+            "com.apple.security.flag": true,
+        ])
+        let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
+        subject.configuration.error = .init(content: [
+            "com.apple.security.flag": .string("true"),
+        ])
+        let content = try createContent()
+
+        // When/Then
+        do {
+            _ = try subject.lint(with: content)
+            Issue.record("Expected error to be thrown")
+        } catch let error as CoreError {
+            let errorMessage = "\(error)"
+            #expect(errorMessage.contains("Cannot parse Entitlemenets value"))
+            #expect(errorMessage.contains("true"))
+        } catch {
+            Issue.record("Expected CoreError but got \(error)")
         }
     }
 
