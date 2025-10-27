@@ -55,6 +55,7 @@ final class EntitlementsLintRule: ContentLintRule, ConfigurableLintRule {
 struct EntitlementsLintRuleConfiguration: LintRuleConfiguration {
     enum Value: Codable, Equatable {
         case string(String)
+        case int(Int)
         case array([String])
 
         init(from decoder: Decoder) throws {
@@ -64,20 +65,35 @@ struct EntitlementsLintRuleConfiguration: LintRuleConfiguration {
             } catch {
                 do {
                     let container = try decoder.singleValueContainer()
-                    self = try .array(container.decode([String].self))
+                    self = try .int(container.decode(Int.self))
                 } catch {
-                    throw CoreError.generic("Cannot parse 'entitlements' rule configuration")
+                    do {
+                        let container = try decoder.singleValueContainer()
+                        self = try .array(container.decode([String].self))
+                    } catch {
+                        throw CoreError.generic("Cannot parse 'entitlements' rule configuration")
+                    }
                 }
             }
         }
 
-        func encode(to _: Encoder) throws {
-            // TODO:
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+            case let .string(value):
+                try container.encode(value)
+            case let .int(value):
+                try container.encode(value)
+            case let .array(value):
+                try container.encode(value)
+            }
         }
 
         init(_ anyValue: Any?) throws {
             if let string = anyValue as? String {
                 self = .string(string)
+            } else if let int = anyValue as? Int {
+                self = .int(int)
             } else if let array = anyValue as? [String] {
                 self = .array(array)
             } else {
