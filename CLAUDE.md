@@ -197,6 +197,11 @@ When writing tests, follow these conventions:
      3. `// MARK: - Private`
      4. Private helper methods
 
+7. **Helper Method Naming**:
+   - Test helper methods that create objects should be prefixed with `make`
+   - Example: `makeContent()`, `makeSnapshot()`, `makeConfiguration()`
+   - Avoid using `create` prefix; use `make` instead
+
 Example test structure:
 ```swift
 @Suite("Crypto Tests")
@@ -207,7 +212,7 @@ struct CryptoTests {
     @Test("SHA256 hash of empty file")
     func sha256EmptyFile() throws {
         // Given
-        let testFile = createTestFile()
+        let testFile = makeTestFile()
 
         // When
         let hash = try subject.sha256String(at: testFile)
@@ -218,7 +223,7 @@ struct CryptoTests {
 
     // MARK: - Private
 
-    private func createTestFile() -> AbsolutePath {
+    private func makeTestFile() -> AbsolutePath {
         // Helper implementation
     }
 }

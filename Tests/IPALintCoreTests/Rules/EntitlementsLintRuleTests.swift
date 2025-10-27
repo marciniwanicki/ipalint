@@ -39,7 +39,7 @@ struct EntitlementsLintRuleTests {
         let codesignExtractor = MockCodesignExtractor()
         codesignExtractor.entitlementsToReturn = Entitlements(dictionary: [:])
         let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -59,7 +59,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.app-sandbox": .string("true"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -79,7 +79,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.app-sandbox": .string("true"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -104,7 +104,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.files.absolute-path": .array(["/tmp", "/usr/local"]),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -124,7 +124,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.files.absolute-path": .array(["/tmp", "/usr/local"]),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -146,7 +146,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.max-connections": .int(10),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -166,7 +166,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.max-connections": .int(10),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -189,7 +189,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.app-sandbox": .string("true"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When/Then
         do {
@@ -215,7 +215,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.double-value": .string("42.5"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When/Then
         do {
@@ -241,7 +241,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.error = .init(content: [
             "com.apple.security.flag": .string("true"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When/Then
         do {
@@ -267,7 +267,7 @@ struct EntitlementsLintRuleTests {
         subject.configuration.warning = .init(content: [
             "com.apple.security.app-sandbox": .string("true"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -290,7 +290,7 @@ struct EntitlementsLintRuleTests {
             "com.apple.security.app-sandbox": .string("true"),
             "com.apple.security.network.client": .string("true"),
         ])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -310,7 +310,7 @@ struct EntitlementsLintRuleTests {
         let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
         subject.configuration.warning = .init(content: ["key1": .string("correct")])
         subject.configuration.error = .init(content: ["key1": .string("correct")])
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         let result = try subject.lint(with: content)
@@ -326,7 +326,7 @@ struct EntitlementsLintRuleTests {
         let codesignExtractor = MockCodesignExtractor()
         codesignExtractor.entitlementsToReturn = Entitlements(dictionary: [:])
         let subject = EntitlementsLintRule(codesignExtractor: codesignExtractor)
-        let content = try createContent()
+        let content = try makeContent()
 
         // When
         _ = try subject.lint(with: content)
@@ -337,7 +337,7 @@ struct EntitlementsLintRuleTests {
 
     // MARK: - Private
 
-    private func createContent() throws -> Content {
+    private func makeContent() throws -> Content {
         try Content(
             ipaPath: AbsolutePath(validating: "/tmp/test.ipa"),
             appPath: AbsolutePath(validating: "/tmp/test.app"),
